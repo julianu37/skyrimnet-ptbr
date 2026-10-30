@@ -1,0 +1,7 @@
+kind: actor
+name: Facções de filtro do SkyrimNet
+description: NPCs nestas facções do SkyrimNet são sempre permitidos ou sempre bloqueados.
+FactionWhitelist:
+  - SkyrimNet_ActorWhitelistFaction
+FactionBlacklist:
+  - SkyrimNet_ActorBlacklistFaction

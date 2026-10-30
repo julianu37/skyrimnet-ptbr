@@ -1,0 +1,7 @@
+kind: memory
+name: Animais não formam memórias
+description: Gatos, cães e lobos não formam memórias.
+RaceBlacklist:
+  - ACLRaceCat
+  - DogRace
+  - WolfRace

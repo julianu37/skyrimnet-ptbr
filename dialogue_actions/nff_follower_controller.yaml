@@ -1,0 +1,5 @@
+kind: lists
+name: Controlador do Nether's Follower Framework
+description: Impede que o LLM dispare o diálogo do controlador do Nether's Follower Framework.
+blacklist:
+  - nwsFollowerController

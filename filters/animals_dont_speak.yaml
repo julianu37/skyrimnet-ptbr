@@ -1,0 +1,7 @@
+kind: actor
+name: Animais não falam
+description: Gatos, cães e lobos nunca conversam.
+RaceBlacklist:
+  - ACLRaceCat
+  - DogRace
+  - WolfRace

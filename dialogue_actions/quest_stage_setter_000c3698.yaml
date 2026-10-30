@@ -1,0 +1,5 @@
+kind: lists
+name: Definidor de estágio de missão TIF__000C3698
+description: Impede que o LLM dispare uma fala cujo script define um estágio de missão.
+blacklist:
+  - TIF__000C3698
