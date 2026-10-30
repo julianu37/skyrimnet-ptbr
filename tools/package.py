@@ -32,7 +32,7 @@ def copy_plugin(destination: Path, extras: bool) -> None:
         if source.exists():
             shutil.copytree(source, destination / name, dirs_exist_ok=True)
     if extras:
-        for name in ("README.md", "NOTICE.md"):
+        for name in ("README.md", "NOTICE.md", "CHANGELOG.md"):
             shutil.copy2(ROOT / name, destination / name)
         shutil.copytree(ROOT / "LICENSES", destination / "LICENSES", dirs_exist_ok=True)
 
@@ -55,6 +55,7 @@ def build_mod_zip() -> Path:
 
     shutil.copy2(ROOT / "README.md", staging / "README.md")
     shutil.copy2(ROOT / "NOTICE.md", staging / "NOTICE.md")
+    shutil.copy2(ROOT / "CHANGELOG.md", staging / "CHANGELOG.md")
     shutil.copy2(ROOT / "LICENSE", staging / "LICENSE")
     shutil.copytree(ROOT / "LICENSES", staging / "LICENSES", dirs_exist_ok=True)
     (staging / "tools").mkdir(parents=True, exist_ok=True)
