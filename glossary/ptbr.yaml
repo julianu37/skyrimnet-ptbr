@@ -1,0 +1,104 @@
+version: 1
+locale: pt-BR
+authority: "Localização oficial PT-BR de Skyrim + consenso da comunidade"
+updated: "2026-10-29"
+
+style:
+  address: voce
+  register: "neutro brasileiro; informal para NPCs comuns, formal para nobres/guardas"
+  contractions: "naturais (pra, tá, cê) só em personagens específicos"
+  numbers: "escrever por extenso quando o TTS puder ler errado"
+  punctuation: "manter travessão, aspas e reticências do original"
+  proper_nouns: "em dúvida, manter o nome em inglês (padrão da localização oficial)"
+
+keep_english:
+  - Whiterun
+  - Riverwood
+  - Solitude
+  - Windhelm
+  - Riften
+  - Markarth
+  - Falkreath
+  - Morthal
+  - Dawnstar
+  - Winterhold
+  - High Hrothgar
+  - Throat of the World
+  - Bleak Falls Barrow
+  - Dragonsreach
+  - Skyrim
+  - Tamriel
+  - Cyrodiil
+  - Morrowind
+  - Hammerfell
+  - High Rock
+  - Valenwood
+  - Elsweyr
+  - Black Marsh
+  - Summerset Isles
+  - Aldmeri Dominion
+  - Thalmor
+  - Stormcloaks
+  - Imperial Legion
+  - Companions
+  - Thieves Guild
+  - Dark Brotherhood
+  - College of Winterhold
+  - Dawnguard
+  - Dragonborn
+  - Dovahkiin
+  - Thu'um
+  - Daedra
+  - Aedra
+  - Jarl
+  - Thane
+  - Septim
+  - Nord
+  - Imperial
+  - Breton
+  - Redguard
+  - Altmer
+  - Bosmer
+  - Dunmer
+  - Khajiit
+  - Argonian
+  - Orc
+  - Falmer
+  - Dwemer
+
+translate:
+  - { en: Hold, pt: Domínio, status: verify }
+  - { en: Dragon, pt: Dragão, status: approved }
+  - { en: Dragon Priest, pt: Sacerdote Dragão, status: verify }
+  - { en: Gold, pt: Ouro, status: approved }
+  - { en: Health, pt: Vida, status: approved }
+  - { en: Stamina, pt: Vigor, status: approved }
+  - { en: Magicka, pt: Magia, status: approved }
+  - { en: Skill, pt: Perícia, status: approved }
+  - { en: Quest, pt: Missão, status: approved }
+  - { en: Dungeon, pt: Masmorra, status: approved }
+  - { en: Bandit, pt: Bandido, status: approved }
+  - { en: Guard, pt: Guarda, status: approved }
+  - { en: Inn, pt: Taverna, status: approved }
+  - { en: Shop, pt: Loja, status: approved }
+  - { en: Follower, pt: Seguidor, status: approved }
+  - { en: Spell, pt: Feitiço, status: approved }
+  - { en: Enchanting, pt: Encantamento, status: approved }
+  - { en: Smithing, pt: Ferraria, status: approved }
+  - { en: Alchemy, pt: Alquimia, status: approved }
+  - { en: Lockpicking, pt: Arrombamento, status: verify }
+  - { en: Pickpocket, pt: Bater carteira, status: verify }
+  - { en: Stealth, pt: Furtividade, status: approved }
+  - { en: Speech, pt: Eloquência, status: approved }
+
+forbidden_translations:
+  - "Whiterun -> Correrrio"
+  - "Riverwood -> Vila do Rio"
+  - "Skyrim -> Céu de Sangue"
+  - "Dragonborn -> Nascido do Dragão (manter Dragonborn)"
+  - "Jarl -> Conde"
+  - "Thane -> Barão"
+
+notes:
+  - "Validar termos 'verify' contra as strings oficiais do jogo antes do release."
+  - "Nomes de lugares em inglês são o padrão da localização oficial PT-BR."
