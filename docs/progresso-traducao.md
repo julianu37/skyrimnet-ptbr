@@ -52,8 +52,13 @@ Atualizado em 2026-10-30.
 4. 35 YAML de conteúdo.
 5. MCM/Papyrus e ESP.
 
+## Em andamento
+
+- Bios lotes 05–08 (`batches/bios_05..08.txt`), 48 arquivos.
+- UI `plugins_1`, `plugins_2` e `characters` (920 chaves).
+
 ## Próximo lote sugerido
 
-- UI `plugins` + `characters` (~920 chaves).
-- Bios: 4 subagentes × 12 por rodada.
+- Concluir bios restantes em rodadas de 4 × 12.
+- UI `gamedata`, `prompts`, `actions`, `triggers`, `routing`.
 - Prompts restantes de sistema (20).
