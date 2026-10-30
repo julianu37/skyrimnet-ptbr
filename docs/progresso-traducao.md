@@ -6,13 +6,13 @@ Atualizado em 2026-10-30.
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts | 304 | 1632 | 18,6% |
-| Bios de personagens | 202 | 1509 | 13,4% |
-| Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
-| Interface web (chaves) | 4267 | 6753 | 63,2% |
+| Prompts | 373 | 1632 | 22,9% |
+| Bios de personagens | 250 | 1509 | 16,6% |
+| Prompts de sistema (não-bios) | 123 | 123 | **100%** |
+| Interface web (chaves) | 6753 | 6753 | **100%** |
 | YAML de conteúdo | 16 | 35 | 45,7% |
+| ESP (textos visíveis) | 9 | 9 | **100%** |
 | MCM/Papyrus | n/a | n/a | — |
-| ESP | n/a | n/a | — |
 
 ## Lotes concluídos
 
@@ -30,11 +30,26 @@ Atualizado em 2026-10-30.
 | Bios 01–04 | 48 | `7735d35`, `fd242ca`, `3dbd27d`, `7c6ba97` |
 | Bios 05–08 | 48 | `b38818b`, `9fbb5f1`, `3d39a9c`, `ce765b2` |
 | Bios 09–12 | 48 | `2b60a99`, `594cd34`, `50f6ec0`, `8ea5446` |
+| Bios 13–16 | 48 | `7274aa6`, `8ee7650`, `aebd4b7`, `d4c23fb` |
 | UI `settings` restante | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
 | UI `plugins` + `characters` | 920 chaves | `bf4ff25`, `073ced9`, `20d78c9` |
 | UI `gamedata` + `prompts` | 795 chaves | `7234876`, `c2047ed`, `f1d9dd1` |
 | UI `actions` + `triggers` + `routing` | 540 chaves | `4ce1cb7` |
+| UI `world_knowledge` + `tutorial` | 646 chaves | `d87d26f`, `646d308` |
+| UI `debug` + `vast_ai` + `bards` + `file_editor` | 493 chaves | `8ddca6b` |
+| UI `memories` + `vision` + `traces` + `record` | 324 chaves | `d87d26f` |
+| UI final A–C | 791 chaves | `f199d17` |
+| UI final D | 232 chaves | este lote |
+| Prompts de sistema restantes | 21 | `25de02f`, `76e4ba6` |
 | YAML: filtros, voice effects, dialogue actions | 16 registros | `d896cb8` |
+| ESP: descrições e mensagens | 9 textos | local (backup) |
+
+## Revisões e normalizações
+
+- `dunmer` padronizado (substituído "elfo negro").
+- `GameMaster` padronizado como **Mestre de Jogo** na UI.
+- `Forte`, `Mina`, `Caverna`, `Fazenda` padronizados nos textos de bios.
+- Glossário ganhou a seção `review_decisions` com as decisões acima.
 
 ## Ferramentas e regras
 
@@ -45,27 +60,18 @@ Atualizado em 2026-10-30.
 - Listas de lote: `batches/*.txt`.
 - UI: `ui/build_ui.py` + `ui/pt-br/*.json` + `ui/source/*.json`.
 - Empacotamento: `tools/package.py` (zip MO2 + pasta do catálogo).
+- ESP: `tools/patch_esp.py` (patch byte-preserving com backup).
 
 ## Pendente
 
-1. 1.307 bios restantes (lotes de ~48).
-2. `eval` (7), `documentation` (2), `dev` (1), `test_decorators` (10).
-3. 1.840 chaves de UI (tutorial e world_knowledge em andamento; depois
-   debug, vast_ai, bards, file_editor, etc.).
-4. 19 YAML restantes: `config/carry_tags_*` (11, fora da Content Library)
-   e `furniture` (4, mantidos em inglês por dependência da lógica dos prompts).
-5. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
-   dashboard web (já traduzido). ESP: só contém registros de teste
-   (`Alrik Test-Alpha`, `Bera Test-Beta`) e nenhum texto de jogador.
-
-## Em andamento
-
-- Bios lotes 13–16 (`batches/bios_13..16.txt`), 48 arquivos.
-- UI `actions`, `triggers`, `routing` (540 chaves).
-- Prompts restantes de sistema (`batches/prompt_remaining.txt`, 21 arquivos).
+1. 1.259 bios restantes (lotes de ~48): 895 nomeadas + 364 genéricas.
+2. 19 YAML restantes: `config/carry_tags_*` (11, fora da Content Library) e
+   `furniture` (4, mantidos em inglês por dependência da lógica dos prompts).
+3. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
+   dashboard web (já 100% traduzido).
 
 ## Próximo lote sugerido
 
-- UI `tutorial` + `world_knowledge` (~646 chaves).
-- Bios: novas rodadas de 4 × 12.
-- Prompts restantes de sistema (20).
+- Bios 21–24 (`batches/bios_21..24.txt`), 48 arquivos.
+- Depois priorizar bios genéricas de guardas, soldados e bandidos, que são as
+  vozes mais frequentes em jogo.
