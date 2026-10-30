@@ -93,7 +93,8 @@ do MO2, porque não são arquivos de plugin.
 ## Build
 
 ```powershell
-python tools/validate_prompts.py --source "...\skyrimnet.base\prompts" --translated prompts --allow-subset
+python tools/validate_prompts.py --source "...\skyrimnet.base\prompts" --translated prompts --allow-subset `
+  --allow-structural components/context/component_npc_state_summary.prompt submodules/character_bio/0050_physical_activity.prompt
 python tools/check_ui.py
 python tools/package.py
 
