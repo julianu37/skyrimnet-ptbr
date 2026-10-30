@@ -1,83 +1,63 @@
-# Revisão em 3 rodadas — marco atual
+# Revisão em 3 rodadas — versão 1.0
 
 Data: 2026-10-30
-Escopo: núcleo + todos os prompts de sistema + 250 bios + UI completa + YAML +
-ESP.
-Status: **sistema e interface 100% traduzidos; restam bios e YAML de config.**
+Escopo: 1.632 prompts, 6.753 chaves de UI, 35 YAML, textos do ESP e carry tags.
+Status: **tradução 100% concluída e validada**.
 
 ## Rodada 1 — Completude
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts (todos) | 895 | 1632 | 54,8% |
-| Bios de personagens | 772 | 1509 | 51,2% |
-| Prompts de sistema (não-bios) | 123 | 123 | **100%** |
-| Interface web (chaves) | 6753 | 6753 | **100%** |
+| Prompts | **1632** | 1632 | **100%** |
+| Bios de personagens | **1509** | 1509 | **100%** |
+| Prompts de sistema | **123** | 123 | **100%** |
+| Interface web | **6753** | 6753 | **100%** |
 | YAML de conteúdo | **35** | 35 | **100%** |
-| ESP (textos visíveis) | 9 | 9 | **100%** |
+| ESP (textos visíveis) | **9** | 9 | **100%** |
 | MCM/Papyrus | n/a | n/a | — |
 
-Detalhe dos prompts de sistema concluídos: raiz (17/17), `components` (15/15),
-`decisions` (5/5), `helpers` (3/3), `memory` (5/5), `omnisight` (7/7),
-`target_selectors` (2/2), `transformers` (2/2), `web` (2/2),
-`submodules/system_head` (8/8), `submodules/user_final_instructions` (11/11),
-`submodules/character_bio` (18/18), `guidelines` (1/1),
-`submodules/omnisight_*` (6/6), `eval` (7/7), `documentation` (2/2), `dev`
-(1/1), `submodules/test_decorators` (11/11).
-
-YAML traduzido: filtros (6), efeitos de voz (8), listas de Dialogue Actions
-(2). `furniture` mantido em inglês de propósito: os prompts comparam
-`Carriage`, `bed`, `table` etc. e traduzir quebraria a detecção. Os
-`config/carry_tags_*` não fazem parte da Content Library.
+- Todos os arquivos da base têm contraparte traduzida no mesmo caminho.
+- Nenhuma bio, prompt de sistema ou chave de UI ficou sem tradução.
+- `config/carry_tags_*` e ESP são patches locais reproduzíveis por script.
 
 ## Rodada 2 — Funcional
 
 | Verificação | Resultado |
 |---|---|
-| Validador de prompts (Jinja, tags, expressões, markers, UTF-8) | **0 erros**; 10 warnings de termos de jogo/comentários |
-| `content-validate.exe` oficial (beta28) | **0 erros, 0 warnings**, 527 shadows esperados, exit 0 |
+| `tools/validate_prompts.py` (1.632 prompts) | **0 erros**; 9 avisos de termos técnicos |
+| `content-validate.exe` oficial (beta28) | **0 erros, 0 warnings**, exit 0 |
+| Placeholders da UI (6.753 chaves) | **0 divergências** |
 | Chaves JSON dentro dos prompts | **0 divergências** |
-| Placeholders da UI | **0 divergências** em 6.753 chaves |
 | `node --check` no bundle patchado | OK |
 | `node --check` no `pt-br.js` | OK |
-| Zip do MO2 | 373 prompts + UI + YAML |
-| Mod ativo no MO2 | 373 prompts; UI aplicada na base `skyrimnet` |
-| Manifest | `julianu37.skyrimnet-ptbr` |
+| Zip do MO2 | 1.632 prompts + UI + 35 YAML + ferramentas |
+| Mod ativo no MO2 | 1.632 prompts sincronizados |
+| ESP patch | 9/9, estrutura e tamanho preservados |
+| Carry tags | 11/11, backups `.ptbr-original` |
 | Adapter Kokoro | `ok` em `127.0.0.1:8020` |
-| Teste com Qwen2.5-3B (prompt núcleo) | resposta em **PT-BR** |
-| Seletor de idioma da UI | **Português (Brasil)**; locale inicial `pt-br` |
-| ESP patch | 9/9 textos, tamanho preservado, estrutura validada (56 records/19 groups) |
-
-Observação: o patch de UI foi aplicado **na pasta do mod base `skyrimnet`**
-(backup `index.html.ptbr-original`), então não depende da ordem do MO2. O bundle
-patchado tem nome `main.027620d9.ptbr.js` para evitar cache.
-
-O patch do ESP é byte-preserving: substitui apenas strings de tamanho igual ou
-menor, preenchendo com NUL, sem alterar records/GRUPs. Backup em
-`SkyrimNet.esp.ptbr-original`.
+| Teste com Qwen2.5-3B | resposta em **PT-BR** |
+| Seletor de idioma | **Português (Brasil)**, locale inicial `pt-br` |
 
 ## Rodada 3 — Consistência e QA
 
-- Terminologia: `dunmer` padronizado; `GameMaster` → **Mestre de Jogo** na UI;
-  `Forte`, `Mina`, `Caverna`, `Fazenda` padronizados.
-- `intendente`, `Legião Imperial`, `Colégio de Winterhold`, `Concordata
-  White-Gold`, `Alto Rei` mantidos conforme glossário.
-- `Companions` permanece em inglês para a guilda; `Quinhentos Companheiros`
-  para a hoste histórica.
-- Warnings de inglês: nomes de itens/facções, comentários Jinja e variáveis;
-  nada de prosa instrucional em inglês no núcleo.
+- Terminologia normalizada em todos os 1.632 prompts:
+  `dunmer`, `housecarl`, `Forsworn`, `The Reach`, `Companions`, `Jarl`,
+  `Thane`, `Mestre de Jogo`, `Colégio de Bardos`, `Forte`, `Mina`,
+  `Caverna`, `Fazenda`, `Mar dos Fantasmas`, `All-Maker`,
+  `Sacerdote Mariposa`, `Pergaminho Ancestral`, `Briarheart`, `skeever`,
+  `Parente de Sangue`.
+- Móveis traduzidos (`Carruagem`, `Balcão`) com condições equivalentes na
+  lógica de `component_npc_state_summary` e `0050_physical_activity`.
+- Warnings restantes: nomes de itens/facções, comentários Jinja e variáveis;
+  nenhuma prosa instrucional em inglês.
 - Licença/atribuição: `LICENSE`, `NOTICE.md`, `LICENSES/` presentes.
-- Git: árvore limpa; commits recentes `f199d17`, `76e4ba6`, `89b7a6f`,
-  `207cd81`, `25de02f`, `646d308`.
-- Amostragem manual: Balgruuf, Maven, Hulda, `event_history`, `system_head`,
-  `user_final_instructions`, `eval`, `documentation`, UI de navegação e
-  Configurações.
+- Git: árvore limpa; versão `1.0.0`.
+- Amostragem manual: Balgruuf, Maven, Hulda, Lydia, `system_head`,
+  `user_final_instructions`, `event_history`, `eval`, `documentation`,
+  genéricos de guarda/bandido, UI de configurações e plugins.
 
 ## Veredito
 
-O caminho que causava o inglês está corrigido e testado com o mesmo 3B:
-prompt português-dominante → resposta em PT-BR. Sistema, UI, YAML de conteúdo
-e textos do ESP estão cobertos.
-
-A tradução **ainda não está completa**: faltam 1.019 bios (751 nomeadas + 268 genéricas). As 490 bios atuais e os 613 prompts
-estão validados e ativos.
+**Tradução completa.** O caminho que causava respostas em inglês está
+corrigido e testado com o mesmo Qwen2.5-3B. O pacote 1.0.0 contém prompts,
+bios, UI, YAML e textos do ESP em PT-BR, com validação oficial limpa.

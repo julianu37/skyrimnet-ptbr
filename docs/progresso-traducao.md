@@ -2,77 +2,56 @@
 
 Atualizado em 2026-10-30.
 
-## Cobertura atual
+## Cobertura final
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts | 895 | 1632 | 54,8% |
-| Bios de personagens | 772 | 1509 | 51,2% |
-| Prompts de sistema (não-bios) | 123 | 123 | **100%** |
-| Interface web (chaves) | 6753 | 6753 | **100%** |
+| Prompts | **1632** | 1632 | **100%** |
+| Bios de personagens | **1509** | 1509 | **100%** |
+| Prompts de sistema (não-bios) | **123** | 123 | **100%** |
+| Interface web (chaves) | **6753** | 6753 | **100%** |
 | YAML de conteúdo | **35** | 35 | **100%** |
-| ESP (textos visíveis) | 9 | 9 | **100%** |
+| ESP (textos visíveis) | **9** | 9 | **100%** |
 | MCM/Papyrus | n/a | n/a | — |
 
-## Lotes concluídos
+## Como foi feito
 
-| Lote | Arquivos | Commit |
-|---|---:|---|
-| Piloto (10 bios + diretiva) | 12 | `ee2aff9` |
-| 48 bios (principais holds) | 48 | `687e419` |
-| Núcleo: `system_head`, `user_final_instructions`, diálogo | 21 | `1918933` |
-| UI core/settings/pages | 965 chaves | `1918933` |
-| `components` + `target_selectors` + `web` | 19 | `d6c36db` |
-| `decisions` + `helpers` + `memory` + `transformers` | 15 | `d6c36db` |
-| `omnisight` + `submodules/omnisight_*` + guidelines | 14 | `d6c36db` |
-| Prompts raiz | 15 | `d6c36db` |
-| `submodules/character_bio` | 18 | `d6c36db` |
-| Bios 01–04 | 48 | `7735d35`, `fd242ca`, `3dbd27d`, `7c6ba97` |
-| Bios 05–08 | 48 | `b38818b`, `9fbb5f1`, `3d39a9c`, `ce765b2` |
-| Bios 09–12 | 48 | `2b60a99`, `594cd34`, `50f6ec0`, `8ea5446` |
-| Bios 13–16 | 48 | `7274aa6`, `8ee7650`, `aebd4b7`, `d4c23fb` |
-| UI `settings` restante | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
-| UI `plugins` + `characters` | 920 chaves | `bf4ff25`, `073ced9`, `20d78c9` |
-| UI `gamedata` + `prompts` | 795 chaves | `7234876`, `c2047ed`, `f1d9dd1` |
-| UI `actions` + `triggers` + `routing` | 540 chaves | `4ce1cb7` |
-| UI `world_knowledge` + `tutorial` | 646 chaves | `d87d26f`, `646d308` |
-| UI `debug` + `vast_ai` + `bards` + `file_editor` | 493 chaves | `8ddca6b` |
-| UI `memories` + `vision` + `traces` + `record` | 324 chaves | `d87d26f` |
-| UI final A–C | 791 chaves | `f199d17` |
-| UI final D | 232 chaves | `8e304e0` |
-| Prompts de sistema restantes | 21 | `25de02f`, `76e4ba6` |
-| YAML: filtros, voice effects, dialogue actions | 16 registros | `d896cb8` |
-| ESP: descrições e mensagens | 9 textos | local (backup) |
+- Tradução em lotes de 12–24 arquivos com subagentes, sempre comparando
+  estrutura Jinja, bullets, numeração, linhas em branco e markers.
+- Validação determinística em todo lote (`tools/validate_prompts.py`).
+- Normalização final de BOM/CRLF, newline e terminologia.
+- UI extraída do bundle instalado (`main.027620d9.js`), 6.753 chaves
+  traduzidas e injetadas como locale `pt-br`.
+- YAML da Content Library: filtros (6), efeitos de voz (8), Dialogue Actions
+  (2) e móveis (4). Os 11 `config/carry_tags_*` e os 4 arquivos sem prosa
+  completam os 35.
+- ESP: `tools/patch_esp.py` traduz 9 textos player-facing preservando o
+  tamanho dos registros.
+- `config/carry_tags_*`: `tools/patch_config.py` (patch local, backup).
 
 ## Revisões e normalizações
 
-- `dunmer` padronizado (substituído "elfo negro").
-- `GameMaster` padronizado como **Mestre de Jogo** na UI.
-- `Forte`, `Mina`, `Caverna`, `Fazenda` padronizados nos textos de bios.
-- Glossário ganhou a seção `review_decisions` com as decisões acima.
+- `dunmer`, `housecarl`, `Forsworn`, `The Reach`, `Companions`, `Jarl`,
+  `Thane` mantidos conforme glossário.
+- `GameMaster` → **Mestre de Jogo** nos prompts e na UI.
+- `Colégio de Bardos`, `Forte`, `Mina`, `Caverna`, `Fazenda`, `O Gourmet`,
+  `Paladar Incomum`.
+- `Mar dos Fantasmas`, `All-Maker`, `Sacerdote Mariposa`,
+  `Pergaminho Ancestral`, `Briarheart`, `skeever`, `Parente de Sangue`.
+- `furniture` traduzido com suporte a `Carruagem`/`Balcão` na lógica dos
+  prompts.
 
-## Ferramentas e regras
+## Ferramentas
 
-- Glossário: `glossary/ptbr.yaml`.
-- Validador: `tools/validate_prompts.py --allow-subset` (Jinja, tags,
-  expressões, markers, UTF-8, proporção, inglês residual; literais traduzidos
-  são permitidos).
-- Listas de lote: `batches/*.txt`.
-- UI: `ui/build_ui.py` + `ui/pt-br/*.json` + `ui/source/*.json`.
-- Empacotamento: `tools/package.py` (zip MO2 + pasta do catálogo).
-- ESP: `tools/patch_esp.py` (patch byte-preserving com backup).
+- `tools/validate_prompts.py` — valida 1.632 prompts.
+- `tools/check_ui.py` — valida 6.753 chaves e placeholders.
+- `tools/package.py` — zip MO2 + pacote do catálogo.
+- `tools/patch_esp.py` — textos do ESP.
+- `tools/patch_config.py` — carry tags.
+- `content-validate.exe` oficial — 0 erros / 0 warnings.
 
 ## Pendente
 
-1. 737 bios restantes (lotes de 12-24).
-2. YAML: Content Library 100%; os 11 `config/carry_tags_*` são patch local
-   via `tools/patch_config.py`.
-3. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
-   dashboard web (já 100% traduzido).
-
-## Próximo lote sugerido
-
-- Bios 21–24 (`batches/bios_21..24.txt`), 48 arquivos.
-- Depois priorizar bios genéricas de guardas, soldados e bandidos, que são as
-  vozes mais frequentes em jogo.
-
+Nada de tradução. Restam apenas testes em jogo com o save real e a publicação
+de novas versões quando o SkyrimNet atualizar (o bundle de UI precisa ser
+reconstruído se o hash mudar).
