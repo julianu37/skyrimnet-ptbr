@@ -30,11 +30,16 @@ código, o build falha em vez de gerar um bundle quebrado.
 
 ## Cobertura
 
-- 965 chaves traduzidas (nav, common, home, settings de voz/áudio/LLM,
-  TTS, LLM, logs e chat).
+- **6.753 de 6.753 chaves (100%)** do bundle `main.027620d9.js` traduzidas,
+  incluindo nav, common, home, settings, TTS, LLM, logs, chat, plugins,
+  personagens, gamedata, prompts, actions, triggers, routing, tutorial,
+  world knowledge, debug, traces, memórias, visão, Vast.ai, bardos, editor de
+  arquivos e telas finais.
 - Chaves ausentes caem no inglês automaticamente (`d.en`).
-- Para traduzir mais áreas, adicione fatias em `ui/source/` e traduções em
-  `ui/pt-br/`, depois rode o build.
+- Para traduzir uma nova área após um update do SkyrimNet, adicione fatias em
+  `ui/source/` e traduções em `ui/pt-br/`, depois rode o build.
+- O build valida que o número de chaves do dicionário final é 6.753 e que os
+  placeholders `{{...}}` batem com o inglês.
 
 ## Instalação
 

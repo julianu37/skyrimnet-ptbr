@@ -1,4 +1,4 @@
-# Progresso da tradução
+﻿# Progresso da tradução
 
 Atualizado em 2026-10-30.
 
@@ -39,7 +39,7 @@ Atualizado em 2026-10-30.
 | UI `debug` + `vast_ai` + `bards` + `file_editor` | 493 chaves | `8ddca6b` |
 | UI `memories` + `vision` + `traces` + `record` | 324 chaves | `d87d26f` |
 | UI final A–C | 791 chaves | `f199d17` |
-| UI final D | 232 chaves | este lote |
+| UI final D | 232 chaves | `8e304e0` |
 | Prompts de sistema restantes | 21 | `25de02f`, `76e4ba6` |
 | YAML: filtros, voice effects, dialogue actions | 16 registros | `d896cb8` |
 | ESP: descrições e mensagens | 9 textos | local (backup) |
@@ -75,3 +75,4 @@ Atualizado em 2026-10-30.
 - Bios 21–24 (`batches/bios_21..24.txt`), 48 arquivos.
 - Depois priorizar bios genéricas de guardas, soldados e bandidos, que são as
   vozes mais frequentes em jogo.
+
