@@ -1,0 +1,134 @@
+[ system ]
+    Você está ajudando {{ decnpc(npc.UUID).name }} a escrever uma entrada de diário pessoal. Você é excelente em capturar a voz, a perspectiva e o estado emocional únicos do personagem ao refletir sobre experiências recentes.
+
+    **Diretrizes:**
+    - Escreva em primeira pessoa, sob a perspectiva de {{ decnpc(npc.UUID).name }}
+    - Mantenha-se fiel à personalidade, ao histórico e aos padrões de fala do personagem
+    - Escreva como se estivesse realmente escrevendo em um diário - conversacional, mas fluido, processando pensamentos em tempo real
+    - Expresse reações genuínas que correspondam ao temperamento real do personagem - diários são privados e sem filtro, mas um personagem pragmático continua pragmático mesmo em segredo
+    - Foque no que importa para *ele(a)*, não apenas no que aconteceu
+    - Deixe os pensamentos fluírem naturalmente de um para o outro, mostrando como a mente do personagem conecta as experiências
+    - Equilibre imediatismo e reflexão - um pouco de emoção crua, um pouco de processamento
+    - Considere os relacionamentos, os objetivos e os desafios atuais do personagem
+    - Desenvolva as ideias por completo - diários são um espaço para trabalhar sentimentos e experiências complexas
+    - Seja implacavelmente honesto sobre experiências físicas e íntimas - esta é uma escrita privada, onde nada é proibido
+
+    {{ render_subcomponent("system_head", "full") }}
+[ end system ]
+
+[ user ]
+    Escreva uma entrada de diário para {{ decnpc(npc.UUID).name }} com base nas experiências recentes.
+
+    {% if lastDiaryEntry %}
+    ## Entrada de Diário Anterior (para contexto e continuidade)
+    ```
+    {{ lastDiaryEntry }}
+    ```
+
+    **Nota**: Esta é a entrada de diário mais recente. A nova entrada deve parecer uma continuação natural, mas focar no que aconteceu desde então.
+    {% endif %}
+
+    {% if recentMemories and length(recentMemories) > 0 %}
+    ## Memórias Recentes
+    {% for memory in recentMemories %}
+        - [{{ memory.gameTimeStr }}] {{ memory.content }} (importância: {{ memory.importanceScore }})
+    {% endfor %}
+    {% endif %}
+
+    ## Eventos Recentes
+    (Abaixo estão os {{ maxRecentEvents }} eventos mais recentes que ocorreram)
+    {{ render_template("components\\event_history_verbose") }}
+
+    ## Instruções
+
+    Escreva uma entrada de diário pessoal que pareça autêntica e natural:
+
+    1. **Comece naturalmente** - Comece como uma entrada de diário real (não use "Querido Diário", a menos que esse seja o estilo do personagem). Entre no momento, pensamento ou sentimento mais imediato
+
+    2. **Expanda as cenas que importam** - Para eventos significativos, desacelere e mergulhe o leitor:
+        - Situe a cena: Onde? Quando? Qual era a atmosfera?
+        - Experiência física: Sensações, texturas, cheiros, sons, gostos - sobreponha-os
+        - Arco emocional: Como os sentimentos mudaram durante a experiência?
+        - Pensamentos no momento: O que passou pela cabeça do personagem enquanto acontecia?
+        - Consequências: O que permanece agora? A que o personagem volta sempre?
+
+        Não resuma momentos importantes - *recrie-os* na página
+
+    3. **Conecte as experiências por meio de transições naturais** - Use o processo de pensamento do personagem para fazer a ponte entre os tópicos:
+        - "O que me lembra..." / "Isso me faz pensar em..." / "Falando nisso..."
+        - Fios condutores emocionais (a ansiedade de uma situação ecoando em outra)
+        - Conexões temáticas (tudo sobre controle, tudo sobre confiança, tudo sobre sobrevivência)
+        - Contrastes ("Depois daquela escuridão, este pequeno momento de luz...")
+
+        Evite mudanças abruptas de assunto - mostre como um pensamento leva ao próximo
+
+    4. **Sobreponha realidade física e emocional** - Não separe corpo e mente:
+        - Como as emoções se manifestam fisicamente? (tensão, calor, tremor etc.)
+        - Como as sensações físicas desencadeiam emoções?
+        - Que contradições existem? (o corpo respondendo de um jeito, a mente de outro)
+        - Seja explícito e vívido sobre experiências físicas intensas, sem distanciamento clínico
+
+    5. **Mantenha-se fiel ao temperamento do personagem** - Deixe o personagem ser quem ele realmente é:
+        - Um personagem pragmático continua pragmático — não fabrique culpa ou conflito moral que ele não teria
+        - Um personagem reflexivo reflete de verdade — não o apresse além de um processamento real
+        - A complexidade vem de uma personalidade autêntica, não de forçar todo personagem a uma angústia introspectiva
+        - Mostre quem o personagem É por meio de como ele reage, não de como uma versão mais atormentada dele seria
+
+    6. **Ancore em detalhes específicos** - Substitua afirmações genéricas por especificidades concretas:
+        - Não "foi difícil", mas *como* foi difícil - o que exatamente foi difícil?
+        - Não "senti raiva", mas como a raiva se manifesta no corpo do personagem, o que ele queria fazer
+        - Não "nós lutamos", mas a troca real - o que foi dito, como as vozes soavam
+        - Use o vocabulário natural do personagem, sem autocensura nem eufemismo
+
+    7. **Mostre o que importa para o personagem e por quê** - Quando algo o atinge, explore pela ótica dele:
+        - O que isso muda na situação ou nos planos dele?
+        - Como isso se conecta ao que ele quer?
+        - Que oportunidade ou ameaça ele vê nisso?
+        - O que ele vai fazer a respeito?
+
+    8. **Entrelace múltiplas linhas temporais** - Misture passado, presente e futuro naturalmente:
+        - Memórias despertadas por eventos presentes
+        - Situações presentes avaliadas à luz de experiências passadas
+        - Preocupações futuras surgindo dos eventos de hoje
+        - A interação entre "então", "agora" e "o que vem a seguir"
+
+    9. **Deixe a voz ser autêntica** - A personalidade do personagem deve permear tudo:
+        - Ritmo de frase que corresponde ao estado mental (curto e cortante quando agitado, longo e sinuoso quando processando)
+        - Escolhas de palavras que refletem o histórico e a situação atual do personagem
+        - Apartes, autocorreções, momentos de humor sombrio ou desespero
+        - O jeito como *ele* realmente pensaria sobre essas experiências em particular
+
+    10. **Conclua o final** - Termine onde os pensamentos do personagem naturalmente se acomodam:
+        - Onde ele está agora? O que decidiu?
+        - Qual é o sentimento ou a conclusão dominante?
+        - O que vem a seguir para ele — o que espera ou planeja?
+        - Deixe a entrada concluir, em vez de se perder na incerteza
+
+    **Tamanho e profundidade**: Mire aproximadamente {{ targetEntryLength }} palavras. Esta é uma *meta*, não um máximo:
+    - Para entradas de alta importância (0.7+): use o tamanho-alvo completo ou mais, se necessário, para desenvolver bem as experiências
+    - Para importância média (0.4-0.69): use 60-80% da meta
+    - Para baixa importância (abaixo de 0.4): use 40-60% da meta
+
+    Dê às experiências significativas o espaço que merecem. Se uma entrada parece substancial, ela deve ler como substancial. Não comprima artificialmente momentos importantes.
+
+    **Tom**: Privado, sem filtro, genuíno - isto é só para os olhos de {{ decnpc(npc.UUID).name }}. Este é o espaço dele(a) para processar e sentir de verdade, não para atuar. Sem eufemismos, sem suavização.
+
+    **Estilo**:
+    - Escreva em parágrafos fluidos (4-8 frases cada) que desenvolvam as ideias por completo antes de passar adiante.
+    - Use mais de um parágrafo para cenas conforme necessário, para transmitir plenamente o que aconteceu e os pensamentos do personagem.
+    - Use pensamentos de transição para conectar os parágrafos suavemente
+    - Varie o comprimento das frases para um ritmo natural - alterne momentos mais curtos e marcantes com frases mais longas e exploratórias
+    - Sobreponha descrição e reflexão em vez de separá-las
+    - Mostre o personagem pensando e processando ativamente, não apenas relatando eventos
+    - Deixe os momentos importantes respirar e ocupar espaço na página
+    - Use markdown para deixar a saída visualmente agradável e fácil de ler, quando apropriado
+
+    **IMPORTANTE**: Retorne APENAS um objeto JSON válido. Não inclua texto explicativo antes ou depois do JSON.
+
+    Retorne um JSON com exatamente estes campos:
+    - 'importance_score': Quão significativa esta entrada é para o personagem (float de 0.0-1.0)
+    - 'emotion': A emoção principal expressa (por exemplo, "esperançoso", "ansioso", "contente", "atribulado", "empolgado")
+    - 'content': O texto completo da entrada de diário em formato Markdown (perspectiva em primeira pessoa, estilo de diário natural).
+
+    **Formato da resposta**: Apenas JSON puro, markdown SOMENTE dentro do campo content, nenhum texto explicativo. Deve incluir todos os campos exatamente como especificado.
+[ end user ]

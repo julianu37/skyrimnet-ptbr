@@ -1,0 +1,26 @@
+{% block setup %}
+{% endblock %}
+## Informações da Cena
+{% block situationSummary %}
+{% endblock %}
+
+{% block weather %}
+{% endblock %}
+
+## Pessoas Próximas
+{% block nearbyNpcs %}
+{% endblock %}
+
+{% if get_short_lived_events_count() > 0 %}
+## Eventos Recentes
+{% block recentEvents %}
+{% endblock %}
+{% endif %}
+
+## Resumo da Cena
+{% block npcStateSummary %}
+{% endblock %}
+
+{# The header is inside of the block #}
+{% block triggeringEvent %}
+{% endblock %}

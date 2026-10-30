@@ -1,0 +1,46 @@
+{#
+  Template de Aquecimento - Pré-renderiza templates e decoradores para popular os caches de callback
+
+  Este template é renderizado durante a preparação de teclas de atalho para aquecer o cache
+  de callbacks do inja. Ele exercita os mesmos decoradores e templates usados nos prompts de
+  player_thoughts e de diálogo. A saída é descartada - só nos importa popular os caches.
+
+  Variáveis de contexto esperadas:
+  - npc: A entidade do jogador (com npc.UUID)
+  - events: Histórico de eventos (para aquecimento de format_event)
+  - Todas as variáveis de contexto padrão definidas pelo ContextEngine
+#}
+
+{# === Aquecer subcomponentes (igual a player_thoughts) === #}
+{{ render_subcomponent("system_head", "thoughts") }}
+{{ render_subcomponent("user_final_instructions", "thoughts") }}
+{{ render_subcomponent("system_head", "transform") }}
+{{ render_subcomponent("user_final_instructions", "transform") }}
+
+{# === Algumas coisas seguras da renderização completa que não causam efeitos colaterais === #}
+{{ render_subcomponent("full", "guidelines") }}
+
+{# === Aquecer o template de histórico de eventos === #}
+{# Este template não é armazenado em cache, mas chamadas subsequentes a format_event e afins serão #}
+{{ render_template("components\\event_history") }}
+
+{# === Aquecer o decorador de missões === #}
+{{ get_selected_quests() }}
+
+{# === Aquecer o contexto de cena === #}
+{{ get_scene_context(npc.UUID, 0, "full") }}
+
+{# === Aquecimento do Perfil do Jogador (ambos os modos) === #}
+{{ render_character_profile("full", npc.UUID) }}
+{{ render_character_profile("dialogue_target", npc.UUID) }}
+{{ render_character_profile("speech_style", npc.UUID) }}
+
+{# === Obter NPCs próximos usando o decorador (inclui NPCs virtuais) e aquecer seus perfis === #}
+{% set _nearbyForWarmup = get_nearby_npc_list(npc.UUID) %}
+{% for nearbyNpc in _nearbyForWarmup %}
+{% if loop.index <= 8 %}
+{{ render_character_profile("full", nearbyNpc.UUID) }}
+{{ render_character_profile("dialogue_target", nearbyNpc.UUID) }}
+{{ render_character_profile("speech_style", nearbyNpc.UUID) }}
+{% endif %}
+{% endfor %}

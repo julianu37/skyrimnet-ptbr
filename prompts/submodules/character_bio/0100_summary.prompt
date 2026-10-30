@@ -1,0 +1,15 @@
+{% if suppress_host_persona and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+{# entity_led: o resumo do hospedeiro se torna uma nota factual sobre o corpo. A entidade precisa
+   saber por trás de qual rosto e reputação está agindo, sem herdar a caracterização do
+   hospedeiro. Apenas nos modos de autobio; dialogue_target / short_inline / bio_summary ainda
+   descrevem o corpo normalmente — é assim que todo mundo o vê. #}
+    ## O corpo que você está vestindo — {{ decnpc(actorUUID).name }}
+    Para todos aqui, você é {{ decnpc(actorUUID).name }}, {{ decnpc(actorUUID).race }}. O nome, o rosto e a posição social são a fantasia em que você se move; a personalidade interior não é sua e não responde por você.
+{% else %}
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "dialogue_target" %}
+    ## {{ decnpc(actorUUID).name }} - Resumo do Personagem
+{% endif %}
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "dialogue_target" or render_mode == "short_inline" or render_mode == "bio_summary"%}
+    {% block summary %}{% endblock %}
+{% endif %}
+{% endif %}

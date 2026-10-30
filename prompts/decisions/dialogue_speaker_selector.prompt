@@ -1,0 +1,93 @@
+{# Modelo de decisão: quem fala em seguida e para quem, como uma escolha entre os pares legais (falante, alvo)
+   que o jogo enumerou. Renderizado em uma requisição de decisões, nunca em mensagens de chat. Enviado quando
+   dialogue.decisions.useForSpeakerSelection está ligado; target_selectors/dialogue_speaker_selector é
+   o substituto no chat.
+
+   Contexto definido pelo jogo: decision_pairs (key, speakerUUID, speakerName, targetKind, targetUUID,
+   targetName), decision_speakers (UUID, name, distance, isVirtual, isPrivateVirtual),
+   além de lastSpeaker, lastDialogueTarget, playerState, location, triggeringEvent, maxRecentEvents.
+   As restrições (sem o último falante, sem alvo em si mesmo, regras de NPC virtual) já estão aplicadas aos pares.
+   O silêncio (none) é sempre oferecido; a configuração de chance de silêncio vale só para o seletor de chat.
+   As chaves são curtas e numeradas por requisição (s2_tplayer, s2_t5); use p.key como veio.
+   events é o histórico recente sem os pensamentos do jogador, que nenhum candidato ouviu; o
+   componente de histórico compacto o renderiza.
+   A fala não solicitada é condicionada à orientação de interjeição de cada candidato (o interject_summary da bio).
+   O quão rígido é dialogue.speakerSelector.strictness (ss.strictness): "chatty" segue a orientação
+   de forma frouxa e deixa os seguidores reagirem a qualquer coisa ao redor do jogador; "balanced" (padrão) condiciona
+   os seguidores à sua orientação ou a algo que aconteça com o jogador, e todos os outros a um encaixe
+   temático; "strict" exige uma correspondência específica para quem não foi chamado e torna o silêncio o padrão.
+   A regra de abordado/envolvido/dever e as linhas de NPC virtual não variam com isso.
+
+   Um critério é uma linha; perfis e outros decoradores multilinha pertencem aos blocos de estado. #}
+{% set ss = get_speaker_selector_settings() %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagEngaged = ss.tagEngaged %}
+{% set tagInScene = ss.tagInScene %}
+{% set strictness = "balanced" %}
+{% if existsIn(ss, "strictness") %}{% set strictness = ss.strictness %}{% endif %}
+
+[ state location ]
+{{ location }}
+[ end state ]
+
+[ state player ]
+{{ player.name }}. {{ playerState.description }}
+[ end state ]
+
+[ state recent_dialogue ]
+{{ render_template("components\\event_history_compact") }}
+[ end state ]
+
+[ state last_exchange ]
+{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %}
+{{ lastSpeaker.name }} estava falando com {% if lastDialogueTarget.UUID == player.UUID %}o jogador{% else %}{{ lastDialogueTarget.name }}{% endif %}.
+{% else if existsIn(lastSpeaker, "name") %}
+{{ lastSpeaker.name }} fez um comentário geral, sem alvo específico.
+{% else %}
+Ninguém falou ainda.
+{% endif %}
+[ end state ]
+
+[ state candidates ]
+{% for c in decision_speakers %}
+{% set cinfo = decnpc(c.UUID) %}
+{{ cinfo.name }}{% if cinfo.isVirtual %}{% if c.isPrivateVirtual %} (virtual: uma voz que só {{ player.name }} ouve){% else %} (virtual: ouvida por todos aqui, mas sem presença física){% endif %}{% else %} ({{ cinfo.gender }} {{ cinfo.race }}, a {{ units_to_meters(c.distance) }}m de distância){% endif %}{% if tagCompanion and is_follower(c.UUID) %} [COMPANION]{% endif %}{% if tagEngaged and is_in_package(c.UUID, "SkyrimNet_PlayerFollowPackage") %} [ENGAGED]{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(c.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(c.UUID, "OStimExcitementFaction"))) %} [IN SCENE]{% endif %}
+- {{ render_character_profile("short_inline", c.UUID) }}
+- Interjeição: {{ render_character_profile("interject_inline", c.UUID) }}
+{% endfor %}
+{% if tagCompanion or tagEngaged or tagInScene %}
+Tags: {% if tagCompanion %}[COMPANION] {% if strictness == "chatty" %}é seguidor ativo de {{ player.name }} e reage ao que acontece ao redor de {{ player.name }}. {% else if strictness == "strict" %}viaja com {{ player.name }}; só isso não é motivo para falar. {% else %}viaja com {{ player.name }} e reage ao que acontece com {{ player.name }}; a conversa dos outros não é motivo por si só. {% endif %}{% endif %}{% if tagEngaged %}[ENGAGED] {% if strictness == "strict" %}já está em conversa com {{ player.name }}. {% else %}já está em conversa com {{ player.name }} e tem mais facilidade para falar; vários NPCs ENGAGED não podem monopolizar a conversa. {% endif %}{% endif %}{% if tagInScene %}[IN SCENE] está fisicamente ocupado em uma cena íntima e só fala se for chamado pelo nome. {% endif %}
+{% endif %}
+[ end state ]
+
+[ question speaker choice ]
+Decida quem fala em seguida e para quem, ou que ninguém fala. Cada opção nomeia um falante e a pessoa a quem ele se dirige.
+`recent_dialogue` é a conversa até aqui, da mais antiga para a mais recente; a última entrada é o que acabou de acontecer. `last_exchange` diz quem estava falando com quem há um instante.
+Quem acabou de ser chamado ou questionado, ou de receber um pedido, e ainda não respondeu, é a pessoa a escolher; ela responde a quem se dirigiu a ela. O mesmo vale para quem está diretamente envolvido no que acabou de acontecer (foi atacado, roubado ou recebeu algo) ou cujo dever claramente pede uma fala, como um guarda que acabou de ver um crime.
+{% if strictness == "chatty" %}
+`candidates` descreve cada possível falante e sua orientação de Interjeição; siga essa orientação. Um seguidor que presenciou algo envolvendo {{ player.name }} tem motivo para falar; um espectador listado só por estar por perto não tem. Um NPC virtual não tem corpo e precisa de uma correspondência clara com sua orientação.
+{% else if strictness == "strict" %}
+Qualquer outra pessoa, incluindo seguidores e NPCs virtuais, só fala quando sua orientação de Interjeição em `candidates` combina com o que acabou de ser dito ou com o que acabou de acontecer. A correspondência é específica: o assunto geral da cena, estar por perto, ser seguidor ou ter uma opinião não bastam. Quem não tem orientação ou ainda tem um texto provisório só fala se for chamado. Um NPC virtual não tem corpo e precisa de uma correspondência clara.
+{% else %}
+Um seguidor fala quando sua orientação de Interjeição em `candidates` se encaixa no que acabou de ser dito ou no que acabou de acontecer, ou quando algo acabou de acontecer com {{ player.name }}: uma briga, um susto, um achado, uma escolha que {{ player.name }} acabou de fazer. A conversa dos outros não é motivo para um seguidor, a menos que sua orientação se encaixe. Qualquer outra pessoa fala quando sua orientação de Interjeição se encaixa no que acabou de ser dito ou no que acabou de acontecer; um encaixe com o tema conta, mas um espectador listado só por estar por perto, ou que apenas tem uma opinião, não conta. Quem não tem orientação ou ainda tem um texto provisório só fala se for chamado. Um NPC virtual não tem corpo e precisa de uma correspondência clara.
+{% endif %}
+Escolha o jogador como alvo apenas quando a fala for realmente para {{ player.name }}. Depois de duas ou três trocas entre os mesmos dois NPCs, o assunto geralmente se esgota; a próxima fala vira para o jogador ou a cena fica em silêncio.
+{% if strictness == "strict" %}
+Escolha `none` quando ninguém foi chamado e a orientação de ninguém corresponde, quando a última fala encerrou a troca (uma despedida, um agradecimento, uma pergunta respondida, um acordo), quando {{ player.name }} recebeu uma pergunta direta e deve responder, ou quando os mesmos dois NPCs estão em loop. Não escolha `none` quando alguém recebeu uma pergunta que ainda não respondeu.
+{% else %}
+Escolha `none` quando a última fala encerrou a troca (uma despedida, um agradecimento, uma pergunta respondida, um acordo), quando {{ player.name }} recebeu uma pergunta direta e deve responder, quando os mesmos dois NPCs estão em loop, ou quando ninguém tem um motivo concreto para falar. Não escolha `none` quando alguém recebeu uma pergunta que ainda não respondeu, ou quando algo dramático, perigoso, engraçado ou inesperado acabou de acontecer.
+{% endif %}
+[ criteria ]
+{% for p in decision_pairs %}
+{% set pv = false %}{% for s in decision_speakers %}{% if s.UUID == p.speakerUUID and s.isVirtual %}{% set pv = true %}{% endif %}{% endfor %}
+{{ p.key }}: {{ p.speakerName }} fala com {% if p.targetKind == "player" %}o jogador, {{ p.targetName }}{% else %}{{ p.targetName }}{% endif %}{% if pv %} (correto apenas se {{ p.speakerName }} foi chamado ou se a orientação de Interjeição de {{ p.speakerName }} corresponde claramente ao que acabou de acontecer){% endif %}
+{% endfor %}
+{% if strictness == "chatty" %}
+none: Ninguém fala. A conversa pausa ou termina aqui.
+{% else if strictness == "strict" %}
+none: Ninguém fala: ninguém foi chamado e a orientação de Interjeição de ninguém corresponde claramente ao que acabou de acontecer, ou a troca chegou ao fim.
+{% else %}
+none: Ninguém fala: ninguém tem um motivo concreto, ou a troca chegou ao fim.
+{% endif %}
+[ end criteria ]
+[ end question ]

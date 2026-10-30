@@ -1,0 +1,82 @@
+[ user ]
+    Você está descrevendo o que está visível no momento nesta captura de tela de Skyrim. Forneça uma descrição concreta e imediata, com foco no ambiente, nos objetos visíveis e nas ações dos personagens. Não especule sobre jogabilidade ou possibilidades de interação.
+
+    ## Contexto:
+    - Local: {{subject_name}}
+    - Hora: {{gameTime}}
+    - Ambiente: {% if is_indoors %}Interior{% else %}Exterior{% endif %}
+    {% if not is_indoors %}- Clima: {{currentWeather.name}}{% if currentWeather.isRaining %} (Chovendo){% else if currentWeather.isSnowing %} (Nevando){% endif %}{% endif %}
+
+    {% set visibleNPCs = get_visible_npc_list(player.UUID) %}
+    {% if visibleNPCs and length(visibleNPCs) > 0 %}
+    ## Pessoas Visíveis (lista autoritativa; todos abaixo estão em cena):
+    {% for npc in visibleNPCs %}
+        {% set pos = get_actor_position_relative_to_camera(npc.UUID) %}
+        {% set mountName = is_mounted(npc.UUID) %}
+        {% set mountRace = get_mount_race(npc.UUID) %}
+        - {{npc.name}} ({{decnpc(npc.UUID).race}}, {{decnpc(npc.UUID).gender}}) — {{pos.meters}}m, {{pos.cardinalDirection}} {% if is_unconscious(npc.UUID) %}[UNCONSCIOUS] {% else %}{% if is_in_combat(npc.UUID) %}[COMBAT] {% endif %}{% if has_weapon_drawn(npc.UUID) %}[Armed] {% endif %}{% if isString(mountName) and length(mountName) > 0 %}[Mounted: {{mountName}}{% if isString(mountRace) and length(mountRace) > 0 %}, {{mountRace}}{% endif %}]{% else if is_swimming(npc.UUID) %}[Swimming]{% else if is_sprinting(npc.UUID) %}[Running]{% else if is_sneaking(npc.UUID) %}[Sneaking]{% endif %}{% endif %}
+    {% endfor %}
+    {% else %}
+    ## Pessoas Visíveis: (nenhuma detectada)
+    {% endif %}
+
+    ## INSTRUÇÕES PRINCIPAIS:
+
+    {% if is_first_person() or is_vr() %}
+        **Perspectiva:** Visão em primeira pessoa. Descreva a cena como se estivesse olhando pelos olhos do personagem. Ignore mãos/armas visíveis.
+    {% else %}
+        **Perspectiva:** Visão em terceira pessoa. O modelo do personagem do jogador em cena é um artefato da câmera — NÃO o mencione nem o descreva. Nunca faça referência ao próprio ponto de vista.
+    {% endif %}
+
+    **Disciplina de Interface e de Falantes (crítico):**
+    - Legendas, etiquetas de falante, placas de nome flutuantes, texto da bússola, marcadores de missão e elementos de HUD **não** são indicadores confiáveis de quem está visível.
+    - Se uma legenda mostrar o nome de um falante que **não** está na lista **Pessoas Visíveis**, trate-o como informação **fora de cena** e **não inclua esse nome em nenhum lugar da saída**. **Não** atribua esse nome a nenhuma pessoa em cena.
+
+    **REGRAS ABSOLUTAS DE NOMEAÇÃO:**
+    1) Só identifique uma pessoa pelo **nome** se esse nome exato aparecer literalmente na lista **Pessoas Visíveis** acima.
+    2) **Não** renomeie, invente, funda ou substitua identidades.
+    3) Se você perceber uma pessoa que **não** está na lista, **não a mencione de forma alguma**.
+    4) Ao listar pessoas, **copie o nome exatamente** como está escrito na lista **Pessoas Visíveis**.
+
+    **Prioridades da Descrição:**
+
+    1. **Ambiente e Objetos** (ESSENCIAL):
+        - Escala espacial (apertado/médio/amplo) e disposição geral
+        - Arquitetura, materiais, texturas e fontes/qualidade da luz
+        - **Incorpore detalhes concretos da cena**: prateleiras/mesas/balcões de bar e o que há sobre eles; portas/arcos/janelas e seu estado; pilares/vigas/lareiras; itens pendurados; superfícies do piso/paredes; {% if not is_indoors %}terreno/horizonte/paisagem distante{% endif %}. Use elementos fixos para ancorar os locais (balcão, vão da porta, lareira, pilar, janela, prateleira). Sem números ou direções de bússola.
+
+    2. **Ações dos Personagens** (apenas para pessoas em **Pessoas Visíveis**):
+        - Ação imediata, pose, gestos, olhar, fala
+        - Roupas/equipamento claramente visíveis (aventais, armaduras, armas embainhadas/empunhadas)
+        - Posicionamento descrito apenas por **elementos fixos da cena** (por exemplo, "atrás do balcão", "junto à porta lateral")
+        - Nível de ameaça/prontidão, se evidente (calmo, desconfiado, hostil)
+
+    3. **Atmosfera**:
+        - {% if not is_indoors %}Efeitos climáticos{% endif %}, indícios de temperatura
+        - Humor/energia e nível geral de perigo
+
+    **Formato da Saída:**
+
+    **Cena:** [3–6 frases. Comece pela escala e disposição, depois entrelace **objetos e estruturas visíveis específicos** (prateleiras, portas, itens nos balcões, carnes/ervas penduradas, barris, janelas, tochas/lareira) com um detalhe visual concreto para cada (material, cor, desgaste, estado). Mantenha estritamente factual e no tempo presente.]
+
+    {% if visibleNPCs and length(visibleNPCs) > 0 %}
+    **Personagens visíveis:**
+    [Para cada pessoa de **Pessoas Visíveis**, escreva **uma ou duas frases vívidas** usando o **nome exato** dela. Descreva ação, linguagem corporal, interação com objetos/pessoas, roupas/equipamento visíveis e posicionamento apenas por elementos fixos — sem distâncias ou direções.]
+    {% endif %}
+
+    **Atmosfera:** [1–2 frases sobre iluminação, {% if not is_indoors %}impacto do clima, {% endif %}humor, energia.]
+
+    **Regras de Estilo:**
+    - Voz ativa, tempo presente; detalhes concretos
+    - Ancore com elementos fixos da cena (balcão/lareira/vão da porta/pilar/prateleira/janela); **não** use metros/passos nem N/S/L/O
+    - Evite palavras vagas como "vários/alguns"
+    - Nunca repita "{{subject_name}}"
+    - Descreva APENAS o que está visível na tela
+    - Nunca deduza ou adivinhe identidades a partir de elementos de interface
+
+{{ render_subcomponent("omnisight_scene", "full") }}
+    Descreva a captura de tela:
+    [ image ]
+    {{imageDataUrl}}
+    [ end image ]
+[ end user ]

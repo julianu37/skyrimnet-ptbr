@@ -1,0 +1,68 @@
+{# Modelo de decisão: quem leva a cena adiante quando o jogador pressiona Continuar Narração, como uma escolha entre os
+   pares legais (falante, alvo) que o jogo enumerou. O jogador não diz nada novo e deixa a cena se desenrolar:
+   quem fala é a pessoa para quem o jogador está olhando; caso contrário, os NPCs levam a conversa entre si, e alguém
+   de fora só entra quando sua orientação de interjeição combina. Renderizado em uma requisição de decisões, nunca em
+   mensagens de chat. Enviado quando dialogue.decisions.useForSpeakerSelection está ligado; caso contrário, ou sem uma
+   resposta utilizável, o jogo recorre ao alvo da mira, senão a quem a última fala foi dirigida, senão a outro
+   participante, senão ao NPC mais próximo que não acabou de falar.
+
+   Contexto definido pelo jogo: decision_pairs (key, speakerUUID, speakerName, targetKind, targetUUID, targetName),
+   decision_speakers (UUID, name, distance, isVirtual, isPrivateVirtual), conversationParticipants (os UUIDs que
+   disseram ou receberam uma das falas mais recentes), triggeringEvent (o pedido de continuar), crosshairTarget,
+   lastSpeaker, lastDialogueTarget, events, maxRecentEvents. As regras de NPC virtual e a proibição de ter a si mesmo
+   como alvo já estão aplicadas aos pares. As chaves são curtas e numeradas por requisição (s2_tplayer, s2_t5); use p.key
+   como veio. Não existe opção none: alguém sempre fala.
+
+   Um critério é uma linha; perfis e outros decoradores multilinha pertencem aos blocos de estado. #}
+{% set ss = get_speaker_selector_settings() %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagEngaged = ss.tagEngaged %}
+{% set tagInScene = ss.tagInScene %}
+{% set lookedAtUUID = 0 %}
+{% if crosshairTarget and crosshairTarget.UUID %}
+{% set lookedAtUUID = crosshairTarget.UUID %}
+{% endif %}
+
+[ state last_exchange ]
+{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %}
+{{ lastSpeaker.name }} falou por último, para {% if lastDialogueTarget.UUID == player.UUID %}{{ player.name }}{% else %}{{ lastDialogueTarget.name }}{% endif %}.
+{% else if existsIn(lastSpeaker, "name") %}
+{{ lastSpeaker.name }} falou por último, para ninguém em particular.
+{% else %}
+Ninguém falou ainda.
+{% endif %}
+[ end state ]
+
+[ state recent_dialogue ]
+{{ render_template("components\\event_history_compact") }}
+[ end state ]
+
+[ state location ]
+{{ location }}
+[ end state ]
+
+[ state nearby ]
+{% for c in decision_speakers %}
+{% set cinfo = decnpc(c.UUID) %}
+{{ cinfo.name }}{% if lookedAtUUID != 0 and c.UUID == lookedAtUUID %} [LOOKED AT]{% endif %}{% if exists("conversationParticipants") and c.UUID in conversationParticipants %} [IN CONVERSATION]{% endif %}{% if cinfo.isVirtual %}{% if c.isPrivateVirtual %} (virtual: uma voz que só {{ player.name }} ouve){% else %} (virtual: ouvida por todos aqui, mas sem presença física){% endif %}{% else %} ({{ cinfo.gender }} {{ cinfo.race }}, a {{ units_to_meters(c.distance) }}m de distância){% endif %}{% if tagCompanion and is_follower(c.UUID) %} [COMPANION]{% endif %}{% if tagEngaged and is_in_package(c.UUID, "SkyrimNet_PlayerFollowPackage") %} [ENGAGED]{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(c.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(c.UUID, "OStimExcitementFaction"))) %} [IN SCENE]{% endif %}
+- {{ render_character_profile("short_inline", c.UUID) }}
+- Interjeição: {{ render_character_profile("interject_inline", c.UUID) }}
+{% endfor %}
+Tags: [LOOKED AT] é a pessoa que {{ player.name }} está olhando. [IN CONVERSATION] disse ou recebeu uma das últimas falas. {% if tagCompanion %}[COMPANION] viaja com {{ player.name }}; só isso não é motivo para falar. {% endif %}{% if tagEngaged %}[ENGAGED] já está em conversa com {{ player.name }}. {% endif %}{% if tagInScene %}[IN SCENE] está fisicamente ocupado em uma cena íntima e só fala se for chamado pelo nome. {% endif %}
+[ end state ]
+
+[ question next choice ]
+Nada de novo foi dito: {{ player.name }} está deixando a cena se desenrolar em silêncio. Decida quem fala em seguida e para quem. `recent_dialogue` é a conversa até aqui, da mais antiga para a mais recente; `last_exchange` diz quem falou por último e para quem.
+Quando alguém está marcado como [LOOKED AT], {{ player.name }} está olhando para essa pessoa: ela fala em seguida, para quem o momento pedir.
+Caso contrário, as pessoas na cena levam a conversa entre si. Quem recebeu a última fala e ainda não respondeu responde a quem falou. Na falta disso, outra pessoa marcada como [IN CONVERSATION] assume: responde, reage, discorda ou leva o assunto para outro lugar.
+Qualquer outra pessoa, incluindo seguidores e NPCs virtuais, só entra quando sua orientação de Interjeição em `nearby` combina com o que acabou de ser dito ou com o que acabou de acontecer. A correspondência é específica: o assunto geral da cena, estar por perto, ser seguidor ou ter uma opinião não bastam. Quem não tem orientação ou ainda tem um texto provisório só entra se for chamado. Um NPC virtual não tem corpo e precisa de uma correspondência clara.
+O último falante acabou de ter sua vez: escolha-o de novo apenas quando ninguém mais tiver motivo para falar.
+Os falantes se dirigem uns aos outros. Escolha {{ player.name }} como alvo apenas quando a fala for realmente para {{ player.name }}, como uma reação a algo que {{ player.name }} fez; {{ player.name }} escolheu ouvir.
+Quando não houver conversa em andamento, escolha quem tiver o motivo mais claro para falar nesta situação.
+[ criteria ]
+{% for p in decision_pairs %}
+{% set pv = false %}{% for s in decision_speakers %}{% if s.UUID == p.speakerUUID and s.isVirtual %}{% set pv = true %}{% endif %}{% endfor %}
+{{ p.key }}: {{ p.speakerName }} fala em seguida, para {% if p.targetKind == "player" %}{{ player.name }}{% else %}{{ p.targetName }}{% endif %}{% if pv %} (correto apenas se {{ p.speakerName }} foi chamado ou se a orientação de Interjeição de {{ p.speakerName }} corresponde claramente ao que acabou de acontecer){% endif %}
+{% endfor %}
+[ end criteria ]
+[ end question ]

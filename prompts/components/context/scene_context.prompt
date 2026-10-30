@@ -1,0 +1,72 @@
+{% block setup %}
+    {# Get nearby NPCs once and store the result #}
+    {# Use sourceEntity.UUID if available (for NPC speakers), otherwise use player.UUID #}
+    {% if sourceEntity %}
+        {% set nearby_npcs = get_nearby_npc_list(sourceEntity.UUID) %}
+        {% set npcLocation = get_location(sourceEntity.UUID) %}
+    {% else %}
+        {% set nearby_npcs = get_nearby_npc_list(player.UUID) %}
+        {% set npcLocation = location %}
+    {% endif %}
+{% endblock %}
+
+{% block nearbyNpcs %}
+    {% if length(nearby_npcs) > 0 %}
+        {% for npc in nearby_npcs %}
+            {% if decnpc(npc.UUID).isDead %}
+                {{ npc.id }}. [DEAD] O cadáver de {{ decnpc(npc.UUID).name }}: {{ render_character_profile("short_inline", npc.UUID) }} ({{ decnpc(npc.UUID).gender }} {{ decnpc(npc.UUID).race }}, a {{ units_to_meters(npc.distance) }} metros de distância)
+            {% else if is_unconscious(npc.UUID) %}
+                {{ npc.id }}. [UNCONSCIOUS] A forma inconsciente e sem resposta de {{ decnpc(npc.UUID).name }}: {{ render_character_profile("short_inline", npc.UUID) }} ({{ decnpc(npc.UUID).gender }} {{ decnpc(npc.UUID).race }}, a {{ units_to_meters(npc.distance) }} metros de distância)
+            {% else %}
+                {{ npc.id }}. {% if is_summoned(npc.UUID) %}{% if is_hostile_to_actor(npc.UUID, player.UUID) %}[Criatura invocada hostil a {{ decnpc(player.UUID).name }}] {% else %}[Criatura invocada a serviço de {{ decnpc(player.UUID).name }}] {% endif %}{% else if is_reanimated(npc.UUID) %}{% if is_hostile_to_actor(npc.UUID, player.UUID) %}[Morto-vivo reanimado hostil a {{ decnpc(player.UUID).name }}] {% else %}[Servo morto-vivo reanimado a serviço de {{ decnpc(player.UUID).name }}] {% endif %}{% endif %}{{ decnpc(npc.UUID).name }}{% if decnpc(npc.UUID).isVirtualPrivate %} (NPC Virtual){% endif %}: {{ render_character_profile("short_inline", npc.UUID) }}{% if not decnpc(npc.UUID).isVirtual %} ({{ decnpc(npc.UUID).gender }} {{ decnpc(npc.UUID).race }}, a {{ units_to_meters(npc.distance) }} metros de distância){% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Não há mais ninguém por perto.
+    {% endif %}
+{% endblock %}
+
+{% block situationSummary %}
+    ## Local Atual
+    A cena está acontecendo em **{{ npcLocation }}**
+
+    ## Hora Atual
+    **Hora**: {{ gameTime }}
+
+    {% if gameTimeJson.hour >= 22 or gameTimeJson.hour <= 5 %}
+        - No momento é tarde da noite — a maioria das pessoas estaria dormindo
+    {% else if gameTimeJson.hour >= 6 and gameTimeJson.hour <= 11 %}
+        - No momento é manhã
+    {% else if gameTimeJson.hour >= 12 and gameTimeJson.hour <= 17 %}
+        - No momento é período da tarde
+    {% else if gameTimeJson.hour >= 18 and gameTimeJson.hour <= 21 %}
+        - No momento é anoitecer.
+    {% endif %}
+{% endblock %}
+
+{% block weather %}
+## Clima Atual
+**Clima**: {% if is_indoors %}Você está em local fechado, protegido do clima. Lá fora, está {% endif %}{{ currentWeather.name }}{% if currentWeather.isRaining %} (Chovendo){% else if currentWeather.isSnowing %} (Nevando){% endif %}
+{% if currentWeather.isRaining and currentWeather.isSnowing %}
+    *Uma tempestade severa ruge com chuva e neve{% if is_indoors %} lá fora{% endif %}*
+{% else if currentWeather.isRaining %}
+    *A chuva cai sem parar{% if is_indoors %} lá fora{% endif %}, tornando as atividades ao ar livre desagradáveis*
+{% else if currentWeather.isSnowing %}
+    *A neve cai{% if is_indoors %} lá fora{% endif %}, criando uma atmosfera de inverno*
+{% else if currentWeather.windSpeed > 0.5 %}
+    *Ventos fortes sopram{% if is_indoors %} lá fora{% endif %}*
+{% endif %}
+{% endblock %}
+
+## Local Atual
+{% block currentLocation %}
+    {{ location }}
+{% endblock %}
+
+{% block recentEvents %}
+    {{ render_template("components\\context\\component_recent_events") }}
+{% endblock  %}
+
+{% block npcStateSummary %}
+    {{ render_template("components\\context\\component_npc_state_summary") }}
+{% endblock %}

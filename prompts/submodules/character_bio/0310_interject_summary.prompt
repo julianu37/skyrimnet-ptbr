@@ -1,0 +1,9 @@
+{# Suprimido na biografia completa para um corpo totalmente vestido por uma entidade vinculada
+   (entity_led). Os modos de decisão de interjeição (interject_inline / bio_interject_summary)
+   são um fluxo separado e sempre renderizam. #}
+{% if render_mode == "interject_inline" or render_mode == "bio_interject_summary" or ((render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not suppress_host_persona) %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        ### Resumo de Interjeições (coisas que {{ decnpc(actorUUID).name }} acha interessantes e às quais vai reagir).
+    {% endif %}
+    {% block interject_summary %}{% endblock %}
+{% endif %}

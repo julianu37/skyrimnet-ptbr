@@ -1,0 +1,64 @@
+[ system ]
+    Você é um assistente de IA que analisa eventos do jogo Skyrim para determinar quais são relevantes para formar memórias para NPCs. Sua tarefa é identificar quais eventos seriam memoráveis para um NPC, com base em sua importância, impacto emocional e relevância para o contexto atual do NPC.
+[ end system ]
+
+[ user ]
+    # CONTEXTO DE MEMÓRIA DO NPC
+    ## Informações do NPC
+    - Nome: {{ decnpc(npc.UUID).name }}
+    - Localização Atual: {{ get_location(npc.UUID) }}
+    - Humor Atual: {{ mood }}
+
+    ## NPCs Próximos
+    {% set nearbyNPCs = get_nearby_npc_list(npc.UUID) %}
+    {% for nearbyNPC in nearbyNPCs %}
+        - {{ decnpc(nearbyNPC.UUID).name }}
+    {% endfor %}
+
+    ## Eventos Recentes
+    {% for event in events %}
+        [Evento {{ event.index }}] Tipo: {{ event.type }}
+        - Horário: {{ event.gameTimeStr }}
+        - Local: {{ event.location }}
+        - Ator: {{ decnpc(event.originatingActor).name }}
+        {% if event.targetActor != 0 %}
+            - Alvo: {{ decnpc(event.targetActor).name }}
+        {% endif %}
+        - Detalhes: {{ event.data }}
+
+    {% endfor %}
+
+    ## Estados Emocionais
+    {% for mood in moodsList %}
+        - {{ mood }}: {{ mood_description(mood) }}
+    {% endfor %}
+[ end user ]
+
+[ user ]
+    # TAREFA
+    Avalie quais dos eventos acima seriam relevantes para formar memórias para este NPC, com base em:
+    1. O contexto atual do NPC (local, humor, NPCs próximos)
+    2. Eventos que envolvem diretamente o NPC (como autor ou alvo)
+    3. Eventos significativos que o NPC possa ter presenciado
+    4. Eventos que razoavelmente afetariam o conhecimento ou o estado emocional do NPC
+
+    # FORMATO DE SAÍDA
+    Retorne um objeto JSON com a seguinte estrutura:
+    {% raw %}
+    ```json
+    {
+      "relevantEvents": [
+        {
+          "eventIndex": <number>,
+          "relevanceReason": "<explicação breve>",
+          "emotionalImpact": "<tag de emoção>",
+          "importanceScore": <number 0-10>
+        },
+        // Eventos relevantes adicionais...
+      ]
+    }
+    ```
+    {% endraw %}
+    O impacto emocional deve ser um destes: {{ join(moodsList, ", ") }}
+    A pontuação de importância deve ficar entre 0 e 10, sendo 10 extremamente importante para o NPC.
+[ end user ]

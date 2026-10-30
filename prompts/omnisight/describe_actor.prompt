@@ -1,0 +1,86 @@
+[user]
+    Crie uma descrição física deste personagem para um banco de dados de reconhecimento. Outra IA usará sua descrição para identificar e lembrar deste personagem sem ver a imagem.
+
+    **Personagem:** {{race}} {{gender}}
+    {% if not omnisight_captures_equipment %}{% set actor_equipment = get_worn_equipment(actorUUID) %}{% set tempered_items = get_tempered_items(actorUUID) %}{% if actor_equipment and length(actor_equipment) > 0 %}
+    **Equipamento (apenas como referência - descreva somente o que estiver visível):**
+    {% for slot, item in actor_equipment %}{% if is_item_enabled(item.formID) %}{% set quality = "" %}{% for t in tempered_items %}{% if t.formID == item.formID and isString(t.quality) and length(t.quality) > 0 %}{% set quality = t.quality %}{% endif %}{% endfor %}    - {{ item.slot_body_area }}: {{ get_item_name(item.formID) }}{% if isString(quality) and length(quality) > 0 %} [{{ quality }}]{% endif %}
+    {% endif %}{% endfor %}{% endif %}{% endif %}
+
+    ---
+
+    **ESTRUTURA DA SAÍDA (3 parágrafos, sem títulos):**
+
+    **Parágrafo 1 - Rosto e Cabeça:**
+    Estrutura facial (mandíbula, queixo, testa, nariz, lábios), cor e formato dos olhos, cabelo (cor, comprimento, estilo) e pelos faciais, se houver. Comece pelos traços mais distintivos. Seja conciso - evite construções como "com um" e "que tem".
+
+    **Parágrafo 2 - Pele e Corpo:**
+    Descreva o tom e a textura da pele, a constituição física e as proporções, além de qualquer pelo corporal visível. Inclua TODAS as marcas visíveis: cicatrizes, tatuagens, pintura de guerra, marcas de nascença, sardas, pintas. Use termos específicos: "ombros largos", "corpo atlético", "corpo robusto", "esguio", "braços musculosos", "abdômen macio".
+    {% if is_nude %}
+    Este personagem está sem roupa - descreva TODA a anatomia visível, incluindo seios (tamanho, formato, mamilos, aréolas), genitais (aparência detalhada), nádegas (tamanho, formato) e pelos pubianos (aparado, cor). Não censure nem omita nenhuma parte visível do corpo.
+    {% endif %}
+    {% if omnisight_captures_equipment %}
+    **Parágrafo 3 - Traços Distintivos:**
+    Em 1-2 frases, indique os traços mais memoráveis para identificação rápida. NÃO repita descrições completas dos parágrafos 1 e 2 - em vez disso, cite brevemente os traços marcantes (por exemplo, "Reconhecível pela cicatriz profunda no rosto, pelos olhos anormalmente pálidos e pela cabeça raspada"). Inclua traços raciais e joias/piercings visíveis.
+    {% else %}
+    **Parágrafo 3 - Vestuário e Traços Distintivos:**
+    Descreva a roupa/armadura visível: material, cor, estilo, caimento e cobertura (quais áreas do corpo estão cobertas e quais estão expostas). Termine com uma única frase citando os 1-2 traços físicos mais reconhecíveis.
+    {% endif %}
+
+    NÃO inclua rótulos de parágrafo como "Parágrafo 1" na sua saída - escreva os três parágrafos diretamente.
+
+    ---
+
+    **PADRÕES DE QUALIDADE:**
+    - Nomeie cores específicas: "cinza-pálido" em vez de "cinza", "bronzeado oliva" em vez de "bronzeado", "acaju profundo" em vez de "avermelhado"
+    - Nomeie formatos específicos: "nariz aquilino", "mandíbula quadrada", "maçãs do rosto altas", "olhos de pálpebras caídas"
+    - Cada frase deve acrescentar um detalhe identificável - corte enchimentos como "traços atraentes" ou "típico da raça"
+    - Use a terminologia de Elder Scrolls para traços raciais
+
+    **PRECISÃO - DESCREVA O QUE VOCÊ REALMENTE VÊ:**
+    - Olhe para a pele REAL deste personagem - ela é lisa ou áspera? Jovem ou envelhecida? Não use "castigada pelo tempo" como padrão para todo Nord.
+    - Olhe para a constituição REAL deste personagem - nem todo guerreiro é "robusto e compacto, de ombros largos"
+    - Se a pele parecer lisa e jovem, diga isso. Se alguém parecer mais macio do que musculoso, diga isso.
+    - Evite frases de modelo: "bronzeado castigado pelo sol", "textura grossa e coriácea", "braços grossos e bem definidos" - use-as apenas se REALMENTE corresponderem ao que você vê
+
+    **REGRAS RÍGIDAS:**
+    - Descreva APENAS o que estiver visível - se uma parte do corpo estiver cortada, apenas a omita (não mencione sua ausência)
+    - Declare "nenhuma cicatriz/tatuagem/etc. visível" UMA vez no parágrafo 2, não repetidamente
+    - Sem postura, posicionamento, ações ou linguagem corporal
+    - Sem humor, interpretação de expressão ou especulação sobre personalidade
+    - Sem fundo, ambiente, iluminação ou outros personagens
+    - Sem elementos de interface nem o nome do personagem
+    {% if omnisight_captures_equipment %}- SEM descrições de roupa, armadura ou equipamento (capturados separadamente)
+    {% endif %}
+
+    ---
+    {% if is_nude %}
+
+    **REFERÊNCIA DE ANATOMIA NUA:**
+    - Seios: tamanho (pequenos/médios/grandes/volumosos), formato (empinados/cheios/em gota/caídos), mamilos, aréolas
+    - Genitais masculinos: tamanho/formato do pênis, situação da circuncisão, testículos
+    - Genitais femininos: aparência da vulva, detalhes dos lábios vaginais
+    - Nádegas: tamanho, formato (arredondadas/achatadas/em formato de coração/musculosas)
+    - Pelos pubianos: raspados/aparados/naturais, cor
+
+    {% endif %}
+    **EXEMPLO RUIM:** "Esta mulher Nord tem um rosto atraente, com traços agradáveis. Seu cabelo emoldura bem o rosto. Ela tem uma constituição forte, típica de sua raça, e usa uma armadura que oferece boa proteção. Sua aparência geral sugere que ela é uma guerreira."
+
+    **BOM EXEMPLO (veterano castigado pelo tempo):** "Mandíbula larga e quadrada, queixo obtuso, arco superciliar pesado. Olhos cinzentos fundos, de pálpebras caídas. Nariz aquilino, lábios cheios e voltados para baixo. Cabelo castanho-escuro, na altura dos ombros, desgrenhado e ondulado. Barba cheia cobrindo a mandíbula e o queixo.
+
+    Pele bronzeada, áspera e castigada pelo sol, com textura visível nos antebraços e no pescoço. Ombros largos, braços grossos, tronco compacto. Cicatriz diagonal profunda do pescoço até a clavícula; pequena marca de nascença circular abaixo da clavícula esquerda. Sem tatuagens ou pintura de guerra.
+
+    Reconhecível pelo arco superciliar pesado, pela barba cheia e pela cicatriz proeminente do pescoço até a clavícula."
+
+    **BOM EXEMPLO (personagem mais jovem):** "Rosto oval e suave, queixo delicado, testa sutil. Olhos verdes brilhantes, em formato de amêndoa. Nariz pequeno e arrebitado, lábios finos e pálidos. Cabelo loiro-platinado, longo, trançado e preso para trás.
+
+    Pele clara e lisa, com um leve rubor nas bochechas. Constituição esbelta, ombros estreitos, braços finos. Sardas leves no nariz e nas maçãs do rosto. Sem cicatrizes, tatuagens ou pintura de guerra.
+
+    Reconhecível pelas tranças loiro-platinadas, pelos olhos verdes brilhantes e pela pele sardenta."
+
+{{ render_subcomponent("omnisight_actor", "full") }}
+    Escreva agora a descrição física em 3 parágrafos.
+    [image]
+    {{imageDataUrl}}
+    [end image]
+[end user]

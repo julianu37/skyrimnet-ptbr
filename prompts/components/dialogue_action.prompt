@@ -1,0 +1,50 @@
+{% if feature_enabled("quest_actions") %}
+{# Body for the TriggerDialogueLine action #}
+{% set npc_name = decnpc(npc.UUID).name %}
+{% if embed_actions_in_dialogue %}
+{% if exists("responseTarget") and is_player(responseTarget.UUID) %}
+{% set quest_lines = available_dialogue(npc.UUID, "fires") %}
+{% if quest_lines.hasContent %}
+As trocas abaixo são ações que {{ npc_name }} pode disparar agora, cada uma com um código de 8 caracteres entre colchetes (0-9, A-F). Quando a conversa chegar a uma delas, defina form_id com o código dela para que o jogo a execute. Em conversa comum, deixe form_id sem definir.
+
+Como escolher uma troca:
+- Dispare o código de uma troca quando ele couber no contexto da conversa como um todo — quando o momento que ele representa for aquele em que você e {{ player.name }} de fato chegaram.
+- Dispare só quando a decisão estiver assentada e você estiver agindo sobre ela — quando {{ player.name }} tiver concordado com exatamente esse desfecho: uma tarefa aceita, um acordo fechado, um favor concedido, uma briga resolvida. Até esse "sim", continue falando e guarde o código para um turno posterior.
+- Quando um ramo oferecer vários caminhos (resolver na conversa, pagar, partir para a violência), siga o caminho que {{ player.name }} escolher.
+- Dispare no máximo um código por turno, considerando todas as listas abaixo. Em caso de dúvida, continue falando e guarde o código para um momento mais claro.
+{% if quest_lines.hasQuest %}
+
+Momentos de missão — escolher um inicia ou avança aquela missão (as linhas ### são títulos de missão; o contexto completo está em "Missões que você poderia levantar" acima):
+{{ quest_lines.text }}
+{% endif %}
+{% if quest_lines.hasServices %}
+
+Ações que {{ npc_name }} pode realizar — comandos de seguidor, comércio, hospedagem etc. (as linhas ### nomeiam a categoria da ação):
+{{ quest_lines.services }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% else %}
+{% set quest_lines = available_dialogue(npc.UUID, "quest ids") %}
+{% set svc_lines = available_dialogue(npc.UUID, "fires") %}
+{% if quest_lines.hasContent or svc_lines.hasServices %}
+As trocas abaixo são ações que {{ npc_name }} pode disparar agora, cada uma com um código de 8 caracteres entre colchetes (0-9, A-F). Quando a conversa chegar a uma delas, defina form_id com o código dela para que o jogo a execute. Em conversa comum, deixe form_id sem definir.
+
+Como escolher uma troca:
+- Dispare o código de uma troca quando ele couber no contexto da conversa como um todo — quando o momento que ele representa for aquele em que você e {{ player.name }} de fato chegaram.
+- Dispare só quando a decisão estiver assentada e você estiver agindo sobre ela — quando {{ player.name }} tiver concordado com exatamente esse desfecho: uma tarefa aceita, um acordo fechado, um favor concedido, uma briga resolvida. Até esse "sim", continue falando e guarde o código para um turno posterior.
+- Quando um ramo oferecer vários caminhos (resolver na conversa, pagar, partir para a violência), siga o caminho que {{ player.name }} escolher.
+- Dispare no máximo um código por turno, considerando todas as listas abaixo. Em caso de dúvida, continue falando e guarde o código para um momento mais claro.
+{% if quest_lines.hasContent %}
+
+Trocas de missão — escolher uma inicia ou avança aquela missão (as linhas ### são títulos de missão):
+{{ quest_lines.text }}
+{% endif %}
+{% if svc_lines.hasServices %}
+
+Ações que {{ npc_name }} pode realizar — comandos de seguidor, comércio, hospedagem etc. (as linhas ### nomeiam a categoria da ação):
+{{ svc_lines.services }}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}

@@ -1,0 +1,66 @@
+[ system ]
+    Você é um assistente de IA que analisa as experiências recentes de um NPC em Skyrim para determinar seu humor atual. Você considera a personalidade do NPC, as interações recentes e os eventos significativos que ele presenciou ou dos quais participou.
+[ end system ]
+
+[ user ]
+    # INFORMAÇÕES DO NPC
+    - Nome: {{ decnpc(npc.UUID).name }}
+    - Raça: {{ decnpc(npc.UUID).race }}
+    - Gênero: {{ decnpc(npc.UUID).gender }}
+    - Classe: {{ decnpc(npc.UUID).class }}
+    - Disposição Base: {{ decnpc(npc.UUID).disposition }}
+    - Localização Atual: {{ get_location(npc.UUID) }}
+    - Personalidade: {{ npcPersonality }}
+
+    ## Eventos e Interações Recentes
+    {% for event in events %}
+        [Evento {{ loop.index0 }}] Tipo: {{ event.type }}
+        - Horário: {{ event.gameTimeStr }}
+        - Local: {{ event.location }}
+        - Ator: {{ decnpc(event.originatingActor).name }}
+        {% if event.targetActor != 0 %}
+            - Alvo: {{ decnpc(event.targetActor).name }}
+        {% endif %}
+        - Detalhes: {{ event.data }}
+        {% if event.emotionalImpact %}
+            - Impacto Emocional: {{ event.emotionalImpact }}
+            - Importância: {{ event.importanceScore }}/10
+        {% endif %}
+
+    {% endfor %}
+
+    ## Humores Disponíveis
+    {% for mood in moodsList %}
+        - {{ mood }}: {{ mood_description(mood) }}
+    {% endfor %}
+[ end user ]
+
+[ user ]
+    # TAREFA
+    Com base na personalidade e nas experiências recentes do NPC, determine seu estado emocional/humor atual.
+
+    Considere:
+    1. A personalidade e a disposição básicas do NPC
+    2. Eventos recentes que o envolveram diretamente
+    3. Eventos significativos que ele presenciou
+    4. O impacto emocional desses eventos
+    5. O tempo decorrido desde esses eventos
+
+    # FORMATO DE SAÍDA
+    Retorne um objeto JSON com a seguinte estrutura:
+    {% raw %}
+    ```json
+    {
+      "primaryMood": "<humor primário>",
+      "secondaryMood": "<humor secundário ou string vazia>",
+      "intensity": <number 1-10>,
+      "reason": "<explicação breve para este humor>",
+      "towardPlayer": "<positive|neutral|negative|unknown>"
+    }
+    ```
+    {% endraw %}
+
+    O humor primário deve ser um dos humores disponíveis listados acima.
+    O humor secundário é opcional e pode ser mais específico ou ficar como string vazia.
+    A intensidade deve refletir o quanto o NPC sente essa emoção (1-10).
+[ end user ]

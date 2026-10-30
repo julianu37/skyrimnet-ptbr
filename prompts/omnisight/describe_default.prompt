@@ -1,0 +1,26 @@
+[user]
+    Você está catalogando elementos do mundo de Skyrim. Forneça uma descrição detalhada e objetiva do que você vê nesta captura de tela.
+
+    Informações do Assunto:
+    - Tipo: {{subject_type}}
+    - Nome: {{subject_name}}
+    {% if location_name %}- Local: {{location_name}} ({% if is_indoors %}Interior{% else %}Exterior{% endif %}){% endif %}
+    - Hora: {{gameTime}}
+    {% if not is_indoors %}- Clima: {{currentWeather.name}}{% if currentWeather.isRaining %} (Chovendo){% else if currentWeather.isSnowing %} (Nevando){% endif %}{% endif %}
+
+    Sua descrição deve:
+    - Ser factual e objetiva (2-3 parágrafos)
+    - Concentrar-se nos detalhes visuais relevantes para este tipo de assunto
+    - Observar quaisquer traços ou características distintivas
+    - Considerar o contexto ambiental ({% if is_indoors %}ambiente interno{% else %}ambiente externo com {{currentWeather.name}}{% if currentWeather.isRaining or currentWeather.isSnowing %} e efeitos climáticos{% endif %}{% endif %})
+    - Usar a terminologia de lore de Elder Scrolls adequada
+    - IGNORAR quaisquer elementos de interface, menus ou sobreposições de HUD - descreva apenas o conteúdo do mundo do jogo
+    - Evitar especulações sobre mecânicas de jogo
+
+{{ render_subcomponent("omnisight_default", "full") }}
+    Descreva as características visuais e os traços notáveis do assunto mostrado na imagem.
+    [image]
+    {{imageDataUrl}}
+    [end image]
+[end user]
+

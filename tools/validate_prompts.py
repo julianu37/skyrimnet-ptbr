@@ -56,12 +56,29 @@ def read_prompt(path: Path) -> tuple[str | None, str]:
         return raw.decode("utf-8", "replace"), f"not UTF-8: {exc}"
 
 
+def normalize_literals(value: str) -> str:
+    """Mask string literals so translated rendered strings are allowed.
+
+    Structural code (variables, filters, operators, keys used as identifiers)
+    still has to match; only the text inside quotes may change.
+    """
+    return re.sub(
+        r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'', '"STR"', value
+    )
+
+
 def structural(path: Path) -> dict:
     text, encoding_issue = read_prompt(path)
     text = text or ""
     blocks = Counter(BLOCK_RE.findall(text))
-    exprs = Counter(re.sub(r"\s+", " ", e).strip() for e in EXPR_RE.findall(text))
-    tags = Counter(re.sub(r"\s+", " ", t).strip() for t in TAG_RE.findall(text))
+    exprs = Counter(
+        normalize_literals(re.sub(r"\s+", " ", e).strip())
+        for e in EXPR_RE.findall(text)
+    )
+    tags = Counter(
+        normalize_literals(re.sub(r"\s+", " ", t).strip())
+        for t in TAG_RE.findall(text)
+    )
     markers = Counter(m.lower() for m in MARKER_RE.findall(text))
     return {
         "text": text,

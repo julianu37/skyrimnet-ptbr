@@ -1,0 +1,25 @@
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+    {% set memories = get_relevant_memories(actorUUID) %}
+    {% if length(memories) > 0 %}
+        ### Memórias Potencialmente Relevantes de {{ decnpc(actorUUID).name }}
+        {% for memory in memories %}
+            {% set timeDiff = gameTimeNumeric - memory.memory.game_time %}
+            {% set timeIndicator = "" %}
+            {% if timeDiff > 31536000 %}{% set timeIndicator = "[Há mais de um ano] " %}
+            {% else if timeDiff > 5184000 %}{% set timeIndicator = "[Há vários meses] " %}
+            {% else if timeDiff > 2592000 %}{% set timeIndicator = "[No mês passado] " %}
+            {% else if timeDiff > 1209600 %}{% set timeIndicator = "[Há algumas semanas] " %}
+            {% else if timeDiff > 604800 %}{% set timeIndicator = "[Na semana passada] " %}
+            {% else if timeDiff > 172800 %}{% set timeIndicator = "[Há alguns dias] " %}
+            {% else if timeDiff > 86400 %}{% set timeIndicator = "[Ontem] " %}
+            {% else if timeDiff > 28800 %}{% set timeIndicator = "[Há muitas horas] " %}
+            {% else if timeDiff > 14400 %}{% set timeIndicator = "[Mais cedo hoje] " %}
+            {% else if timeDiff > 7200 %}{% set timeIndicator = "[Há algumas horas] " %}
+            {% else if timeDiff > 3600 %}{% set timeIndicator = "[Há cerca de uma hora] " %}
+            {% else if timeDiff > 1800 %}{% set timeIndicator = "[Há um tempo] " %}
+            {% endif %}
+            {{ loop.index }}. {% if not memory.isOwn %}[experienced as {{ memory.originName }}] {% endif %}{{ timeIndicator }}{% if memory.memory.season != season and memory.memory.season != "unknown" %}[em {{ memory.memory.season }}] {% endif %}**{{ memory.memory.content }}** ({{ memory.memory.emotion }}, Importância: {{ memory.memory.importance_score }})
+            {% if memory.memory.tags %}{{ memory.memory.tags }}{% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}

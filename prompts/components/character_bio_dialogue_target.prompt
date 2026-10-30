@@ -1,0 +1,19 @@
+{# This prompt is used when the actor is the target in a dialogue. #}
+{% if responseTarget %}
+    {% if responseTarget.type == "player" %}
+        ## Biografia de {{ player.name }} (Alvo do Diálogo)
+    {% else %}
+        ## Biografia de {{ decnpc(npc.UUID).name }} (Alvo do Diálogo)
+    {% endif %}
+{% else %}
+    ## Biografia de {{ decnpc(npc.UUID).name }}
+{% endif %}
+- Gênero: {{ decnpc(npc.UUID).gender }}
+- Raça: {{ decnpc(npc.UUID).race }}
+{% if is_unconscious(npc.UUID) %}
+- Atualmente nocauteado(a): {{ decnpc(npc.UUID).name }} está inconsciente. **É incapaz de falar ou responder de qualquer forma.**
+{% endif %}
+## Resumo
+{% block summary %}{% endblock %}
+## Aparência
+{% block appearance %}{% endblock %}

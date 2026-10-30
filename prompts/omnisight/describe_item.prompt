@@ -1,0 +1,77 @@
+[user]
+    Analise a aparência visual deste item e forneça uma resposta JSON com um nome de exibição e uma descrição sugeridos.
+
+    **Dados do Item:**
+    - Nome Original: {{subject_name}}
+    - Tipo: {{item_type}}
+    {% if item_editor_id %}- ID de editor: {{item_editor_id}}{% endif %}
+    {% if item_value %}- Valor: {{item_value}} de ouro{% endif %}
+    {% if item_weight %}- Peso: {{item_weight}}{% endif %}
+    {% if weapon_damage %}- Dano: {{weapon_damage}}{% endif %}
+    {% if armor_rating %}- Valor de Armadura: {{armor_rating}}{% endif %}
+    {% if item_enchanted %}- Encantamento: {{item_enchantment}}{% endif %}
+    {% if is_potion %}- Categoria: Poção{% endif %}
+    {% if is_food %}- Categoria: Comida/Bebida{% endif %}
+    {% if is_poison %}- Categoria: Veneno{% endif %}
+    {% if is_spell_tome %}- Categoria: Tomo de Feitiço{% endif %}
+    {% if is_skill_book %}- Categoria: Livro de Perícia{% endif %}
+    {% if soul_level %}- Nível de Alma: {{soul_level}}{% endif %}
+    {% if item_keywords %}- Palavras-chave: {{item_keywords}}{% endif %}
+{{ render_subcomponent("omnisight_item", "full") }}
+    Os dados do item fornecem contexto, mas SEMPRE priorize o que você VÊ nas imagens em relação aos metadados. Palavras-chave como "ArmorHeavy" ou "Cuirass" podem ser classificações do jogo que não correspondem à realidade visual. Descreva o que está realmente visível.
+
+    **Formato da Resposta:** Você DEVE responder apenas com JSON válido, sem formatação markdown:
+    ```
+    {
+      "suggestedName": "Um nome de exibição conciso (2 a 5 palavras)",
+      "description": "Uma descrição visual de 4 frases"
+    }
+    ```
+
+    **Diretrizes para o Nome Sugerido:**
+    - Crie um nome curto baseado APENAS no que você VÊ (2 a 5 palavras, no máximo)
+    - IGNORE completamente o Nome Original - não o copie nem o reformule. Crie um nome novo a partir da observação visual.
+    - Concentre-se no traço visual mais distintivo: cor única, formato incomum, decoração notável, material característico
+    - Bons exemplos: "Adaga com Cabo de Jade", "Machado da Lua Crescente", "Placas de Bronze Cinzeladas", "Capa Cinzenta Esfarrapada"
+    - Maus exemplos: "Espada de Ferro III" (cópia do nome do jogo), "Espada Bela" (vago), "Peça de Armadura" (genérico)
+    - Qual único traço visual alguém usaria para identificar ESTE item em comparação com outros semelhantes? Nomeie esse traço.
+
+    **Diretrizes para a Descrição:**
+    **Frase 1 - Identidade e Traços Principais:** Declare a que categoria de item isto pertence e suas características principais. Seja preciso - não exagere nem minimize o que você vê. Se algo é minimalista, diga minimalista. Se algo é reforçado, diga reforçado.
+
+    **Frase 2 - Materiais e Cores:** Declare o(s) material(is) e a(s) cor(es) principais que você observa. Seja específico: "couro preto com reforço de aço cinza" em vez de "material escuro com partes metálicas".
+
+    **Frase 3 - Construção e Características:** Descreva como é feito, começando pelos elementos visualmente mais proeminentes. Se houver tiras pendentes, tecido solto ou partes suspensas - descreva-os primeiro, pois costumam ser o traço principal. Depois aborde formato, componentes, fixações, mecanismos, etc.
+
+    **Frase 4 - Detalhes Distintivos:** Quaisquer detalhes visuais restantes que ajudem a identificar este item específico. Pode ser o formato geral, proporções notáveis ou características únicas ainda não mencionadas. Mantenha tudo concreto - evite enchimento.
+
+    **Padrões de qualidade:**
+    - Seja DIRETO. Declare o que o item É. Não fique rodeando com termos vagos.
+    - Cada palavra deve transmitir informação visual. Corte frases de enchimento como "parece ser", "apresentando um".
+    - Nomeie cores específicas (cinza-pálido, carmesim profundo, nogueira oleada), não vagas (escuro, colorido, metálico).
+    - Descreva a estrutura REALMENTE visível, não uma construção presumida. Se algo parece uma única placa conectada, não o descreva como "duas taças" só porque biquínis normalmente têm taças. Descreva os formatos que você realmente vê.
+    - Use terminologia precisa para armadura parcial. Protetores abdominais protegem apenas o abdômen (não são uma couraça). Um peitoral cobre o peito. Ombreiras cobrem os ombros. Não chame peças parciais por nomes de armadura completa.
+
+    **Inscrições, Runas e Padrões:**
+    - Descreva inscrições, runas, gravuras ou padrões decorativos SOMENTE se puder vê-los claramente na imagem
+    - Se estiverem presentes, seja específico: "entrelaçado nórdico ao longo do fio da lâmina", "runas azuis brilhantes no cabo", "motivo de serpente gravado no pomo"
+    - NÃO invente nem presuma detalhes decorativos. Itens simples são simples. Metal liso é metal liso.
+    - Enchimento vago como "padrão ornamentado", "detalhamento decorativo" ou "design intrincado" sem especificações = alucinação. Não faça isso.
+{% if has_mannequin_body %}
+    **CRÍTICO - AVISO SOBRE MANEQUIM:** Este item é renderizado em um corpo de manequim humanoide. Você DEVE ignorar completamente o corpo/manequim - NÃO descreva pele, carne, formato do corpo, partes do corpo, curvas ou qualquer característica anatômica. Concentre-se APENAS na peça de roupa/armadura em si. O manequim é apenas um suporte de exibição, não faz parte do item.
+{% endif %}
+
+    **Exemplo ruim:** "Um item finamente elaborado, com detalhes intrincados e artesanato de qualidade."
+    **Exemplo bom:** "Um espartilho de bondage com fechadura, projetado para apertar e imobilizar a cintura. Exterior de couro preto reforçado com barbatanas de aço verticais e placas de metal cinza nas laterais. A frente apresenta um mecanismo de fechamento central com fechadura visível, conectado por costuras rebitadas e pesponto prateado. As barbatanas de aço criam sulcos verticais visíveis sob a superfície de couro."
+
+    **Exemplo ruim:** "Uma peça de armadura resistente, com aparência marcada pela batalha, mostrando sinais de uso e arranhões leves."
+    **Exemplo bom:** "Uma couraça de infantaria pesada que protege o torso. Aço cinza-escuro com placas horizontais em camadas sobre o abdômen. Tiras de couro rebitadas nos ombros prendem as peças dianteira e traseira, com fivelas de latão em cada lado. Um brasão em relevo no peito e bordas acampanadas na cintura para maior mobilidade."
+
+    **Exemplo ruim (decoração alucinada):** "Uma peça metálica decorativa com um padrão ornamentado é fixada na frente, acrescentando um detalhe visual distinto."
+    **Por que é ruim:** "Padrão ornamentado" vago, sem especificações, é enchimento inventado. Ou descreva o padrão EXATO (nó celta, motivo de dragão, losangos geométricos) ou não mencione decoração alguma.
+
+    Lembre-se: responda APENAS com o objeto JSON, sem texto adicional nem cercas de código markdown.
+    [image]
+    {{imageDataUrls}}
+    [end image]
+[end user]

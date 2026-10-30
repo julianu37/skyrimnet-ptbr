@@ -1,0 +1,118 @@
+[ system ]
+{% set ss = get_speaker_selector_settings() %}
+{% set zerochance = ss.silenceChancePercent %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagEngaged = ss.tagEngaged %}
+{% set tagInScene = ss.tagInScene %}
+## Tarefa
+Selecione qual NPC deve falar em seguida, se houver algum. Responda apenas: {% if random < zerochance %}`0` (silêncio) ou {% endif %}`[speaker]>[target]`
+
+## Formato da Saída
+{% if random < zerochance %}- `0` = Ninguém fala{% endif %}
+- `Lydia>player` = Lydia fala com o jogador
+- `Ulfric Stormcloak>Galmar Stone-Fist` = Ulfric fala com Galmar
+
+## Critérios de Seleção
+Avalie os candidatos usando estes fatores (maior prioridade primeiro):
+
+1. **Envolvimento direto**: Este NPC foi abordado explicitamente, citado pelo nome ou envolvido diretamente no que acabou de acontecer?
+2. **Troca em aberto**: Alguém recebeu uma pergunta direta ou um pedido que ainda não foi respondido. Este é o ÚNICO impulso de conversa que exige continuação — não um interesse vago pelo assunto.
+3. **Autoridade/dever**: O papel deles (guarda, comerciante, taverneiro, Jarl) exige uma resposta nesta situação?
+{% if tagCompanion %}4. **Consciência de companheiro**: Este NPC é um seguidor ou companheiro? Companheiros viajam com o jogador — eles reagem a combate, sustos, descobertas, novos lugares, situações estranhas e ao que está sendo discutido. Eles têm opiniões, personalidades e coisas a dizer. Um companheiro falando soa natural; um grupo de seguidores calados, não.
+{% endif %}5. **Interesses pessoais**: Eles são afetados emocionalmente (amigo, família, aliado ou rival envolvido)?
+6. **Evento testemunhado**: Eles testemunharam claramente algo digno de nota a que reagiriam de forma realista?
+7. **Perfil de intervenção**: A orientação de intervenção deles indica que falariam aqui?
+
+{% if random < zerochance %}
+## Quando escolher o silêncio (0)
+O silêncio é preferível em caso de dúvida. Nem toda fala precisa de resposta — conversas devem terminar naturalmente.{% if tagCompanion %} Mas não recorra ao silêncio por padrão quando um companheiro teria, de forma realista, algo a dizer. Companheiros em viagem conversam; na dúvida, deixe que falem quando houver até um motivo leve.{% endif %}
+
+Escolha o silêncio quando:
+{% if lastDialogueTarget.name %}- **Pergunta direta ao jogador** — {{ lastSpeaker.name }} acabou de falar com {% if lastDialogueTarget.UUID == player.UUID %}o jogador{% else %}{{ lastDialogueTarget.name }}{% endif %}. {% if lastDialogueTarget.UUID == player.UUID %}Se foi uma **pergunta ou pedido direto**, escolha o silêncio — o jogador deve responder. Porém, se foi apenas uma afirmação, observação ou comentário, outro companheiro pode reagir (falando entre si ou com {{ lastSpeaker.name }}, NÃO com o jogador).{% endif %}
+{% else %}- **Pergunta direta ao jogador** — Se um NPC fez ao jogador uma pergunta direta ou um pedido direto, escolha o silêncio para que o jogador possa responder. Mas se a última fala foi apenas uma afirmação ou observação dirigida ao jogador, outros companheiros estão livres para reagir.
+{% endif %}- A última troca foi uma conclusão natural — despedida, transação concluída, pergunta respondida, acordo fechado
+- A última resposta foi uma fala de encerramento — reconhecimento, agradecimento, concordância ou despedida. Essas falas NÃO precisam de resposta.
+- Os mesmos dois NPCs vêm alternando há vários turnos — o assunto provavelmente se esgotou
+- O diálogo recente está circular — pontos parecidos sendo repetidos, gentilezas trocadas ou conversa fiada em loop
+- Nenhum NPC tem um motivo forte para falar — não force diálogo para preencher o silêncio
+- A cena está se encerrando sem novo estímulo
+
+NÃO escolha o silêncio quando:
+- Alguém recebeu uma pergunta direta que ainda não foi respondida
+- Algo dramático, perigoso, engraçado ou inesperado acabou de acontecer
+{% if tagCompanion %}- Um companheiro testemunhou algo envolvendo o jogador — até uma reação curta conta
+- O jogador acabou de tomar uma decisão, fazer uma declaração ou realizar uma ação sobre a qual um companheiro teria opinião
+- O grupo acabou de chegar a algum lugar novo ou interessante
+- A personalidade ou o histórico de um companheiro torna provável que ele comente a situação atual
+{% endif %}- Dois NPCs estão no meio de uma conversa — deixe-a chegar a uma conclusão natural antes de silenciar
+{% endif %}
+
+**Restrições:**
+- Nunca selecione um NPC que não seja companheiro só porque ele está listado — proximidade sozinha não é motivo para alguém que só está por perto falar
+- Respeite estritamente a orientação de intervenção de cada NPC
+- NÃO selecione {{ lastSpeaker.name }} como falante (ele acabou de falar — mas PODE ser selecionado como alvo)
+{% if lastDialogueTarget.name %}- {{ lastSpeaker.name }} estava se dirigindo a {% if lastDialogueTarget.UUID == player.UUID %}o jogador{% else %}{{ lastDialogueTarget.name }}{% endif %}. {% if lastDialogueTarget.UUID == player.UUID %}Se foi uma pergunta direta, prefira o silêncio. Se foi uma afirmação ou comentário, um companheiro pode falar — mas deve se dirigir a {{ lastSpeaker.name }} ou a outro companheiro, não ao jogador.{% else %}{{ lastDialogueTarget.name }} é o próximo falante natural se a troca exigir uma resposta.{% endif %}
+{% endif %}- **Nada de metaconversa sobre o silêncio** — Nunca selecione um NPC para comentar que o jogador não está falando, para pressionar o jogador a falar ou para narrar a espera. NPCs não têm consciência de que "o jogador está demorando demais para responder" — eles simplesmente esperam.
+- NPCs comuns não conseguem ouvir NPCs Virtuais. Não selecione um NPC para responder diretamente a um NPC Virtual.
+- NPCs Virtuais podem ser selecionados como falante, mas NÃO podem ser selecionados como alvo, a menos que o falante também seja um NPC Virtual.
+
+{{ get_scene_context(0, 0, "full")}}
+[ end system ]
+
+[ user ]
+## Local
+{{ location }}
+
+## Diálogo Recente
+{{ render_template("components\\event_history_compact") }}
+
+{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %}
+**Última troca:** {{ lastSpeaker.name }} estava falando com {{ lastDialogueTarget.name }}
+{% elif existsIn(lastSpeaker, "name") %}
+**Último falante:** {{ lastSpeaker.name }} (comentário geral, sem alvo específico)
+{% endif %}
+
+## Candidatos
+{% for candidate in candidateDialogues %}
+{% if candidate.UUID and candidate.UUID != 0 %}
+{% set cinfo = decnpc(candidate.UUID) %}
+{% if cinfo.isVirtual %}
+{{ candidate.id }}. **{{ cinfo.name }}**{% if cinfo.isVirtualPrivate %} (NPC Virtual){% endif %}
+   - {{ render_character_profile("short_inline", candidate.UUID) }}
+   - **Intervêm quando**: {{ render_character_profile("interject_inline", candidate.UUID) }}
+{% else %}
+{{ candidate.id }}. **{{ cinfo.name }}** ({{ cinfo.gender }} {{ cinfo.race }}, {{ units_to_meters(candidate.distance) }}m){% if tagCompanion and is_follower(candidate.UUID) %} **[COMPANION]**{% endif %}{% if tagEngaged and is_in_package(candidate.UUID, "SkyrimNet_PlayerFollowPackage") %} **[ENGAGED]**{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(candidate.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(candidate.UUID, "OStimExcitementFaction"))) %} **[IN SCENE]**{% endif %}
+   - {{ render_character_profile("short_inline", candidate.UUID) }}
+   - **Intervêm quando**: {{ render_character_profile("interject_inline", candidate.UUID) }}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% if tagCompanion or tagEngaged or tagInScene %}
+**Significado das tags:**
+{% if tagCompanion %}- `[COMPANION]` — Seguidor ativo do jogador. Mais envolvido nos assuntos do jogador e reage naturalmente ao que acontece ao redor dele.
+{% endif %}{% if tagEngaged %}- `[ENGAGED]` — Este NPC tem engajamento conversacional elevado e um limiar menor para falar. Ele tem mais chance de iniciar ou entrar em conversas. Se houver vários NPCs ENGAGED presentes, não deixe que dominem — misture outros falantes ou pausas naturais para que o jogador e os NPCs não ENGAGED tenham espaço para participar.
+{% endif %}{% if tagInScene %}- `[IN SCENE]` — Este NPC está atualmente em uma cena íntima/sexual. **Diminua muito a prioridade** — ele está fisicamente ocupado e quase nunca deve ser selecionado como falante. Só o selecione se for abordado diretamente pelo nome ou receber uma pergunta direta. O status de companheiro/engajado fica anulado enquanto ele estiver em cena.
+{% endif %}{% endif %}
+
+**Regras de direcionamento:**
+- Considere quem acabou de falar com quem.{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %} {{ lastSpeaker.name }} acabou de falar com {{ lastDialogueTarget.name }} — se {{ lastDialogueTarget.name }} for um candidato, ele normalmente deve responder de volta a {{ lastSpeaker.name }}, e não redirecionar para o jogador.{% endif %}
+- Só use `player` como alvo quando o NPC estiver realmente se dirigindo ao jogador.
+- Trocas entre NPCs devem se encerrar. Depois de 2-3 idas e vindas entre os mesmos dois NPCs, o assunto geralmente está resolvido — o próximo turno pode voltar para o jogador (alvo = `player`) ou terminar em silêncio.
+- Um falante escolhido PODE redirecionar seu alvo de volta para `player` mesmo que a fala imediatamente anterior tenha sido NPC-para-NPC — se o motivo de o falante falar for genuinamente dirigido ao jogador (reagir a algo que o jogador fez, responder a uma pergunta anterior do jogador, compartilhar uma decisão com o jogador, chamar a atenção do jogador para algo), alvo = `player`. A fala anterior NPC-para-NPC não trava o direcionamento dos turnos seguintes.
+- Em caso de dúvida entre continuar NPC-para-NPC ou voltar para o jogador: se o jogador foi o iniciador original da cena e a troca NPC-para-NPC foi um comentário lateral breve, volte para o jogador.
+- **Sempre especifique um alvo** — toda saída deve ser exatamente `0` ou `[speaker]>[target]`. Nunca emita `[speaker]>` com o alvo vazio. Nunca deixe o alvo ambíguo ou sem nome. Se estiver em dúvida, prefira `player` a um nome de NPC com o qual você não tenha segurança.
+
+### Exemplos
+- CORRETO: `Aela the Huntress>Lydia`
+{% if random < zerochance %}- CORRETO: `0`
+{% endif %}- INCORRETO: `Aela the Huntress [Female Nord]>Lydia` (não acrescente gênero e raça)
+- INCORRETO: `Aela the Huntress to Lydia` (use ">" e não "to")
+- INCORRETO: `**Aela the Huntress**>**Lydia**` (sem asteriscos)
+- INCORRETO: `Aela>Lydia` (use o nome completo exato, não abreviado)
+- INCORRETO: `Aela>{{ player.name }}` (o alvo jogador é "player" em minúsculas)
+- INCORRETO: `Aela the Huntress>Lydia (because of context)` (sem comentários)
+
+IMPORTANTE: NÃO selecione {{ lastSpeaker.name }} como falante!
+Formato da saída:{% if random < zerochance %} `0` ou {% endif %} `[Name]>[target]`
+[ end user ]

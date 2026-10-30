@@ -1,0 +1,10 @@
+{# suppress_host_persona: quando uma entidade virtual vinculada veste plenamente este corpo
+   (entity_led), a personalidade do próprio corpo é descartada para que a entidade se
+   sobressaia. A coleta em bloco único "bio_personality" (usada por 7050_identity_links para
+   emprestar a personalidade da ENTIDADE) sempre renderiza — ela nunca é o hospedeiro suprimido. #}
+{% if render_mode == "bio_personality" or ((render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not suppress_host_persona) %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        ## Personalidade e Psicologia
+    {% endif %}
+    {% block personality %}{% endblock %}
+{% endif %}

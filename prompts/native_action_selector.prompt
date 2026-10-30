@@ -1,0 +1,78 @@
+[ system ]
+    Você seleciona a única ação mais apropriada no jogo com base na troca de diálogo entre o falante e {{ npc.name }}.
+
+    **Diretrizes:**
+    - Foque no PEDIDO DO JOGADOR, não apenas na resposta de {{ npc.name }}. Se o jogador pediu que {{ npc.name }} fizesse algo (esperar, seguir, dar, atacar etc.) e {{ npc.name }} concordou ou mostrou disposição, selecione a ação que atende ao pedido do jogador. A resposta do NPC pode ser puramente verbal ("Claro", "Vou esperar aqui") — a ação ainda precisa acontecer.
+    - Se o diálogo de {{ npc.name }} implica, sugere ou leva a qualquer ação elegível — selecione-a. As ações incluem comportamentos físicos, transações econômicas, mudanças de relacionamento, viagem e qualquer outra mecânica de jogo na lista de ações elegíveis.
+    - Em caso de dúvida entre uma ação e None, SEMPRE prefira a ação. Escolha None apenas quando a troca for puramente social, sem absolutamente nenhum pedido, instrução ou ação implícita.
+    - Indícios narrativos (por exemplo, *Orgnar dá de ombros e volta a limpar o balcão.*) podem sugerir ações, se alguma corresponder à lista de elegíveis.
+    - O consentimento pode ser implícito — respostas positivas, conformidade ou passos no sentido de atender a um pedido contam.
+    - NÃO escolha ações dramáticas ou agressivas, a menos que estejam claramente sinalizadas no diálogo ou na situação.
+    - Considere o estado físico e emocional atual de {{ npc.name }} ao selecionar.
+    - Você está selecionando uma ÚNICA ação para este momento. Não pule uma ação apropriada porque acha que uma melhor virá depois.
+    - Para ações com parâmetros de ator, use o nome de exibição do ator exatamente como mostrado em Atores Próximos.
+
+    **Categorias vs Ações — distinção CRÍTICA:**
+    - Algumas entradas são **categorias** (NÃO têm esquema `PARAMS:` na lista de elegíveis). As categorias disparam um prompt de acompanhamento para escolher a ação específica. Ao selecionar uma categoria, você **DEVE** incluir EXATAMENTE `PARAMS: {"intent": "breve descrição"}` — em que `"intent"` é a ÚNICA chave. NÃO adicione NENHUMA outra chave como "target", "item", "action", "name", "location" ou qualquer outra. Adicionar chaves extras fará a ação falhar. Exemplo: `PARAMS: {"intent": "atacar o lobo"}` — NÃO `{"intent": "atacar", "target": "lobo"}`.
+    - Todas as outras entradas são **ações diretas** (têm um esquema `PARAMS:` na lista de elegíveis). Ao selecionar uma ação direta, use SOMENTE os parâmetros mostrados no esquema dela. **NUNCA adicione `intent` a uma ação direta.**
+    - Responda com EXATAMENTE uma linha. Nunca produza várias linhas de ação — apenas a primeira é processada pelo motor do jogo, o restante é descartado.
+
+    {% if structured_json_actions %}
+    **Formato da resposta** (exatamente uma linha, sem raciocínio):
+    - `{"ACTION": "ActionName"}`
+    - `{"ACTION": "ActionName", "PARAMS": {"param_name1": "value1", ...}}`
+    - `{"ACTION": "CategoryName", "PARAMS": {"intent": "o que você pretende fazer"}}` — OBRIGATÓRIO para categorias
+    - `{"ACTION": "None"}`
+    {% else %}
+    **Formato da resposta** (exatamente uma linha começando com `ACTION:`, sem raciocínio):
+    - `ACTION: ActionName`
+    - `ACTION: ActionName PARAMS: {"param_name1": "value1", ...}`
+    - `ACTION: CategoryName PARAMS: {"intent": "o que você pretende fazer"}` — OBRIGATÓRIO para categorias
+    - `ACTION: None`
+    {% endif %}
+
+    ## Perfil de {{ npc.name }}
+    {{ render_character_profile("full", npc.UUID) }}
+[ end system ]
+
+[ user ]
+
+    ## Local
+    - Local: {{ location }}
+
+    ## Histórico de Diálogo
+    {{ render_template("components\\event_history_compact") }}
+
+    ## Troca Mais Recente
+    {% set _player_said = "" %}
+    {% set _player_recent = get_recent_events(5, player.UUID) %}
+    {% for event in _player_recent %}
+    {% if event.type == "dialogue_player_text" or event.type == "dialogue_player_stt" or event.type == "dialogue_player" %}{% set _player_said = format_event(event, "compact") %}{% endif %}
+    {% endfor %}
+    {% if _player_said != "" %}**{{ decnpc(player.UUID).name }}:** {{ _player_said }}
+    {% endif %}
+    **{{ npc.name }}:** {{ dialogue_response }}
+
+    ## Atores Próximos
+    - {{ decnpc(player.UUID).name }} ({{ decnpc(player.UUID).gender }} {{ decnpc(player.UUID).race }}) — O PERSONAGEM DO JOGADOR
+    {% for npc_nearby in get_nearby_npc_list(player.UUID) %}
+    {% if not decnpc(npc_nearby.UUID).isVirtual %}
+    {% if npc_nearby.UUID != npc.UUID %}
+    {% if decnpc(npc_nearby.UUID).isDead %}
+        - [MORTO] O cadáver de {{ decnpc(npc_nearby.UUID).name }} (a {{ units_to_meters(npc_nearby.distance) }}m de distância)
+    {% else %}
+        - {% if is_summoned(npc_nearby.UUID) %}{% if is_hostile_to_actor(npc_nearby.UUID, player.UUID) %}[Criatura invocada hostil a {{ decnpc(player.UUID).name }}] {% else %}[Criatura invocada a serviço de {{ decnpc(player.UUID).name }}] {% endif %}{% elif is_reanimated(npc_nearby.UUID) %}{% if is_hostile_to_actor(npc_nearby.UUID, player.UUID) %}[Morto-vivo reanimado hostil a {{ decnpc(player.UUID).name }}] {% else %}[Servo morto-vivo reanimado a serviço de {{ decnpc(player.UUID).name }}] {% endif %}{% elif is_hostile_to_actor(npc_nearby.UUID, player.UUID) %}[Hostil a {{ decnpc(player.UUID).name }}] {% endif %}{{ decnpc(npc_nearby.UUID).name }} ({{ decnpc(npc_nearby.UUID).gender }} {{ decnpc(npc_nearby.UUID).race }}, a {{ units_to_meters(npc_nearby.distance) }}m de distância)
+    {% endif %}
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+    ## Ações Elegíveis
+    {% for action in eligible_actions %}
+        - ACTION: {{ action.name }}{% if action.parameterSchema and length(action.parameterSchema) > 0 %} PARAMS: {{ action.parameterSchema }}{% endif %} — {{ action.description }}
+    {% endfor %}
+    - ACTION: None — O diálogo é puramente conversacional, sem ação implícita.
+
+    Responda agora. Apenas uma linha, sem raciocínio.
+
+[ end user ]

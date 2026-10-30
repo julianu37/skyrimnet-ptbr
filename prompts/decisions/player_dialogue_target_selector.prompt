@@ -1,0 +1,75 @@
+{# Modelo de decisão: a quem o jogador está se dirigindo, como uma escolha entre os pares legais (falante, alvo)
+   que o jogo enumerou. Renderizado em uma requisição de decisões, nunca em mensagens de chat.
+   Enviado quando dialogue.decisions.useForPlayerTarget está ligado; target_selectors/player_dialogue_target_selector
+   é o substituto no chat.
+
+   Contexto definido pelo jogo: decision_pairs (key, speakerUUID, speakerName, targetKind, targetUUID,
+   targetName), decision_speakers (UUID, name, distance, isVirtual, isPrivateVirtual), triggeringEvent
+   (a fala do jogador), crosshairTarget, lastSpeaker, lastDialogueTarget, events, maxRecentEvents.
+   O falante de um par é o NPC que responde; as regras de NPC virtual e a proibição de alvo em si mesmo já estão
+   aplicadas aos pares. As chaves são curtas e numeradas por requisição (s2_tplayer, s2_t5); use p.key como veio.
+   Não existe opção none: alguém sempre responde ao jogador. Quando o jogo não recebe uma resposta utilizável, o
+   NPC na mira responde; senão, o mais próximo.
+
+   Um critério é uma linha; perfis e outros decoradores multilinha pertencem aos blocos de estado. #}
+{% set ss = get_speaker_selector_settings() %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagEngaged = ss.tagEngaged %}
+{% set tagInScene = ss.tagInScene %}
+
+[ state player_line ]
+{{ player.name }}: {{ format_event(triggeringEvent, "verbose") }}
+[ end state ]
+
+[ state looking_at ]
+{% if crosshairTarget and crosshairTarget.UUID and crosshairTarget.UUID != 0 %}
+{{ player.name }} está olhando diretamente para {{ crosshairTarget.name }} (a {{ units_to_meters(crosshairTarget.distance) }}m de distância).{% if is_unconscious(crosshairTarget.UUID) %} {{ crosshairTarget.name }} está inconsciente e não pode responder.{% endif %}
+{% else %}
+{{ player.name }} não está olhando para ninguém em particular.
+{% endif %}
+[ end state ]
+
+[ state location ]
+{{ location }}
+[ end state ]
+
+[ state recent_dialogue ]
+{{ render_template("components\\event_history_compact") }}
+[ end state ]
+
+[ state last_exchange ]
+{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %}
+{{ lastSpeaker.name }} estava falando com {% if lastDialogueTarget.UUID == player.UUID %}{{ player.name }}{% else %}{{ lastDialogueTarget.name }}{% endif %}.
+{% else if existsIn(lastSpeaker, "name") %}
+{{ lastSpeaker.name }} fez um comentário geral, sem alvo específico.
+{% else %}
+Ninguém falou ainda.
+{% endif %}
+[ end state ]
+
+[ state nearby ]
+{% for c in decision_speakers %}
+{% set cinfo = decnpc(c.UUID) %}
+{{ cinfo.name }}{% if cinfo.isVirtual %}{% if c.isPrivateVirtual %} (virtual: uma voz que só {{ player.name }} ouve){% else %} (virtual: ouvida por todos aqui, mas sem presença física){% endif %}{% else %} ({{ cinfo.gender }} {{ cinfo.race }}, a {{ units_to_meters(c.distance) }}m de distância){% endif %}{% if tagCompanion and is_follower(c.UUID) %} [COMPANION]{% endif %}{% if tagEngaged and is_in_package(c.UUID, "SkyrimNet_PlayerFollowPackage") %} [ENGAGED]{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(c.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(c.UUID, "OStimExcitementFaction"))) %} [IN SCENE]{% endif %}
+- {{ render_character_profile("short_inline", c.UUID) }}
+{% endfor %}
+{% if tagCompanion or tagEngaged or tagInScene %}
+Tags: {% if tagCompanion %}[COMPANION] viaja com {{ player.name }}. {% endif %}{% if tagEngaged %}[ENGAGED] já está em conversa com o jogador. {% endif %}{% if tagInScene %}[IN SCENE] está fisicamente ocupado em uma cena íntima. {% endif %}
+{% endif %}
+[ end state ]
+
+[ question target choice ]
+Decida com quem {{ player.name }} está falando em `player_line` e, portanto, quem responde. Cada opção nomeia a pessoa abordada e com quem ela fala em seguida.
+`recent_dialogue` é a conversa até aqui, da mais antiga para a mais recente. `last_exchange` diz quem estava falando com quem há um instante: uma fala que continua essa troca (uma resposta, um agradecimento, a resposta a uma pergunta, um desdobramento) é para a pessoa com quem {{ player.name }} acabou de lidar.
+`looking_at` é quem {{ player.name }} está encarando; alguém encarado diretamente tem grande chance de ser o destinatário, a menos que a fala nomeie outra pessoa.
+`nearby` descreve todos ao alcance da voz e a que distância estão. Um nome ou uma referência clara na fala decide. Caso contrário, prefira a pessoa da troca em andamento, depois a pessoa cujo papel combina com a fala, depois alguém próximo em vez de alguém distante. Um comentário claramente destinado às pessoas que viajam com {{ player.name }} vai para um seguidor.
+Um NPC virtual não tem corpo: escolha um apenas quando a fala o nomear ou responder claramente ao que ele acabou de dizer. Ter falado por último não faz da próxima fala de {{ player.name }} uma fala para ele.
+Escolha uma opção em que a pessoa abordada fale com outro NPC apenas quando {{ player.name }} pedir que ela fale, pergunte ou diga algo a esse NPC.
+Uma fala sem nome que vem depois de uma troca é para a pessoa dessa troca. Quando a fala puder ser para várias pessoas, escolha quem ela provavelmente aborda.
+[ criteria ]
+{% for p in decision_pairs %}
+{% set pv = false %}{% for s in decision_speakers %}{% if s.UUID == p.speakerUUID and s.isVirtual %}{% set pv = true %}{% endif %}{% endfor %}
+{{ p.key }}: {% if p.targetKind == "player" %}{{ player.name }} está falando com {{ p.speakerName }}, que responde a {{ player.name }}{% else %}{{ player.name }} está pedindo que {{ p.speakerName }} fale com {{ p.targetName }}{% endif %}{% if pv %} (correto apenas se a fala nomear {{ p.speakerName }} ou responder claramente ao que {{ p.speakerName }} acabou de dizer){% endif %}
+{% endfor %}
+[ end criteria ]
+[ end question ]

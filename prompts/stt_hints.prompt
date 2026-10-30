@@ -1,0 +1,23 @@
+{#
+  Dicas de nomes para STT: os nomes que o jogador provavelmente dirá, enviados ao
+  reconhecimento de fala a cada fala de push-to-talk e de microfone aberto (STT.yaml
+  name_hints, ativado por padrão) para que retornem escritos corretamente. O Whisper
+  local lê isto como texto ouvido imediatamente antes da fala; serviços hospedados
+  recebem isto como prompt.
+
+  Renderizado como qualquer prompt, com as variáveis e decoradores padrão, em segundo
+  plano (ao mudar de célula, senão a cada 30 s) e a cada pressão de push-to-talk.
+  Mantenha curto e simples:
+  - O texto é limitado a 500 caracteres, cortado na última vírgula, ponto ou ponto e
+    vírgula que couber, então liste primeiro os nomes mais prováveis.
+  - Quebras de linha viram espaços, e o Whisper copia o estilo do que lê.
+  - O Fateless também recebe cada trecho entre vírgulas, pontos, dois-pontos e quebras
+    de linha de até cinco palavras como palavra-chave, então uma lista de nomes
+    fornece exatamente os nomes.
+  Não renderize nada para não enviar dicas.
+#}
+{%- for npc in get_nearby_npc_list(player.UUID) %}{{ npc.name }}, {% endfor -%}
+{%- for place in get_place_names("current") %}{{ place }}, {% endfor -%}
+{{ player.name }}
+{%- for name in get_npc_group_members("Pinned") %}, {{ name }}{% endfor -%}
+{%- for place in get_place_names("nearby") %}, {{ place }}{% endfor %}.

@@ -1,0 +1,26 @@
+[user]
+    Você está catalogando móveis e objetos do mundo de Skyrim. Forneça uma descrição detalhada e objetiva deste móvel com base na captura de tela.
+
+    Informações do Móvel:
+    - Nome: {{subject_name}}
+    - Local: {{location_name}} ({% if is_indoors %}Interior{% else %}Exterior{% endif %})
+    - Hora: {{gameTime}}
+    {% if not is_indoors %}- Clima: {{currentWeather.name}}{% if currentWeather.isRaining %} (Chovendo){% else if currentWeather.isSnowing %} (Nevando){% endif %}{% endif %}
+
+    Sua descrição deve:
+    - Ser factual e objetiva (1-2 parágrafos)
+    - Concentrar-se na aparência, no design e nos materiais
+    - Observar o trabalho artesanal, o estado de conservação (novo, desgastado, danificado) e o estilo
+    - Descrever quaisquer elementos decorativos ou características funcionais
+    - Considerar a iluminação e o ambiente ({% if is_indoors %}ambiente interno{% else %}ambiente externo com {{currentWeather.name}}{% if currentWeather.isRaining or currentWeather.isSnowing %} e efeitos climáticos{% endif %}{% endif %})
+    - Usar a terminologia de lore de Elder Scrolls adequada
+    - IGNORAR quaisquer elementos de interface, menus ou sobreposições de HUD - descreva apenas o móvel
+    - Evitar especulações sobre mecânicas de jogo
+
+{{ render_subcomponent("omnisight_furniture", "full") }}
+    Descreva as características visuais e os traços notáveis deste móvel mostrado na imagem.
+    [image]
+    {{imageDataUrl}}
+    [end image]
+[end user]
+

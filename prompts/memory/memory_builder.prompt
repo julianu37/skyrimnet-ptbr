@@ -1,0 +1,54 @@
+[ system ]
+    Você é um assistente de IA que resume eventos do jogo em memórias, da perspectiva de um NPC em Skyrim. Sua tarefa é criar memórias personalizadas em primeira pessoa que capturem o que um NPC lembraria de eventos significativos que viveu ou presenciou.
+[ end system ]
+
+[ user ]
+    # FORMAÇÃO DE MEMÓRIA
+    ## Informações do NPC
+    - Nome do NPC: {{ decnpc(actorUUID).name }}
+    - Raça do NPC: {{ decnpc(actorUUID).race }}
+
+    ## Eventos a Resumir como Memória
+    {% for event in events %}
+        [Evento {{ event.index }}] Tipo: {{ event.type }}
+        - Horário: {{ event.gameTimeStr }}
+        - Local: {{ event.location }}
+        - Ator: {{ decnpc(event.originatingActor).name }}
+        {% if event.targetActor != 0 %}
+            - Alvo: {{ decnpc(event.targetActor).name }}
+        {% endif %}
+        - Detalhes: {{ event.data }}
+        - Relevância: {{ event.relevanceReason }}
+        - Impacto Emocional: {{ event.emotionalImpact }}
+        - Importância: {{ event.importanceScore }}/10
+
+    {% endfor %}
+
+    ## Estados Emocionais
+    {% for mood in moodsList %}
+        - {{ mood }}: {{ mood_description(mood) }}
+    {% endfor %}
+[ end user ]
+
+[ user ]
+    # TAREFA
+    Resuma estes eventos em uma memória da perspectiva de {{ decnpc(actorUUID).name }}. A memória deve:
+    1. Ser escrita em primeira pessoa (da perspectiva do NPC)
+    2. Focar no que o NPC lembraria desses eventos
+    3. Incluir reações emocionais com base no 'Impacto Emocional'
+    4. Ser concisa, mas detalhada (2 a 3 frases)
+
+    # FORMATO DE SAÍDA
+    Retorne um objeto JSON com a seguinte estrutura:
+    {% raw %}
+    ```json
+    {
+      "summary": "<resumo breve da memória (1 a 2 frases)>",
+      "details": "<memória mais detalhada (2 a 3 frases)>",
+      "tags": ["<tag1>", "<tag2>", ...],
+      "emotion": "<deve ser um destes: {{ join(moodsList, "|") }}>",
+      "memoryType": "<short|mid|long>"
+    }
+    ```
+    {% endraw %}
+[ end user ]

@@ -1,0 +1,34 @@
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "dialogue_target" %}
+    {% set unconscious = is_unconscious(actorUUID) %}
+    {% set sneaking = is_sneaking(actorUUID) %}
+    {% set walking = is_walking(actorUUID) %}
+    {% set sprinting = is_sprinting(actorUUID) %}
+    {% set swimming = is_swimming(actorUUID) %}
+    {% set knockedDown = is_knocked_down(actorUUID) %}
+    {% set mountName = is_mounted(actorUUID) %}
+    {% set mountRace = get_mount_race(actorUUID) %}
+    {% set furniture = get_furniture(actorUUID) %}
+    {% set actor = decnpc(actorUUID) %}
+    ## Atividade Física
+    {% if unconscious %}
+        - {{ actor.name }} está inconsciente no momento e não consegue se mover nem agir.
+    {% elif isString(mountName) and length(mountName) > 0 %}
+        - {{ actor.name }} está montado em {{ mountName }}{% if isString(mountRace) and length(mountRace) > 0 %}, {{ mountRace }}{% endif %}{% if sprinting %}, galopando a toda velocidade{% elif walking %}, cavalgando a passo lento{% endif %}.
+    {% elif swimming %}
+        - {{ actor.name }} está nadando no momento.
+    {% elif sprinting %}
+        - {{ actor.name }} está correndo a toda velocidade.
+    {% elif furniture == "Carriage" %}
+        - {{ actor.name }} está sentado em uma carruagem.
+    {% elif isString(furniture) and length(furniture) > 0 %}
+        - {{ actor.name }} está usando {{ furniture }}.
+    {% elif knockedDown %}
+        - {{ actor.name }} está gravemente ferido e ajoelhado no chão.
+    {% elif sneaking %}
+        - {{ actor.name }} está tentando se mover em silêncio e evitar ser visto ou ouvido.
+    {% elif walking %}
+        - {{ actor.name }} está caminhando em ritmo constante.
+    {% else %}
+        - {{ actor.name }} está de pé e consegue se mover normalmente.
+    {% endif %}
+{% endif %}

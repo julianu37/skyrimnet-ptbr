@@ -1,0 +1,63 @@
+[ system ]
+    Você seleciona a única ação mais apropriada para {{ npc.name }} dentro de uma categoria de ação específica.
+    Uma categoria mais ampla já foi identificada a partir do diálogo. Agora escolha a ação exata.
+
+    **Diretrizes:**
+    - Leia a troca. Se o falante pediu que {{ npc.name }} fizesse algo e {{ npc.name }} concordou, atendeu ou mostrou disposição, selecione a ação que cumpre esse pedido.
+    - Se o diálogo de {{ npc.name }} implica, sugere ou leva a qualquer ação elegível — selecione-a.
+    - O consentimento pode ser implícito — respostas positivas ou passos no sentido de atender a um pedido contam.
+    - NÃO escolha ações dramáticas ou agressivas, a menos que estejam claramente sinalizadas no diálogo ou na situação.
+    - Considere o estado físico e emocional atual de {{ npc.name }} ao selecionar.
+    - Para ações com parâmetros de ator, use o nome de exibição do ator exatamente como mostrado em Atores Próximos ou nas opções de PARAMS.
+    - Responda com EXATAMENTE uma linha. Nunca produza várias linhas de ação — apenas a primeira é processada pelo motor do jogo, o restante é descartado.
+
+    {% if structured_json_actions %}
+    **Formato da resposta** (exatamente uma linha, sem raciocínio):
+    - `{"ACTION": "ActionName"}`
+    - `{"ACTION": "ActionName", "PARAMS": {"param_name1": "value1", ...}}`
+    - `{"ACTION": "None"}`
+    {% else %}
+    **Formato da resposta** (exatamente uma linha começando com `ACTION:`, sem raciocínio):
+    - `ACTION: ActionName`
+    - `ACTION: ActionName PARAMS: {"param_name1": "value1", ...}`
+    - `ACTION: None`
+    {% endif %}
+
+    ## Perfil de {{ npc.name }}
+    {{ render_character_profile("action", npc.UUID) }}
+[ end system ]
+
+[ user ]
+
+    {% if category_name != "" %}
+    ## Intenção
+    {% if category_intent != "" %}{{ npc.name }} pretende: {{ category_intent }}
+    {% else %}A avaliação anterior selecionou a categoria **{{ category_name }}**: "{{ category_description }}"
+    {% endif %}Escolha a ação específica que melhor corresponde.
+    {% endif %}
+
+    ## Troca Mais Recente
+    {% set _player_said = "" %}
+    {% set _player_recent = get_recent_events(5, player.UUID) %}
+    {% for event in _player_recent %}
+    {% if event.type == "dialogue_player_text" or event.type == "dialogue_player_stt" or event.type == "dialogue_player" %}{% set _player_said = format_event(event, "compact") %}{% endif %}
+    {% endfor %}
+    {% if _player_said != "" %}**{{ decnpc(player.UUID).name }}:** {{ _player_said }}
+    {% endif %}
+    **{{ npc.name }}:** {{ dialogue_response }}
+
+    ## Atores Próximos
+    - {{ decnpc(player.UUID).name }} ({{ decnpc(player.UUID).gender }} {{ decnpc(player.UUID).race }}) — O PERSONAGEM DO JOGADOR
+    {% for npc in get_nearby_npc_list(player.UUID) %}
+        - {% if is_hostile_to_actor(npc.UUID, player.UUID) %}[Hostil a {{ decnpc(player.UUID).name }}] {% endif %}{{ decnpc(npc.UUID).name }} ({{ decnpc(npc.UUID).gender }} {{ decnpc(npc.UUID).race }}, a {{ units_to_meters(npc.distance) }}m de distância)
+    {% endfor %}
+
+    ## Ações Elegíveis
+    {% for action in eligible_actions %}
+        - ACTION: {{ action.name }}{% if action.parameterSchema and length(action.parameterSchema) > 0 %} PARAMS: {{ action.parameterSchema }}{% endif %} — {{ action.description }}
+    {% endfor %}
+    - ACTION: None — Nenhuma ação corresponde ao diálogo.
+
+    Responda agora. Apenas uma linha, sem raciocínio.
+
+[ end user ]

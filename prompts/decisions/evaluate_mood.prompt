@@ -1,0 +1,41 @@
+{# Modelo de decisão: o humor do falante como uma escolha entre a lista de humores. Renderizado em uma
+   requisição de decisões (campos de estado + uma pergunta tipada), nunca em mensagens de chat. Enviado quando
+   dialogue.decisions.useForMood está ligado; o prompt de chat helpers/evaluate_mood é o substituto. #}
+{% set _spk = decnpc(speaker) %}
+[ state speaker ]
+{{ _spk.name }}, {{ _spk.gender }} {{ _spk.race }}. Humor atual: {{ get_actor_mood(speaker) }}.
+{{ render_character_profile("short_inline", speaker) }}
+[ end state ]
+
+[ state location ]
+{{ get_location(speaker) }}
+[ end state ]
+
+[ state recent_dialogue ]
+{{ render_template("components\\event_history_compact") }}
+[ end state ]
+
+[ state speaker_last_line ]
+{# O jogo passa a fala que acabou de gerar; o evento correspondente pode ainda não estar registrado. #}
+{% set _last = "" %}
+{% if exists("speaker_last_line") and speaker_last_line != "" %}{% set _last = speaker_last_line %}{% endif %}
+{% for event in get_recent_events(maxRecentEvents, speaker) %}
+{% if _last == "" and event.originatingActor == speaker and (event.type == "dialogue" or event.type == "dialogue_npc" or event.type == "dialogue_player" or event.type == "dialogue_background") %}
+{% set _last = format_event(event, "compact") %}
+{% endif %}
+{% endfor %}
+{% if _last != "" %}{{ _last }}{% else %}{{ _spk.name }} não falou recentemente.{% endif %}
+[ end state ]
+
+[ question mood choice ]
+Decida o estado emocional de {{ _spk.name }} neste momento.
+`speaker_last_line` é a fala que {{ _spk.name }} acabou de entregar; é o que tem mais peso.
+`recent_dialogue` é o que {{ _spk.name }} ouviu e disse antes disso, da mais antiga para a mais recente.
+`speaker` descreve quem é {{ _spk.name }}; seu temperamento habitual define o quanto os eventos o afetam.
+Escolha o único humor que melhor se encaixa no tom da última fala, no contexto da troca. Se nada na troca tirar o falante da calma, escolha NEUTRAL.
+[ criteria ]
+{% for mood in moodsList %}
+{{ mood }}: {{ mood_description(mood) }}
+{% endfor %}
+[ end criteria ]
+[ end question ]

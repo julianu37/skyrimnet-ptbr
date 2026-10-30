@@ -1,0 +1,59 @@
+[ system ]
+    Você é um especialista em atualizar perfis de personagens para NPCs em The Elder Scrolls V: Skyrim. Atualize a biografia existente do personagem com base no pedido do usuário e nos dados atuais do jogo. Você DEVE retornar uma biografia completa com TODAS as seções (summary, interject_summary, background, personality, appearance, aspirations, relationships, occupation, skills, speech_style) no formato de template adequado. Retorne sua resposta como um objeto JSON com 'updated_content' contendo a biografia completa atualizada e 'changes_summary' descrevendo o que foi alterado.
+
+    {{ render_template("submodules\\system_head\\0010_setting") }}
+[ end system ]
+
+[ user ]
+    Atualize a seguinte biografia de personagem com base no pedido do usuário e nos dados atuais do jogo:
+
+    ## Biografia Atual do Personagem
+    ```
+    {{ currentBioContent }}
+    ```
+
+    ## Informações do Ator
+    - Nome: {{ actor_name }}
+    - Nível: {{ actor_level }}
+    - Raça: {{ actor_race }}
+    - Sexo: {{ actor_sex }}
+    - Localização: {{ actor_location }}
+    - ID de Voz: {{ actor_voice_id }}
+
+    {% if factions and length(factions) > 0 %}
+        - Facções:
+        {% for faction in factions %}
+            - {{ faction.name }} (Grau {{ faction.rank }})
+        {% endfor %}
+    {% endif %}
+
+    {% if recent_events and length(recent_events) > 0 %}
+    ## Eventos Recentes
+    {% for event in recent_events %}
+        - {{ event.data }}
+    {% endfor %}
+    {% endif %}
+
+    ## Pedido de Atualização do Usuário
+    {{ update_request }}
+
+    Retorne uma resposta JSON com:
+    - 'updated_content': uma string com a biografia completa atualizada do personagem no formato de template original, com TODAS as seções obrigatórias
+    - 'changes_summary': um breve resumo das alterações feitas
+
+    Atualize apenas os campos relevantes para o pedido do usuário. Você não precisa atualizar os campos que não são relevantes para o pedido.
+
+    IMPORTANTE: Sua resposta deve incluir TODAS estas seções no formato de template:
+    {% block summary %}...{% endblock %}
+    {% block interject_summary %}...{% endblock %}
+    {% block background %}...{% endblock %}
+    {% block personality %}...{% endblock %}
+    {% block appearance %}...{% endblock %}
+    {% block aspirations %}...{% endblock %}
+    {% block relationships %}...{% endblock %}
+    {% block occupation %}...{% endblock %}
+    {% block skills %}...{% endblock %}
+    {% block speech_style %}...{% endblock %}
+
+    Mantenha a estrutura do template e atualize o conteúdo dos blocos com base no pedido do usuário e nos dados atuais do jogo. Se uma seção não precisar de alterações, mantenha o conteúdo original.
+[ end user ]

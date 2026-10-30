@@ -1,0 +1,8 @@
+{# Suprimido para um corpo totalmente vestido por uma entidade vinculada (entity_led); a coleta
+   "bio_aspirations", que empresta os objetivos da ENTIDADE em 7050, sempre renderiza. #}
+{% if render_mode == "bio_aspirations" or ((render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not suppress_host_persona) %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        ## Objetivos e Aspirações
+    {% endif %}
+    {% block aspirations %}{% endblock %}
+{% endif %}

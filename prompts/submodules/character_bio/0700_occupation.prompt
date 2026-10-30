@@ -1,0 +1,13 @@
+{# No estado entity_led, o ofício do corpo ainda é útil (a entidade precisa manter as aparências
+   na loja dela), mas é enquadrado como o papel do corpo, não como a vocação de quem fala. #}
+{% if render_mode == "bio_occupation" or render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        {% if suppress_host_persona %}
+        ## O que se espera que este corpo esteja fazendo
+        (Este é o ofício do corpo — útil para manter as aparências, não a sua vocação.)
+        {% else %}
+        ## Ocupação
+        {% endif %}
+    {% endif %}
+    {% block occupation %}{% endblock %}
+{% endif %}

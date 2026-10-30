@@ -1,0 +1,51 @@
+[ user ]
+    Você está catalogando "{{subject_name}}" para um banco de dados visual de locais em Skyrim. Use TANTO seu conhecimento deste local a partir da lore de Elder Scrolls QUANTO as evidências visuais desta captura de tela para criar uma descrição abrangente.
+
+    Contexto do Local:
+    - Nome: {{subject_name}}
+    - Tipo: {% if is_indoors %}Interior{% else %}Exterior{% endif %}
+    - Posição Atual: {{location_name}}
+
+    SUA TAREFA:
+    Descreva este local fundamentando sua resposta no que você observa visualmente na captura de tela, complementado pelo seu conhecimento da lore de Skyrim quando aplicável.
+
+    1. CARACTERÍSTICAS FÍSICAS (foco principal - o que você VÊ):
+        - {% if is_indoors %}Estilo arquitetônico e disposição interna{% else %}Tipo de terreno e características naturais{% endif %}
+        - {% if is_indoors %}Materiais de construção visíveis (pedra, madeira, metal etc.){% else %}Características da paisagem (vegetação, formações rochosas, corpos d'água){% endif %}
+        - {% if is_indoors %}Estrutura dos cômodos, elementos estruturais principais (portas, janelas, colunas, escadas){% else %}Estruturas, marcos ou acidentes geográficos visíveis{% endif %}
+        - Elementos fixos, mobiliário e objetos característicos
+        - Esquemas de cores e atmosfera visual
+        - {% if not is_indoors %}Contexto geográfico (montanhas, florestas, água, estruturas distantes){% endif %}
+
+    2. IDENTIDADE DO LOCAL (se reconhecível pelas imagens):
+        - Que tipo de lugar é este (residência, loja, salão da guilda, masmorra, ermo etc.)
+        - Seu propósito ou função em Skyrim (com base no que você vê)
+        - Se você reconhecer este como um local famoso da lore, pode mencionar sua importância
+
+    3. CARACTERÍSTICAS DEFINIDORAS:
+        - O que torna este local visualmente reconhecível ou único
+        - Elementos visuais principais que o distinguem de locais semelhantes
+        - Detalhes arquitetônicos ou naturais que o caracterizam
+
+    REGRAS IMPORTANTES:
+    - Fundamente sua descrição PRIMEIRO na EVIDÊNCIA VISUAL, e só depois complemente com o conhecimento de lore
+    - NÃO mencione nem repita o nome do local "{{subject_name}}" na sua saída
+    - Se isto parecer uma área genérica (trilha no ermo, encruzilhada, caminho sem nome), descreva o que você vê, e não como um local importante da lore
+    - Comece diretamente pela descrição (sem preâmbulo como "Este local é..." ou "{{subject_name}} é...")
+    - Concentre-se em características PERMANENTES, não em condições temporárias
+    - NÃO descreva: NPCs em detalhes, iluminação/sombras atuais, efeitos climáticos, elementos de interface, hora do dia.
+    - Use o tempo presente para características permanentes
+    - Seja conciso e factual - não invente detalhes que não estejam visíveis na captura de tela
+
+    EXEMPLO DE BOA SAÍDA (local famoso):
+    "O palácio do jarl serve como sede do poder em Whiterun. O grande salão apresenta construção nórdica imponente em madeira, com vigas maciças e uma plataforma elevada para o trono. As paredes de pedra são adornadas com cabeças de animais empalhadas e estandartes, enquanto uma longa cova de fogo central percorre todo o salão..."
+
+    EXEMPLO DE BOA SAÍDA (ermo genérico):
+    "Uma trilha florestal serpenteia por uma mata densa de coníferas. O caminho de terra é ladeado por altos pinheiros e abetos, com vegetação rasteira espessa de samambaias cobrindo o solo da floresta. Afloramentos rochosos pontuam o terreno irregular, enquanto picos distantes se erguem acima da linha das árvores. Uma torre de vigia de pedra é visível numa encosta próxima, sugerindo proximidade com um assentamento ou fortificação."
+
+{{ render_subcomponent("omnisight_location", "full") }}
+    FORMATO: Escreva 2-3 parágrafos concisos descrevendo o que você observa e o que torna este local distinto. Não inclua o nome do local na sua saída.
+    [ image ]
+    {{imageDataUrl}}
+    [ end image ]
+[ end user ]

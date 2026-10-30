@@ -1,0 +1,17 @@
+## Memórias do NPC
+{% set memories = get_relevant_memories(npc.UUID) %}
+{% if memories %}
+{{ decnpc(npc.UUID).name }} tem as seguintes memórias:
+
+{% for memory in memories %}
+    [Memória {{ loop.index }}]
+    - Resumo: {{ memory.summary }}
+    - Detalhes: {{ memory.details }}
+    - Emoção: {{ memory.emotion }}
+    - Tags: {% for tag in memory.tags %}{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}
+    - Local: {{ memory.location }}
+    - Importância: {{ memory.importanceScore }}/10
+{% endfor %}
+{% else %}
+{{ decnpc(npc.UUID).name }} não tem memórias significativas relevantes para esta situação.
+{% endif %}

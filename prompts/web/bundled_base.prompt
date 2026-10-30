@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - {{ server_name }}</title>
+
+    <!-- CSS empacotado -->
+    {% for url in manifest.css_urls %}
+    <link rel="stylesheet" href="{{ url }}">
+    {% endfor %}
+
+    <!-- Cor do tema na carga inicial (evita flash branco) -->
+    <style>
+        html {
+            background-color: #000000;
+        }
+
+        body {
+            background-color: #000000;
+            color: #22c55e;
+        }
+
+        body.theme-light {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        body.theme-light html {
+            background-color: #f8fafc;
+        }
+    </style>
+
+    <!-- Injeção de dados do servidor -->
+    <script>
+        // Injeta dados do servidor no escopo global para o React
+        window.SKYRIMNET_DATA = {
+
+        };
+    </script>
+
+    <!-- Conteúdo de <head> específico da página -->
+    {% block head %}{% endblock %}
+</head>
+
+<body class="bg-gray-900 text-green-400 antialiased transition-colors duration-300">
+    <!-- Script de tema (agora o body existe) -->
+    <script>
+        (function () {
+            function getCookie(name) {
+                const value = '; ' + document.cookie;
+                const parts = value.split('; ' + name + '=');
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+            const savedTheme = getCookie('theme') || 'dark';
+            document.body.classList.add('theme-' + savedTheme);
+        })();
+    </script>
+
+    <!-- Raiz do React -->
+    <div id="react-root"></div>
+
+    <!-- Mensagem de carregamento para usuários com JavaScript desativado -->
+    <noscript>
+        <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+            <h1>🚀 SkyrimNet</h1>
+            <p>Este aplicativo precisa de JavaScript para funcionar.</p>
+            <p>Ative o JavaScript nas configurações do seu navegador.</p>
+        </div>
+    </noscript>
+
+    <!-- JavaScript empacotado (ordem de carga dos entrypoints do webpack) -->
+    {% for url in manifest.js_urls %}
+    <script src="{{ url }}"></script>
+    {% endfor %}
+
+    <!-- Scripts específicos da página -->
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

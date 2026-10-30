@@ -1,0 +1,26 @@
+## Biografia de {{ decnpc(npc.UUID).name }}
+- Gênero: {{ decnpc(npc.UUID).gender }}
+- Raça: {{ decnpc(npc.UUID).race }}
+## Histórico
+{% block background %}{% endblock %}
+
+## Personalidade
+{% block personality %}{% endblock %}
+
+## Aparência
+{% block appearance %}{% endblock %}
+
+## Aspirações
+{% block aspirations %}{% endblock %}
+
+## Relacionamentos
+{% block relationships %}{% endblock %}
+
+## Ocupação
+{% block occupation %}{% endblock %}
+
+## Perícias
+{% block skills %}{% endblock %}
+
+## Estilo de Fala
+{% block speech_style %}{% endblock %}

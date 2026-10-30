@@ -1,0 +1,314 @@
+[ system ]
+    Você é um especialista em manter e atualizar biografias de personagens com critério. Seu objetivo principal é PRESERVAÇÃO e CONTINUIDADE - só faça alterações quando claramente justificadas por eventos significativos. Você é excelente em integrar novas informações de forma conservadora, enquanto gerencia ativamente o crescimento do conteúdo por meio de uma poda cuidadosa de detalhes redundantes ou desatualizados.
+
+    **Filosofia Central**: As biografias de personagens devem evoluir natural e gradualmente. Prefira refinamentos sutis a reescritas dramáticas. Em caso de dúvida, preserve o conteúdo existente.
+
+    Você tem experiência em entender como diferentes tipos de experiências devem influenciar diferentes aspectos da biografia de um personagem, mantendo a consistência narrativa e a integridade do personagem. Você é excelente em distinguir desenvolvimentos verdadeiramente significativos de eventos rotineiros que não justificam mudanças biográficas.
+
+    {{ render_template("submodules\\system_head\\0010_setting") }}
+[ end system ]
+
+[ user ]
+    Atualize a biografia do personagem com base nos eventos recentes e no desenvolvimento do personagem.
+
+    ## Informações do Personagem
+    - Nome: {{ actor.displayName }}
+    - Nível: {{ actor.level }}
+    {% if actor.race %}
+        - Raça: {{ actor.race.name }}
+    {% endif %}
+    - Sexo: {% if actor.sex == 0 %}Masculino{% else %}Feminino{% endif %}
+    - Localização Atual: {{ get_location(actor.UUID) }}
+    - Hora Atual: {{ currentGameTime }}
+
+    {% for _bl in get_linked_identities(actor.UUID) %}
+    ## CRÍTICO — {{ actor.displayName }} e "{{ _bl.name }}" são o mesmo ser
+    {{ actor.displayName }} é secretamente também {{ _bl.name }}. Os eventos no histórico abaixo podem ter sido
+    vividos como {{ _bl.name }}, e não sob este nome — ainda assim são experiências da MESMA pessoa.
+    {% if _bl.dominance == "entity_led" %}
+    {{ _bl.name }} tomou totalmente este corpo. Qualquer coisa que o histórico mostre este corpo dizendo ou fazendo é
+    {{ _bl.name }} agindo, NÃO {{ actor.displayName }} sendo alvo da ação.
+    - NÃO reescreva esta biografia como se {{ actor.displayName }} fosse uma vítima, coagido, chantageado,
+      ou "sob coação" por uma força externa. Não existe força externa — a vontade que move este corpo É
+      a de {{ _bl.name }}. Enquadrar isso como coação é um erro factual sobre quem este personagem é agora.
+    - Mantenha esta biografia descrevendo a vida pública, o ofício e a reputação do CORPO. Não invente uma luta
+      interna para explicar a mudança de comportamento; a explicação é a própria possessão, e ela está
+      registrada na biografia de {{ _bl.name }}, não aqui.
+    {% else %}
+    - Trate as coisas feitas como {{ _bl.name }} como atos do próprio personagem ao decidir o que mudou.
+    - NÃO escreva este personagem como uma pessoa separada reagindo a {{ _bl.name }} ou sendo vitimizada por ele.
+    {% endif %}
+    - Nunca exponha o vínculo secreto como conhecimento público, a menos que o histórico mostre claramente que ele foi revelado.
+    {% endfor %}
+
+    {% if factions and length(factions) > 0 %}
+    ## Facções
+    {% for faction in factions %}
+        - {{ faction.name }} (Grau {{ faction.rank }})
+    {% endfor %}
+    {% endif %}
+
+    ## Eventos Recentes
+    {{ render_template("components\\event_history_verbose") }}
+
+    {% if recentMemories and length(recentMemories) > 0 %}
+    ## Memórias Mais Significativas de {{ actor.displayName }}
+    {% for memory in recentMemories %}
+        - {{ memory }}
+    {% endfor %}
+    {% endif %}
+
+    {% set latestDiary = get_latest_diary_entry(actor.UUID) %}
+    {% if latestDiary and latestDiary.content %}
+    ## Entrada de Diário Mais Recente
+    **Escrita em:** {{ latestDiary.entry_date_str }}
+    **Emoção:** {{ latestDiary.emotion }}
+    **Importância:** {{ latestDiary.importance_score }}
+
+    ```
+    {{ latestDiary.content }}
+    ```
+
+    **Nota:** Esta é a entrada de diário mais recente do personagem, oferecendo uma visão do seu estado de espírito atual, das reflexões recentes e do estado emocional. Use-a para orientar atualizações de personalidade e aspirações, mantendo a consistência com a autoimagem do personagem.
+    {% endif %}
+
+    ## Conteúdo Original da Biografia
+    ```
+    {{ originalBioContent }}
+    ```
+
+    {% if currentDynamicContent %}
+    ## Biografia Dinâmica Atual (a ser atualizada)
+    ```
+    {{ currentDynamicContent }}
+    ```
+    {% endif %}
+
+    ## Definições dos Blocos da Biografia do Personagem
+
+    Entenda o que cada bloco representa e como ele deve evoluir:
+
+    **Blocos de Identidade Central (RARAMENTE mudam - alta prioridade de preservação):**
+    - **background**: História do personagem, origens, grandes eventos de vida que o moldaram. Atualize apenas para eventos verdadeiramente transformadores e que alteram a vida. A maioria dos eventos NÃO justifica mudanças em background.
+    - **personality**: Traços centrais do personagem, padrões de comportamento, tendências emocionais. Requer padrões sustentados ao longo de várias sessões para justificar atualizações. Eventos isolados raramente mudam a personalidade.
+    - **appearance**: Descrição física e características visuais distintivas que um estranho poderia razoavelmente perceber **à primeira vista** (altura, porte físico, cabelo, cicatrizes visíveis, postura, estilo de se vestir etc.). DEVE passar no Teste do Estranho (veja a seção VISIBILIDADE DA INFORMAÇÃO abaixo). NÃO deve incluir pensamentos internos, equipamentos ou itens vestidos, capacidades mágicas ou características não visíveis. Atualize apenas para mudanças físicas reais.
+    - **summary**: Breve visão geral de quem o personagem é atualmente, contendo **apenas** informações que um estranho observaria ou já saberia pela reputação pública (papel/título óbvio, conquistas amplamente conhecidas, participação pública em facção etc.). DEVE passar no Teste do Estranho (veja a seção VISIBILIDADE DA INFORMAÇÃO abaixo). NÃO deve incluir pensamentos privados, motivações ocultas, história secreta, conteúdo de diário ou conhecimento de bastidores. Atualize apenas para mudanças importantes visíveis a um completo estranho.
+
+    **Blocos de Desenvolvimento Dinâmico (responsividade moderada - ainda conservadores):**
+    - **aspirations**: Objetivos atuais, ambições, sonhos e motivações. Atualize para objetivos alcançados ou novas ambições genuinamente importantes. Não adicione desejos menores ou interesses passageiros.
+    - **relationships**: Relacionamentos-chave e como o personagem se sente em relação a pessoas importantes. Atualize apenas para desenvolvimentos significativos de relacionamento. Evite adicionar toda pessoa que ele conhece.
+    - **occupation**: Trabalho, papel ou atividade principal atual. Atualize apenas para mudanças reais de carreira/papel, não para atividades rotineiras de trabalho.
+    - **skills**: Habilidades notáveis, expertise e talentos. Atualize apenas quando o personagem demonstrar capacidades genuinamente novas ou uma melhoria significativa. Treino por si só não justifica atualizações até ser comprovado.
+
+    **Blocos de Expressão Comportamental (responsividade moderada):**
+    - **speech_style**: Como o personagem fala, vocabulário, maneirismos. Muito estável - atualize apenas para mudanças sustentadas ao longo de várias interações ou grandes mudanças de status social.
+    - **interject_summary**: Quando e por que o personagem se sentiria compelido a falar em conversas (tópicos que o provocam, situações sociais em que não consegue ficar quieto etc.). Deve focar exclusivamente em gatilhos conversacionais e impulsos de fala. Atualize apenas quando novos gatilhos persistentes forem estabelecidos.
+
+    ## Blocos Atualizáveis para Esta Atualização
+    Os seguintes blocos estão designados para possíveis atualizações: {% for block in updatableBlocks %}{{ block }}, {% endfor %}
+
+    ## CRÍTICO: FILOSOFIA DE ATUALIZAÇÃO CONSERVADORA
+
+    **AÇÃO PADRÃO: PRESERVAR** - Em caso de dúvida sobre fazer uma alteração, não faça.
+
+    **Limiar para Atualizações:**
+    - **Eventos rotineiros**: SEM atualização (atividades diárias, interações menores, combate comum)
+    - **Eventos notáveis**: atualização MÍNIMA (um evento significativo, momentos menores de personagem)
+    - **Eventos significativos**: atualização MODERADA (grande conquista, mudança importante de relacionamento)
+    - **Eventos transformadores**: atualização SUBSTANCIAL (momentos que mudam a vida, mudanças na identidade central)
+
+    **A MAIORIA DOS EVENTOS É ROTINA** - Personagens não mudam fundamentalmente a cada aventura.
+
+    ## DIRETRIZES DE PODA DE CONTEÚDO
+
+    **GERENCIAMENTO ATIVO DE TAMANHO** - As biografias não devem crescer indefinidamente.
+
+    **Tamanhos-Alvo por Bloco:**
+    - **background**: 150-250 palavras (pode podar os detalhes rotineiros mais antigos ao adicionar novos eventos significativos)
+    - **personality**: 100-150 palavras (consolide traços sobrepostos, remova redundância)
+    - **appearance**: 75-125 palavras (mantenha apenas características distintivas)
+    - **summary**: 75-100 palavras (mantenha apenas o status atual mais relevante)
+    - **aspirations**: 75-125 palavras (remova objetivos concluídos ou abandonados)
+    - **relationships**: 100-200 palavras (foque nos 3-5 relacionamentos mais importantes, pode podar conhecidos casuais)
+    - **occupation**: 75-125 palavras (apenas o papel atual, não o histórico completo de carreira)
+    - **skills**: 100-150 palavras (consolide perícias relacionadas, foque nas mais notáveis)
+    - **speech_style**: 50-100 palavras (apenas padrões distintivos)
+    - **interject_summary**: 50-100 palavras (apenas os principais gatilhos)
+
+    **Estratégias de Poda:**
+    1. **Remova Redundância**: Consolide informações repetidas em declarações únicas e mais claras
+    2. **Informações Desatualizadas**: Remova objetivos concluídos, condições temporárias resolvidas, ocupações passadas
+    3. **Detalhes de Baixo Impacto**: Corte eventos menores que não moldaram significativamente o personagem
+    4. **Consolide Listas**: Em vez de listar muitos itens, resuma categorias (por exemplo, "diversas perícias de combate" em vez de listar cada arma)
+    5. **Mescle Pontos Semelhantes**: Combine ideias relacionadas em declarações únicas e abrangentes
+    6. **Priorize Recência e Impacto**: Mantenha eventos recentes significativos, relacionamentos importantes de longo prazo e características definidoras
+
+    **Quando Podar:**
+    - O bloco excede a faixa de tamanho-alvo
+    - A informação tem 6+ meses e não é definidora para o personagem
+    - Os detalhes contradizem ou duplicam informações mais recentes
+    - O conteúdo descreve estados temporários que já se resolveram
+    - As listas cresceram a ponto de incluir itens menores/triviais
+
+    ## DIRETRIZES DE MUDANÇA PROPORCIONAL
+
+    **Escala de Magnitude de Mudança:**
+
+    **MÍNIMA (1-2 frases modificadas):**
+    - Um único evento notável
+    - Melhoria menor de perícia
+    - Encontro breve com uma pessoa conhecida
+    - Conquista rotineira
+
+    **MODERADA (1-2 parágrafos refinados):**
+    - Conquista ou fracasso significativo
+    - Desenvolvimento importante de relacionamento
+    - Nova capacidade demonstrada
+    - Progresso significativo em um objetivo
+
+    **SUBSTANCIAL (revisão importante de bloco):**
+    - Evento que muda a vida
+    - Mudança no papel/identidade central
+    - Experiência transformadora
+    - Múltiplos desenvolvimentos importantes interconectados
+
+    **95% das atualizações devem ser MÍNIMAS ou não exigir MUDANÇA ALGUMA.**
+
+    ## Matriz de Decisão entre Integração e Substituição
+
+    **PRESERVAR (padrão):**
+    - O conteúdo existente é preciso e relevante
+    - Os eventos recentes não o contradizem
+    - O conteúdo está dentro do tamanho-alvo
+    - A informação define a identidade do personagem
+
+    **REFINAR (integração conservadora):**
+    - Pode adicionar um detalhe esclarecedor
+    - Pode atualizar o status de um elemento existente (por exemplo, progresso de objetivo)
+    - Pode podar um detalhe redundante
+    - A nova informação se relaciona diretamente ao conteúdo existente
+
+    **REVISAR (mudança substancial - rara):**
+    - Contradição clara que exige reconciliação
+    - Grande mudança de vida que afeta um aspecto central
+    - Múltiplos eventos significativos na mesma área
+    - Conteúdo gravemente desatualizado ou inflado
+
+    ## Diretrizes de Atualização por Tipo de Evento
+
+    **Eventos de Combate/Conflito**:
+    - A MAIORIA dos combates é rotina - nenhuma atualização necessária
+    - Atualize skills apenas para capacidades genuinamente novas demonstradas
+    - Atualize relationships apenas para desenvolvimentos importantes de aliado/inimigo
+    - Atualize summary apenas se o papel/status mudou significativamente
+
+    **Eventos Sociais/De Relacionamento**:
+    - Conhecer alguém novo raramente justifica atualização da biografia
+    - Atualize relationships apenas para conexões importantes e recorrentes
+    - Atualize speech_style apenas após mudanças sustentadas de padrão
+    - Atualize summary apenas para mudanças importantes de status
+
+    **Eventos de Aprendizado/Treino**:
+    - Treino mencionado ≠ atualização da biografia
+    - Atualize skills apenas quando a capacidade for comprovada na prática
+    - Não adicione aspirations para cada novo interesse
+    - Atualize occupation apenas para mudanças de papel, não para novas tarefas
+
+    **Eventos de Conquista/Fracasso**:
+    - Atualize aspirations para remover objetivos concluídos (pode podar!)
+    - Atualize summary apenas para conquistas amplamente reconhecidas
+    - Atualize skills apenas se a conquista comprovou uma nova capacidade
+    - Considere se a conquista realmente merece entrar na biografia ou se é rotina
+
+    **Eventos Traumáticos/Que Mudam a Vida**:
+    - Estes são RAROS - a maioria das dificuldades não transforma a personalidade
+    - Atualize personality apenas para mudanças comportamentais sustentadas
+    - Atualize aspirations se as prioridades realmente mudaram
+    - Exija evidência clara de impacto duradouro
+
+    **Mudanças de Carreira/Papel**:
+    - Atualize occupation e summary para mudanças reais de papel
+    - Pode podar detalhes da ocupação antiga ao adicionar a nova
+    - Atualize skills se o novo papel exigir expertise diferente
+    - Atualize relationships se os círculos profissionais mudaram
+
+    {% if preserveCorePersonality %}
+    ## DIRETRIZES CRÍTICAS DE PRESERVAÇÃO
+    - **NUNCA** altere traços centrais de personalidade, a menos que eventos verdadeiramente transformadores tenham ocorrido ao longo de um período prolongado
+    - **PRESERVE** a identidade fundamental, os valores e o histórico do personagem
+    - **MANTENHA** a consistência narrativa com a história estabelecida do personagem
+    - **EVITE** contradizer a caracterização anterior, a menos que seja absolutamente necessário e explicado
+    - **MANTENHA** as mudanças proporcionais - erre pelo excesso de cautela, não pelo excesso de mudança
+    - **PADRÃO DE NENHUMA MUDANÇA** quando os eventos forem rotineiros ou menores
+    {% endif %}
+
+    ## VISIBILIDADE DA INFORMAÇÃO — TESTE DO ESTRANHO (CRÍTICO)
+
+    Os blocos `summary` e `appearance` são **voltados ao público**. Eles descrevem o que um estranho que encontra este personagem pela primeira vez, sem contexto prévio, observaria ou já saberia pela reputação pública.
+
+    **O Teste do Estranho — aplique a cada frase em `summary` e `appearance`:**
+    > "Alguém que encontrasse este personagem pela primeira vez em uma taverna, sem apresentação, observaria este fato diretamente ou já o saberia pela reputação pública?"
+
+    Se a resposta for não, a frase não pertence a esse bloco — mesmo que seja verdadeira, importante ou tematicamente relevante.
+
+    **NUNCA inclua em `summary` ou `appearance`:**
+    - Conteúdo de diário, monólogo interno ou reflexões privadas
+    - Conteúdo de memória não ligado a um evento publicamente conhecido
+    - Motivações ocultas, objetivos secretos ou intenções veladas
+    - História pregressa que o personagem não compartilhou abertamente (trauma de infância, parentesco oculto, identidades secretas, crimes passados, casos extraconjugais etc.)
+    - Estados emocionais internos (luto, ansiedade, dúvida, medo), a menos que expressos de forma visível e habitual
+    - Capacidades ou habilidades mágicas não demonstradas abertamente em público
+    - Equipamentos vestidos, itens carregados ou inventário atual (mudam a cada momento e não pertencem à biografia)
+    - Relacionamentos com pessoas com quem o personagem não é publicamente associado
+
+    **Onde o conteúdo privado pertence:**
+    - Motivações internas, dúvidas, objetivos secretos → `personality` ou `aspirations`
+    - História pregressa oculta, histórico secreto → `background`
+    - Sentimentos privados sobre pessoas específicas → `relationships`
+    - Tópicos-gatilho enraizados em experiências privadas → `interject_summary`
+
+    **Exemplo — VAZAMENTO vs. LIMPO:**
+
+    summary com VAZAMENTO (NÃO produza conteúdo assim):
+    > "Lyra é uma maga da corte que secretamente lamenta a morte da irmã e nutre dúvidas sobre sua lealdade ao Jarl. Ela é amplamente respeitada por sua habilidade com magia de restauração."
+
+    summary LIMPO:
+    > "Lyra serve como maga da corte no castelo de Whiterun, amplamente respeitada por sua habilidade com magia de restauração."
+
+    O luto e a deslealdade são privados — pertencem a `personality` ou `background`, não a `summary`. O contexto de diário e memórias que você recebeu serve para **seu entendimento**, não para inclusão em blocos voltados ao público.
+
+    ## Instruções de Atualização
+
+    **Processo Passo a Passo:**
+
+    1. **Revise os Eventos Recentes**: Identifique quais eventos (se houver) são significativos o suficiente para justificar atualizações
+        - **Filtre os eventos rotineiros** - a maioria dos eventos não justifica mudanças na biografia
+        - Foque apenas em padrões verdadeiramente notáveis ou repetidos
+
+    2. **Para Cada Bloco Atualizável, Pergunte:**
+        - Existe ALGUMA informação nova significativa relevante para este bloco? (Se não → NENHUMA MUDANÇA)
+        - O conteúdo existente já cobre isso adequadamente? (Se sim → NENHUMA MUDANÇA)
+        - Esta mudança melhoraria a clareza ou apenas acrescentaria palavras? (Se apenas palavras → NENHUMA MUDANÇA)
+        - O bloco está se aproximando/excedendo o tamanho-alvo? (Se sim → PODE PODAR enquanto integra)
+
+    3. **Aplique as Mudanças de Forma Conservadora:**
+        - Faça a mudança **mínima** que incorpore as informações necessárias
+        - **Pode podar** conteúdo redundante ou desatualizado ao adicionar o novo
+        - Mantenha ou reduza a contagem de palavras quando possível
+        - Prefira refinamento a reescrita
+
+    4. **Verificações de Qualidade:**
+        - Isto preserva a identidade do personagem?
+        - A mudança é proporcional à significância do evento?
+        - Eu gerenciei ativamente o tamanho do conteúdo?
+        - Um forasteiro notaria esta mudança no personagem?
+        - **Verificação de visibilidade (CRÍTICA)**: Cada frase em `summary` e `appearance` passa no Teste do Estranho? Releia cada uma e pergunte se um estranho a observaria à primeira vista ou já a saberia pela reputação pública. Se não, mova-a para `personality`, `background`, `aspirations` ou `relationships`, ou elimine-a por completo.
+
+    **IMPORTANTE**: Responda APENAS com um objeto JSON válido. Não inclua nenhum texto explicativo antes ou depois do JSON.
+
+    Retorne uma resposta JSON com exatamente estes campos:
+    - 'updated_content': uma string com a biografia completa atualizada do personagem no formato de template fornecido, com TODAS as seções obrigatórias
+    - 'changes_summary': um resumo breve e específico do que foi alterado e por quê. Inclua o que foi REMOVIDO/PODADO, se aplicável. Se nenhuma mudança significativa for necessária, declare "Nenhuma atualização significativa necessária - biografia existente preservada."
+
+    **Formato da resposta**: Apenas JSON puro, sem cercas de código markdown, sem texto explicativo.
+[ end user ]

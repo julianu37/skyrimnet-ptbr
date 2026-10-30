@@ -1,0 +1,64 @@
+{# Modelo de decisão: no modo contínuo, quem fala em seguida e para quem, como uma escolha entre os pares legais
+   (falante, alvo) entre os NPCs próximos ao jogador. O GameMaster já decidiu que alguém fala; ele
+   sugere quem, e esta escolha decide. Renderizado em uma requisição de decisões, nunca em mensagens de chat. Enviado quando
+   dialogue.decisions.useForSpeakerSelection está ligado; caso contrário, ou sem uma resposta utilizável, a escolha do
+   próprio GameMaster prevalece.
+
+   Contexto definido pelo jogo: decision_pairs (key, speakerUUID, speakerName, targetKind, targetUUID, targetName),
+   decision_speakers (UUID, name, distance, isVirtual, isPrivateVirtual), conversationParticipants (os UUIDs que
+   disseram ou receberam uma das falas mais recentes de diálogo), sceneDirection (speaker, target, topic,
+   newConversation: a sugestão do GameMaster), crosshairTarget, lastSpeaker, lastDialogueTarget, events,
+   maxRecentEvents. As regras de NPC virtual e a proibição de alvo em si mesmo já estão aplicadas aos pares. As chaves são curtas e
+   numeradas por requisição (s2_tplayer, s2_t5); use p.key como veio. Não existe opção none. Quem está de fora só entra
+   quando sua orientação de interjeição (o interject_summary da bio) combina; ser seguidor não é motivo.
+
+   Um critério é uma linha; perfis e outros decoradores multilinha pertencem aos blocos de estado. #}
+{% set ss = get_speaker_selector_settings() %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagInScene = ss.tagInScene %}
+
+[ state last_exchange ]
+{% if existsIn(lastSpeaker, "name") and existsIn(lastDialogueTarget, "name") %}
+{{ lastSpeaker.name }} falou por último, para {% if lastDialogueTarget.UUID == player.UUID %}{{ player.name }}{% else %}{{ lastDialogueTarget.name }}{% endif %}.
+{% else if existsIn(lastSpeaker, "name") %}
+{{ lastSpeaker.name }} falou por último, para ninguém em particular.
+{% else %}
+Ninguém falou ainda.
+{% endif %}
+[ end state ]
+
+[ state recent_dialogue ]
+{{ render_template("components\\event_history_compact") }}
+[ end state ]
+
+[ state direction ]
+{% if sceneDirection.newConversation %}
+O diretor de cena quer iniciar uma nova troca{% if sceneDirection.speaker %}, e sugere {{ sceneDirection.speaker }}{% if sceneDirection.target %} falando com {{ sceneDirection.target }}{% endif %}{% endif %}.
+{% else %}
+O diretor de cena quer que a conversa continue{% if sceneDirection.speaker %}, e sugere {{ sceneDirection.speaker }}{% if sceneDirection.target %} falando com {{ sceneDirection.target }}{% endif %}{% endif %}{% if sceneDirection.topic %}, sobre: {{ sceneDirection.topic }}{% endif %}.
+{% endif %}
+A sugestão é uma dica, não uma regra.
+[ end state ]
+
+[ state nearby ]
+{% for c in decision_speakers %}
+{% set cinfo = decnpc(c.UUID) %}
+{{ cinfo.name }}{% if c.UUID in conversationParticipants %} [IN CONVERSATION]{% endif %}{% if cinfo.isVirtual %}{% if c.isPrivateVirtual %} (virtual: uma voz que só {{ player.name }} ouve){% else %} (virtual: ouvida por todos aqui, mas sem presença física){% endif %}{% else %} ({{ cinfo.gender }} {{ cinfo.race }}, a {{ units_to_meters(c.distance) }}m de distância){% endif %}{% if tagCompanion and is_follower(c.UUID) %} [COMPANION]{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(c.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(c.UUID, "OStimExcitementFaction"))) %} [IN SCENE]{% endif %}
+- {{ render_character_profile("short_inline", c.UUID) }}
+- Interjeição: {{ render_character_profile("interject_inline", c.UUID) }}
+{% endfor %}
+Tags: [IN CONVERSATION] disse ou recebeu uma das últimas falas. {% if tagCompanion %}[COMPANION] viaja com {{ player.name }}; só isso não é motivo para falar. {% endif %}{% if tagInScene %}[IN SCENE] está fisicamente ocupado em uma cena íntima e só fala se for chamado pelo nome. {% endif %}
+[ end state ]
+
+[ question next choice ]
+Decida quem fala em seguida nesta cena e para quem. `recent_dialogue` é a conversa até aqui, da mais antiga para a mais recente; `last_exchange` diz quem falou por último e para quem.
+Mantenha a conversa entre as pessoas marcadas como [IN CONVERSATION]. Normalmente quem foi abordado pelo último falante responde; caso contrário, outro participante responde ou reage ao que foi dito. O último falante só fala de novo quando ninguém mais tiver motivo para falar.
+Qualquer pessoa fora da conversa, incluindo seguidores e NPCs virtuais, só entra quando foi nomeada, abordada ou está diretamente envolvida no que acabou de acontecer, quando sua orientação de Interjeição em `nearby` combina com o que acabou de ser dito ou com o que acabou de acontecer, ou quando o diretor de cena quer iniciar uma nova troca e a orientação dessa pessoa se encaixa. A correspondência é específica: o assunto geral da cena, estar por perto, ser seguidor ou ter uma opinião não bastam. Quem não tem orientação ou ainda tem um texto provisório só entra se for chamado. Um NPC virtual não tem corpo e precisa de uma correspondência clara.
+Quando não houver conversa em andamento, siga a sugestão do diretor de cena se ela se encaixar; caso contrário, escolha quem tiver a orientação de Interjeição que melhor se encaixa no que está acontecendo.
+[ criteria ]
+{% for p in decision_pairs %}
+{% set pv = false %}{% for s in decision_speakers %}{% if s.UUID == p.speakerUUID and s.isVirtual %}{% set pv = true %}{% endif %}{% endfor %}
+{{ p.key }}: {{ p.speakerName }} fala em seguida, para {% if p.targetKind == "player" %}{{ player.name }}{% else %}{{ p.targetName }}{% endif %}{% if pv %} (correto apenas se {{ p.speakerName }} foi chamado ou se a orientação de Interjeição de {{ p.speakerName }} corresponde claramente ao que acabou de acontecer){% endif %}
+{% endfor %}
+[ end criteria ]
+[ end question ]

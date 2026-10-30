@@ -1,0 +1,26 @@
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "bio_relationships" %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        {% if suppress_host_persona %}
+        ## Quem conhece este corpo
+        (Estes são os vínculos de {{ decnpc(actorUUID).name }}, não os seus. Você herdou o
+        conhecimento deles, não os sentimentos — use-os para circular sem chamar atenção entre o povo dela.)
+        {% else %}
+        ## Relacionamentos
+        {% endif %}
+    {% endif %}
+    {% block relationships %}{% endblock %}
+    {# O histórico de viagem é contexto gerado automaticamente, não faz parte do bloco de
+       biografia escrito à mão — mantenha-o fora do modo de renderização em bloco único "bio_relationships" #}
+    {% if (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not is_player(actorUUID) %}
+        ### Histórico de Viagem com {{ player.name }}
+        {% if is_follower(actorUUID) %}
+            - {{ decnpc(actorUUID).name }} faz parte do grupo de {{ player.name }} e viaja ativamente com o grupo no momento.
+        {% else %}
+            {% if is_in_faction(actorUUID, "DismissedFollowerFaction") %}
+                - {{ decnpc(actorUUID).name }} já fez parte do grupo de {{ player.name }}, mas não viaja com o grupo no momento e vai ficar para trás.
+            {% else %}
+                - {{ decnpc(actorUUID).name }} nunca fez parte do grupo de {{ player.name }} e nunca viaja junto com {{ player.name }}.
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}

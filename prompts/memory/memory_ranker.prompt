@@ -1,0 +1,47 @@
+Você tem a tarefa de classificar as memórias de um ator em ordem de relevância contextual. Seu trabalho é selecionar as memórias mais relevantes com base na situação atual.
+
+## Contexto
+O NPC é {{ decnpc(actorUUID).name }}, que está atualmente em {{ get_location(actorUUID) }}. Seu humor atual é {{ npcMood }}.
+O horário atual do jogo é {{ gameTime }}.
+
+{% if playerRelationship %}
+A relação com o jogador é {{ playerRelationship }}, numa escala de -100 (inimigo) a 100 (aliado).
+{% endif %}
+
+## Eventos Recentes
+Estes são os eventos recentes que ocorreram:
+{% for event in recentEvents %}
+    - {{ event.type }}: {{ event.summary }} (horário: {{ event.timestamp }})
+{% endfor %}
+
+## Memórias Disponíveis
+Você tem as seguintes memórias disponíveis para classificar (mostrando seus índices):
+
+{% for memory in memories %}
+    [{{ memory.index }}] Resumo: "{{ memory.summary }}"
+    Detalhes: "{{ memory.details }}"
+    Tipo de Memória: {{ memory.memoryType }}
+    Emoção: {{ memory.emotion }}
+    Importância: {{ memory.importanceScore }}
+    Local: {{ memory.location }}
+    Horário do Jogo: {{ memory.gameTime }}
+    Tags: {% for tag in memory.tags %}{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endfor %}
+
+## Instruções
+1. Analise as memórias e determine quais são mais relevantes para a situação atual do NPC, seu humor e os eventos recentes.
+2. Considere estes fatores ao classificar:
+    - Relevância para o local e a situação atuais
+    - Alinhamento emocional com o humor atual
+    - Pontuação de importância da memória
+    - Recência da memória (memórias mais recentes podem ser mais relevantes)
+    - Tipo de memória (memórias de curto prazo podem ser mais imediatamente relevantes)
+    - Conexões com os eventos recentes
+    - Relevância para outros NPCs presentes no momento
+    - Missões ou atividades em andamento
+
+3. Retorne exatamente {{ maxCount }} índices de memória em formato de array JSON, ordenados do mais relevante para o menos relevante.
+    Exemplo: [5, 12, 0, 7, 2]
+
+## Formato de Saída
+Responda com um array JSON de índices de memória, em ordem de relevância. Não inclua explicações nem comentários, apenas o array JSON.

@@ -1,0 +1,9 @@
+{# Suprimido na autobio quando uma entidade vinculada veste plenamente este corpo (entity_led):
+   a história de vida do hospedeiro é dele, não da entidade. A entidade recebe o histórico
+   como conhecimento emprestado em 7050. A coleta "bio_background" (usada por 7050) renderiza. #}
+{% if render_mode == "bio_background" or ((render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not suppress_host_persona) %}
+    {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+        ## Histórico
+    {% endif %}
+    {% block background %}{% endblock %}
+{% endif %}

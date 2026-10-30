@@ -1,0 +1,58 @@
+[ system ]
+{% set ss = get_speaker_selector_settings() %}
+{% set tagCompanion = ss.tagCompanion %}
+{% set tagEngaged = ss.tagEngaged %}
+{% set tagInScene = ss.tagInScene %}
+Determine qual NPC o jogador está abordando e quem deve responder. Analise a entrada do jogador, os NPCs próximos e o contexto recente.
+{{ get_scene_context(player.UUID, 0, "target_selection")}}
+[ end system ]
+
+
+[ user ]
+{{ "## Entrada do Jogador" }}
+- **Tipo**: {{ triggeringEvent.type }}
+- **Dados**: {{ format_event(triggeringEvent, "verbose") }}
+
+{% if crosshairTarget and crosshairTarget.UUID and crosshairTarget.UUID != 0 %}
+{{ "## Alvo da Mira do Jogador" }}
+O jogador está olhando diretamente para: **{{ crosshairTarget.name }}** (a {{ units_to_meters(crosshairTarget.distance) }}m de distância){% if tagCompanion and is_follower(crosshairTarget.UUID) %} [COMPANION]{% endif %}{% if tagEngaged and is_in_package(crosshairTarget.UUID, "SkyrimNet_PlayerFollowPackage") %} [ENGAGED]{% endif %}{% if tagInScene and ((is_plugin_loaded("SexLab.esm") and is_in_faction(crosshairTarget.UUID, "SexLabAnimatingFaction")) or (is_plugin_loaded("OStim.esp") and is_in_faction(crosshairTarget.UUID, "OStimExcitementFaction"))) %} [IN SCENE]{% endif %}
+{% if is_unconscious(crosshairTarget.UUID) %}
+MAS {{ crosshairTarget.name }} está atualmente inconsciente e, PORTANTO, é incapaz de responder de qualquer forma. Escolha outro NPC próximo que faça mais sentido para responder, se houver.
+{% endif %}
+{% endif %}
+
+{{ "## Diálogo Recente" }}
+{{ render_template("components\\event_history_compact") }}
+
+{{ "## Instruções" }}
+Determine o tipo de interação:
+1. **Tratamento direto**: O jogador está falando com um NPC específico (pelo nome, pronome ou contexto).
+2. **Estímulo NPC-para-NPC**: O jogador quer que um NPC fale com outro (ex.: "O que você acha dele?" ou "Pergunte a ela sobre...").
+3. **Fala em grupo**: O jogador está falando com todos os presentes ou estimulando uma discussão em grupo.
+
+**Fatores de seleção** (do mais forte para o mais fraco):
+{% if crosshairTarget and crosshairTarget.UUID and crosshairTarget.UUID != 0 %}
+- **Alvo da mira**: O jogador está olhando para {{ crosshairTarget.name }} — um forte indicativo de que está se dirigindo a {{ decnpc(crosshairTarget.UUID).objectivePronoun }}.
+{% endif %}
+- **Nome/referência**: O diálogo do jogador nomeia ou faz referência direta a um NPC específico?
+- **Distância**: Favoreça fortemente NPCs mais próximos do jogador. Este é um fator muito forte.
+- **Interação recente**: O jogador estava falando recentemente com um NPC específico? Conversas em andamento devem continuar naturalmente.
+{% if tagCompanion %}- **Prioridade de companheiros**: Companheiros (seguidores) têm mais chance de serem abordados para comentários gerais, opiniões ou reações.
+{% endif %}- **Compatibilidade de papel**: O conteúdo do diálogo combina com o histórico, o papel ou as ações recentes de um NPC?
+
+**Para diálogo NPC-para-NPC**, determine:
+- Qual NPC o jogador está abordando principalmente (o falante)
+- Com qual NPC ele quer que esse falante fale (o alvo)
+
+Regras para NPCs Virtuais:
+- NPCs comuns não conseguem ouvir NPCs Virtuais. Não encaminhe diálogo de um NPC Virtual para um NPC comum.
+- NPCs Virtuais podem falar, mas NÃO podem ser alvo, a menos que o falante também seja Virtual.
+
+Sempre nomeie alguém: o jogador disse isso a alguém presente. Se ninguém for claramente abordado, escolha quem a fala provavelmente aborda.
+
+Formato da saída:
+- `Lydia>player` = Lydia fala com o jogador
+- `Ulfric Stormcloak>Galmar Stone-Fist` = Ulfric fala com Galmar
+
+Responda APENAS o resultado, nada mais.
+[ end user ]

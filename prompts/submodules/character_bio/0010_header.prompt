@@ -1,0 +1,84 @@
+{# Monta o cabeçalho conforme o modo de renderização #}
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+    ## Perfil de Personagem de {{ decnpc(actorUUID).name }} (ESTE É O PAPEL QUE VOCÊ INTERPRETA)
+{% elif render_mode == "dialogue_target" %}
+    {# Este prompt é usado quando o ator é o alvo de um diálogo. #}
+    {% if responseTarget %}
+        {% if responseTarget.type == "player" %}
+            ## Perfil de Personagem de {{ player.name }} (ESTA É A PESSOA COM QUEM VOCÊ ESTÁ FALANDO)
+        {% else %}
+            ## Perfil de Personagem de {{ decnpc(actorUUID).name }} (ESTA É A PESSOA COM QUEM VOCÊ ESTÁ FALANDO)
+        {% endif %}
+    {% else %}
+        ## Perfil de Personagem de {{ decnpc(actorUUID).name }}
+    {% endif %}
+{% endif %}
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "dialogue_target" %}
+    {# Lógica de atributos comum aos dois modos de renderização #}
+    - Gênero: {{ decnpc(actorUUID).gender }}
+    - Raça: {{ decnpc(actorUUID).race }}
+    {% if is_summoned(actorUUID) %}
+        {% if is_hostile_to_actor(actorUUID, player.UUID) %}
+            - Status: Criatura invocada (hostil a {{ decnpc(player.UUID).name }})
+        {% else %}
+            - Status: Criatura invocada (servindo {{ decnpc(player.UUID).name }})
+        {% endif %}
+    {% elif is_reanimated(actorUUID) %}
+        {% if is_hostile_to_actor(actorUUID, player.UUID) %}
+            - Status: Morto-vivo reanimado (hostil a {{ decnpc(player.UUID).name }})
+        {% else %}
+            - Status: Servo morto-vivo reanimado (servindo {{ decnpc(player.UUID).name }})
+        {% endif %}
+    {% endif %}
+    {% if decnpc(actorUUID).maxHealth > 0 %}
+        {% set healthRatio = decnpc(actorUUID).health / decnpc(actorUUID).maxHealth %}
+        {% if healthRatio < 0.25 %}
+            - Vida: Gravemente ferido e à beira da morte (IMPORTANTE)
+        {% elif healthRatio < 0.5 %}
+            - Vida: Ferido e sangrando
+        {% elif healthRatio < 0.75 %}
+            - Vida: Um pouco ferido
+        {% elif healthRatio <= 0.9 %}
+            - Vida: Quase saudável, com ferimentos leves
+        {% else %}
+            - Vida: Saudável e sem ferimentos
+        {% endif %}
+    {% else %}
+        - Vida: Estado de saúde desconhecido
+    {% endif %}
+    {% if decnpc(actorUUID).maxMagicka > 0 or is_player(actorUUID) %}
+        {% set magickaRatio = decnpc(actorUUID).magicka / decnpc(actorUUID).maxMagicka %}
+        {% if decnpc(actorUUID).magicka == 0 %}
+            {% set magickaRatio = 0 %}
+        {% endif %}
+        {% if magickaRatio < 0.15 %}
+            - Magia: Esgotada magicamente, quase sem reservas
+        {% elif magickaRatio < 0.35 %}
+            - Magia: Reservas mágicas em baixa
+        {% elif magickaRatio < 0.6 %}
+            - Magia: Reservas mágicas moderadas
+        {% elif magickaRatio < 0.85 %}
+            - Magia: Reservas mágicas fortes
+        {% else %}
+            - Magia: Plena de energia mágica
+        {% endif %}
+    {% else %}
+        - Magia: Nenhuma habilidade mágica
+    {% endif %}
+    {% if decnpc(actorUUID).maxStamina > 0 %}
+        {% set staminaRatio = decnpc(actorUUID).stamina / decnpc(actorUUID).maxStamina %}
+        {% if staminaRatio < 0.25 %}
+            - Vigor: Completamente sem fôlego
+        {% elif staminaRatio < 0.5 %}
+            - Vigor: Cansado e sem fôlego
+        {% elif staminaRatio < 0.75 %}
+            - Vigor: Um pouco cansado
+        {% elif staminaRatio <= 0.9 %}
+            - Vigor: Disposto, com leve fadiga
+        {% else %}
+            - Vigor: Cheio de energia e pronto para a ação
+        {% endif %}
+    {% else %}
+        - Vigor: Estado de vigor desconhecido
+    {% endif %}
+{% endif %}
