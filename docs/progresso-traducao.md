@@ -6,10 +6,10 @@ Atualizado em 2026-10-30.
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts | 208 | 1632 | 12,7% |
-| Bios de personagens | 106 | 1509 | 7,0% |
+| Prompts | 256 | 1632 | 15,7% |
+| Bios de personagens | 154 | 1509 | 10,2% |
 | Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
-| Interface web (chaves) | 2012 | 6753 | 29,8% |
+| Interface web (chaves) | 2932 | 6753 | 43,4% |
 | YAML de conteúdo | 0 | 35 | 0% |
 | MCM/Papyrus | 0 | 1 | 0% |
 | ESP | 0 | 1 | 0% |
@@ -27,11 +27,10 @@ Atualizado em 2026-10-30.
 | `omnisight` + `submodules/omnisight_*` + guidelines | 14 | `d6c36db` |
 | Prompts raiz | 15 | `d6c36db` |
 | `submodules/character_bio` | 18 | `d6c36db` |
-| Bios lote 01 | 12 | `7735d35` |
-| Bios lote 02 | 12 | `fd242ca` |
-| Bios lote 03 | 12 | `3dbd27d` |
-| Bios lote 04 | 12 | `7c6ba97` |
-| UI `settings` restante (3 lotes) | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
+| Bios 01–04 | 48 | `7735d35`, `fd242ca`, `3dbd27d`, `7c6ba97` |
+| Bios 05–08 | 48 | `b38818b`, `9fbb5f1`, `3d39a9c`, `ce765b2` |
+| UI `settings` restante | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
+| UI `plugins` + `characters` | 920 chaves | `bf4ff25`, `073ced9`, `20d78c9` |
 
 ## Ferramentas e regras
 
@@ -45,20 +44,14 @@ Atualizado em 2026-10-30.
 
 ## Pendente
 
-1. 1.403 bios restantes (lotes de ~48).
+1. 1.355 bios restantes (lotes de ~48).
 2. `eval` (7), `documentation` (2), `dev` (1), `test_decorators` (10).
-3. 4.741 chaves de UI (plugins, characters, gamedata, prompts, actions,
-   triggers, routing, etc.).
+3. 3.821 chaves de UI (gamedata, prompts, actions, triggers, routing, etc.).
 4. 35 YAML de conteúdo.
 5. MCM/Papyrus e ESP.
 
-## Em andamento
-
-- Bios lotes 05–08 (`batches/bios_05..08.txt`), 48 arquivos.
-- UI `plugins_1`, `plugins_2` e `characters` (920 chaves).
-
 ## Próximo lote sugerido
 
-- Concluir bios restantes em rodadas de 4 × 12.
-- UI `gamedata`, `prompts`, `actions`, `triggers`, `routing`.
+- UI `gamedata` + `prompts` (~795 chaves).
+- Bios: 4 subagentes × 12 por rodada.
 - Prompts restantes de sistema (20).

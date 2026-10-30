@@ -12,10 +12,11 @@ do SkyrimNet.
 - **Núcleo dos prompts**: `system_head` (8), `user_final_instructions` (11),
   `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
   e no fim da mensagem do usuário.
-- **106 bios**: Whiterun, Riverwood, Solitude, Windhelm, Riften, Markarth e
+- **154 bios**: Whiterun, Riverwood, Solitude, Windhelm, Riften, Markarth e
   NPCs nomeados de outras regiões.
-- **Interface web**: 2.012 chaves em PT-BR (nav, common, home, settings
-  completos, TTS, LLM, logs e chat), com fallback para inglês nas demais.
+- **Interface web**: 2.932 chaves em PT-BR (nav, common, home, settings
+  completos, TTS, LLM, logs, chat, plugins e personagens), com fallback para
+  inglês nas demais.
 
 O restante está em tradução. O pacote é incremental: cada lote entra como um
 commit e um release. O benchmark local com Qwen2.5-3B está em
