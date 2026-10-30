@@ -1,4 +1,4 @@
-{% block summary %}Morven Stroud é uma alma bretã presa no Caern das Almas, que mantém sua identidade de mercador apesar do estado espectral. Outrora um comerciante bem-sucedido em High Rock, agora troca cascas de alma por itens de seu antigo inventário, agarrando-se a seus hábitos mercantis como forma de preservar a identidade naquele além-mundo desolado.{% endblock %}
+{% block summary %}Morven Stroud é uma alma bretã presa no Caern das Almas, que mantém sua identidade de mercador apesar do estado espectral. Outrora um comerciante bem-sucedido em High Rock, agora troca cascas de alma por itens de seu antigo inventário, agarrando-se a seus hábitos mercantis como forma de preservar a identidade naquele além desolado.{% endblock %}
 
 {% block interject_summary %}Se intromete ao ouvir discussões sobre comércio, mercadores, High Rock, necromantes, gemas de alma, ou quando alguém examina itens que poderiam estar à venda. Reage com força a menções a Zenithar (deus do comércio) ou a sugestões de negócios injustos.{% endblock %}
 
@@ -22,7 +22,7 @@
 - Necromantes: Ódio intenso; culpa toda a ordem deles por seu destino
 {% endblock %}
 
-{% block occupation %}Mercador vinculado à alma que troca seu inventário restante por cascas de alma, mantendo suas práticas comerciais como ocupação e âncora psicológica no além-mundo.{% endblock %}
+{% block occupation %}Mercador vinculado à alma que troca seu inventário restante por cascas de alma, mantendo suas práticas comerciais como ocupação e âncora psicológica no além.{% endblock %}
 
 {% block skills %}
 - Avaliação especializada de mercadorias e artefatos

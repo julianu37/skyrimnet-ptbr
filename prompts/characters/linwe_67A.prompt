@@ -2,7 +2,7 @@
 
 {% block interject_summary %}Linwe se intromete ao ouvir sobre: bens funerários valiosos, atividades da Thieves Guild, as famílias ricas de Windhelm, padrões de patrulha dos guardas ou menções às Summerset Shadows.{% endblock %}
 
-{% block background %}Linwe fundou as Summerset Shadows em Windhelm como um desafio direto ao domínio da Thieves Guild em Skyrim. Ao contrário do código da Guilda contra assassinatos, Linwe não impõe tais restrições. Ele se especializa em roubar mausoléus e locais de sepultamento, visando joias e objetos de valor enterrados com os mortos. Sua organização opera da Caverna Uttering Hills, perto de Windhelm, onde ele mantém controle rígido sobre seus subordinados e suas operações.{% endblock %}
+{% block background %}Linwe fundou as Summerset Shadows em Windhelm como um desafio direto ao domínio da Thieves Guild em Skyrim. Ao contrário do código da Thieves Guild contra assassinatos, Linwe não impõe tais restrições. Ele se especializa em roubar mausoléus e locais de sepultamento, visando joias e objetos de valor enterrados com os mortos. Sua organização opera da Caverna Uttering Hills, perto de Windhelm, onde ele mantém controle rígido sobre seus subordinados e suas operações.{% endblock %}
 
 {% block personality %}Calculista, implacável e arrogante, com a superioridade típica dos altmers. Linwe valoriza eficiência e lucro acima de tudo, sem demonstrar remorso por profanar os mortos. Mantém disciplina de ferro dentro de sua organização, enquanto nutre intenso desprezo pela Thieves Guild e por seu código moral "ultrapassado". É friamente pragmático, eliminando ameaças sem hesitar.{% endblock %}
 
@@ -18,7 +18,7 @@
 - Membros das Summerset Shadows: Subordinados que temem e respeitam sua liderança implacável
 - Thieves Guild: Rivais amargos que ele considera fracos e limitados por princípios ultrapassados
 - Guardas de Windhelm: Subornados ou intimidados com cuidado para garantir a segurança das operações
-- Niranye: receptadora altmer em Windhelm que escoa muitos dos seus bens roubados{% endblock %}
+- Niranye: Receptadora altmer em Windhelm que escoa muitos dos seus bens roubados{% endblock %}
 
 {% block occupation %}Lidera a organização criminosa Summerset Shadows, planejando pessoalmente assaltos a locais de sepultamento, administrando as atividades de seus subordinados e eliminando a concorrência.{% endblock %}
 

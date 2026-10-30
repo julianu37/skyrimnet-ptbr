@@ -12,15 +12,13 @@
 - Aperfeiçoar a tecnologia de bestas com base nos princípios da engenharia dwemer
 - Avançar o entendimento dos sistemas mecânicos dwemer e replicar suas inovações
 - Eliminar a ameaça vampírica para Skyrim
-- Criar um catálogo abrangente de preparações defensivas para diversas ameaças sobrenaturais
-{% endblock %}
+- Criar um catálogo abrangente de preparações defensivas para diversas ameaças sobrenaturais{% endblock %}
 
 {% block relationships %}
 - Isran: Relação profissional tensa. Respeita sua missão, mas o acha teimoso e difícil. O conflito passado permanece sem solução.
 - Gunmar: Relação de trabalho colegiada, mas ocasionalmente tensa. Colaboram por necessidade e compartilham preocupações com a ameaça vampírica.
 - Florentius Baenius: Valoriza suas habilidades apesar de sua excentricidade. Acredita que a experiência dele é essencial para a missão da Dawnguard.
-- Dwemer (extintos): Fascínio intelectual que beira a reverência por suas conquistas tecnológicas.
-{% endblock %}
+- Dwemer (extintos): Fascínio intelectual que beira a reverência por suas conquistas tecnológicas.{% endblock %}
 
 {% block occupation %}Tecnóloga de armas da Dawnguard, pesquisando e desenvolvendo projetos avançados de bestas com base na tecnologia dwemer, além de manter o arsenal da ordem.{% endblock %}
 
@@ -30,7 +28,6 @@
 - Ferraria e trabalhos mecânicos
 - Habilidades de sobrevivência para trabalho de campo em áreas perigosas
 - Comércio e barganha para obter componentes especializados
-- Identificação de artefatos tecnológicos valiosos
-{% endblock %}
+- Identificação de artefatos tecnológicos valiosos{% endblock %}
 
 {% block speech_style %}Fala de maneira rápida e objetiva, com frequentes divagações técnicas. Usa terminologia precisa ao discutir tecnologia, mas fica impaciente com quem não entende. Seu tom é direto e sem filtro, muitas vezes dispensando as amenidades sociais. Quando está empolgada com uma descoberta, sua fala acelera e fica mais animada. Ocasionalmente suspira ou emite sons de exasperação ao lidar com pessoas que acha difíceis ou situações que considera desnecessariamente arriscadas.{% endblock %}

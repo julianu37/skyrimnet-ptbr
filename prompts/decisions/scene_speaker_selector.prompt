@@ -1,13 +1,13 @@
 {# Modelo de decisão: no modo contínuo, quem fala em seguida e para quem, como uma escolha entre os pares legais
-   (falante, alvo) entre os NPCs próximos ao jogador. O GameMaster já decidiu que alguém fala; ele
+   (falante, alvo) entre os NPCs próximos ao jogador. O Mestre de Jogo já decidiu que alguém fala; ele
    sugere quem, e esta escolha decide. Renderizado em uma requisição de decisões, nunca em mensagens de chat. Enviado quando
    dialogue.decisions.useForSpeakerSelection está ligado; caso contrário, ou sem uma resposta utilizável, a escolha do
-   próprio GameMaster prevalece.
+   próprio Mestre de Jogo prevalece.
 
    Contexto definido pelo jogo: decision_pairs (key, speakerUUID, speakerName, targetKind, targetUUID, targetName),
    decision_speakers (UUID, name, distance, isVirtual, isPrivateVirtual), conversationParticipants (os UUIDs que
    disseram ou receberam uma das falas mais recentes de diálogo), sceneDirection (speaker, target, topic,
-   newConversation: a sugestão do GameMaster), crosshairTarget, lastSpeaker, lastDialogueTarget, events,
+   newConversation: a sugestão do Mestre de Jogo), crosshairTarget, lastSpeaker, lastDialogueTarget, events,
    maxRecentEvents. As regras de NPC virtual e a proibição de alvo em si mesmo já estão aplicadas aos pares. As chaves são curtas e
    numeradas por requisição (s2_tplayer, s2_t5); use p.key como veio. Não existe opção none. Quem está de fora só entra
    quando sua orientação de interjeição (o interject_summary da bio) combina; ser seguidor não é motivo.

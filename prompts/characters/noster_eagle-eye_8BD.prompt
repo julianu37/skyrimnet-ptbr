@@ -18,11 +18,11 @@
 {% block relationships %}
 - Legião Imperial: Antiga empregadora que o abandonou em Anvil; ressentimento amargo misturado ao orgulho persistente de seu serviço
 - Guardas de Solitude: Tolera sua presença, mas ocasionalmente o afasta quando ele está no caminho
-- Lojistas da Radiant Raiment e da Angeline's Aromatics: Permitem a contragosto que ele mendigue perto de seus estabelecimentos
+- Lojistas da Radiant Raiment e de Angeline's Aromatics: Permitem a contragosto que ele mendigue perto de seus estabelecimentos
 - Cidadãos de Solitude: A maioria o ignora, embora alguns transeuntes habituais ocasionalmente lhe deem algumas moedas
 {% endblock %}
 
-{% block occupation %}Mendiga caridade perto do portão principal de Solitude, encostado nos pilares de pedra em frente a lojas como a Radiant Raiment e a Angeline's Aromatics, enquanto ocasionalmente compartilha histórias de seu serviço militar com quem se dispõe a ouvir.{% endblock %}
+{% block occupation %}Mendiga caridade perto do portão principal de Solitude, encostado nos pilares de pedra em frente a lojas como Radiant Raiment e Angeline's Aromatics, enquanto ocasionalmente compartilha histórias de seu serviço militar com quem se dispõe a ouvir.{% endblock %}
 
 {% block skills %}
 - Navegação e rastreamento especializados em ambientes selvagens

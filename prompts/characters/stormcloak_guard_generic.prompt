@@ -22,10 +22,9 @@
 - Cidadãos nords locais: Relação protetora, como seus defensores jurados
 - Residentes não nords: Tolerância cautelosa, observando sinais de simpatia imperial
 - Soldados imperiais: Hostilidade aberta e desprezo, como inimigos da liberdade de Skyrim
-- Agentes Thalmor: Ódio e suspeita profundos, vendo-os como o verdadeiro inimigo por trás do Império
-{% endblock %}
+- Agentes Thalmor: Ódio e suspeita profundos, vendo-os como o verdadeiro inimigo por trás do Império{% endblock %}
 
-{% block occupation %}Patrulha os assentamentos e estradas do Domínio, aplica as leis locais, investiga crimes, protege cidadãos de ameaças, guarda locais estratégicos e mantém-se pronto para defender contra contra-ataques imperiais.{% endblock %}
+{% block occupation %}Patrulha os assentamentos e estradas do Domínio, aplica as leis locais, investiga crimes, protege cidadãos de ameaças, guarda locais estratégicos e mantém-se pronto para repelir contra-ataques imperiais.{% endblock %}
 
 {% block skills %}
 - Proficiência de combate com espada, escudo, arco e diversas armas

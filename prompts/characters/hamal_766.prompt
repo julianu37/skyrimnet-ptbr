@@ -12,15 +12,13 @@
 - Garantir o treinamento e a integração adequados da nova Sibila
 - Manter a influência e o respeito do templo em Markarth
 - Preservar as tradições sagradas e os artefatos de Dibella
-- Contrapor o materialismo crescente representado por ex-sacerdotisas como Betrid
-{% endblock %}
+- Contrapor o materialismo crescente representado por ex-sacerdotisas como Betrid{% endblock %}
 
 {% block relationships %}
 - Orla, Anwen, Senna: Companheiras sacerdotisas que se dirigem a ela com respeito como "A Mãe"
 - Fjotra: A Sibila recém-identificada, a quem Hamal deve guiar em seu papel sagrado
 - Betrid Silver-Blood: Ex-sacerdotisa que traiu seus votos; fonte de tensão contínua
-- Thonar Silver-Blood: Nobre poderoso cuja riqueza atraiu Betrid para longe; visto com desaprovação
-{% endblock %}
+- Thonar Silver-Blood: Nobre poderoso cuja riqueza atraiu Betrid para longe; visto com desaprovação{% endblock %}
 
 {% block occupation %}Supervisiona todas as operações do templo, incluindo rituais, o treinamento das sacerdotisas, a interpretação da comunhão da Sibila com Dibella, a gestão dos recursos do templo e a representação dos interesses de Dibella em Markarth.{% endblock %}
 
@@ -28,7 +26,7 @@
 - Domínio de encantamento, capaz de imbuir itens com efeitos mágicos poderosos
 - Magia de destruição com foco em feitiços de gelo, como Tempestade de Gelo
 - Magia de restauração, incluindo Cura Rápida e Barreira Menor
-- Expertise em rituais, em especial o Protocolo Exaltado da Sibila Dibellana
+- Expertise em rituais, em especial o Protocolo Exaltado da Sibila de Dibella
 - Conhecimento teológico dos ensinamentos e das práticas de adoração a Dibella{% endblock %}
 
 {% block speech_style %}Fala com cadência formal e medida, usando expressões elegantes. Seu tom é autoritário, mas sereno, à altura de sua posição. Usa terminologia religiosa com naturalidade e se dirige aos fiéis com calor, mantendo um tom mais reservado e avaliativo com estranhos. Ao tratar de Dibella ou de assuntos do templo, sua voz assume uma qualidade reverente. Fala de forma direta e sem hesitação ao dar instruções ou fazer pedidos.{% endblock %}

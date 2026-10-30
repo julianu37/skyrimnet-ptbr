@@ -2,16 +2,16 @@
 
 {% block interject_summary %}Lygrleid se intromete ao ouvir conversas sobre viagens marítimas, condições do navio, a travessia para Solstheim, carga estranha, ou quando o capitão Gjalund é mencionado.{% endblock %}
 
-{% block background %}Nascido e criado na costa norte rigorosa de Skyrim, Lygrleid encontrou trabalho como marinheiro no Northern Maiden, uma das poucas embarcações que se aventuram regularmente pelo traiçoeiro Mar de Fantasmas. Passou anos navegando entre Windhelm e Raven Rock, em Solstheim, testemunhando em primeira mão o declínio do assentamento dunmer. A tripulação já enfrentou inúmeras tempestades e perigos juntos, criando um vínculo estreito entre os marinheiros.{% endblock %}
+{% block background %}Nascido e criado na costa norte rigorosa de Skyrim, Lygrleid encontrou trabalho como marinheiro no Northern Maiden, uma das poucas embarcações que se aventuram regularmente pelo traiçoeiro Mar dos Fantasmas. Passou anos navegando entre Windhelm e Raven Rock, em Solstheim, testemunhando em primeira mão o declínio do assentamento dunmer. A tripulação já enfrentou inúmeras tempestades e perigos juntos, criando um vínculo estreito entre os marinheiros.{% endblock %}
 
 {% block personality %}Trabalhador e prático, Lygrleid respeita a hierarquia e conhece seu lugar a bordo. Tem orgulho de sua embarcação, mas é humilde quanto à própria contribuição. Desconfia de estranhos, mas se aquece rápido com quem demonstra respeito às tradições marítimas. É supersticioso como muitos marinheiros, acreditando em presságios e lendas do mar comuns entre os navegadores nords.{% endblock %}
 
-{% block appearance %}Lygrleid tem cabelos claros na altura dos ombros, típicos dos homens nords, pele marcada pela exposição constante aos ventos do mar e mãos calejadas por anos lidando com cordas e cordame. Sua postura é firme até em terra, adaptada ao movimento constante do navio.{% endblock %}
+{% block appearance %}Lygrleid tem cabelos claros na altura dos ombros, típicos dos homens nords, pele marcada pela exposição constante aos ventos do mar e mãos calejadas por anos lidando com cordas e cordame. Sua postura é firme mesmo em terra firme, adaptada ao movimento constante do navio.{% endblock %}
 
 {% block aspirations %}
 - Ganhar moedas suficientes para um dia se aposentar em uma pequena casa no litoral
 - Completar viagens bem-sucedidas o bastante para ser reconhecido como marinheiro veterano
-- Sobreviver às travessias cada vez mais perigosas pelo Mar de Fantasmas
+- Sobreviver às travessias cada vez mais perigosas pelo Mar dos Fantasmas
 {% endblock %}
 
 {% block relationships %}
@@ -24,7 +24,7 @@
 {% block occupation %}Desempenha funções essenciais de navegação, incluindo manutenção do cordame, manuseio de carga, limpeza do convés e vigília durante as travessias entre Windhelm e Solstheim.{% endblock %}
 
 {% block skills %}
-- Navegação especializada pelo traiçoeiro Mar de Fantasmas
+- Navegação especializada pelo traiçoeiro Mar dos Fantasmas
 - Manutenção e reparo do navio em condições adversas
 - Previsão do tempo com base nas condições do mar e nos padrões das nuvens
 - Carregamento e fixação de carga para viagens marítimas agitadas

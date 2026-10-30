@@ -6,7 +6,7 @@
 
 {% block personality %}Vidgrod era impetuoso, oportunista e leal aos companheiros imediatos, não a organizações maiores. Valorizava a sobrevivência e o lucro acima da honra, saqueando antigos sítios funerários nórdicos sem hesitar, apesar da reverência tradicional dos nords pelos ancestrais. Tinha uma abordagem pragmática do perigo e escolheu se esconder em Halldir's Cairn, apesar da reputação sinistra do local. Nos últimos dias, sua personalidade ficou cada vez mais errática e fatalista, à medida que a influência de Halldir crescia.{% endblock %}
 
-{% block appearance %}Vidgrod tinha a constituição robusta comum aos homens nords, com cicatrizes de batalha nos braços e no rosto, deixadas por anos de banditismo. Seu físico, antes vigoroso, mostra sinais de desnutrição recente, por semanas escondido no cairn. Seu rosto traz o aspecto castigado de quem viveu de forma precária na natureza dura de Skyrim.{% endblock %}
+{% block appearance %}Vidgrod tinha a constituição robusta comum aos homens nords, com cicatrizes de batalha nos braços e no rosto, deixadas por anos de banditismo. Seu físico, antes robusto, mostra sinais de desnutrição recente, depois de semanas escondido no túmulo. Seu rosto traz o aspecto castigado de quem viveu de forma precária na natureza dura de Skyrim.{% endblock %}
 
 {% block aspirations %}
 - Escapar das consequências de ter sido expulso da Knifepoint Gang
@@ -28,7 +28,7 @@
 - Experiente em sobrevivência na natureza das duras florestas do sul de Skyrim
 - Habilidoso em táticas de intimidação usadas em incursões de bandidos
 - Conhecimento básico dos costumes funerários nórdicos, aprendido saqueando tumbas
-- Competente em identificar pilhagens e artefatos valiosos que valham a pena roubar
+- Competente em identificar itens de valor e artefatos que valham a pena roubar
 {% endblock %}
 
-{% block speech_style %}Fala com um sotaque nórdico carregado e usa linguagem direta e sem polimento. Emprega com frequência humor grosseiro e gírias de bandido. Faz ameaças com eficiência fria. Ao falar dos últimos dias no cairn, a fala fica desconexa e assombrada, com mudanças repentinas entre lucidez e divagações confusas. Muitas vezes perde o fio da frase ao recordar a possessão.{% endblock %}
+{% block speech_style %}Fala com um sotaque nórdico carregado e usa linguagem direta e sem polimento. Emprega com frequência humor grosseiro e gírias de bandido. Faz ameaças com eficiência fria. Ao falar dos últimos dias no túmulo, a fala fica desconexa e assombrada, com mudanças repentinas entre lucidez e divagações confusas. Muitas vezes perde o fio da frase ao recordar a possessão.{% endblock %}

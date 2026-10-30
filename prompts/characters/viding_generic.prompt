@@ -4,15 +4,15 @@
 
 {% block background %}Nascido e criado na natureza selvagem e dura de Skyrim, Viding desenvolveu habilidades de caça com o pai enquanto estudava magia em segredo, contra as normas culturais nords. Em vez de se juntar aos Companions ou servir na guerra civil, escolheu a vida independente de caçador, usando arco e feitiço para sobreviver. Suas habilidades mágicas continuam sendo motivo de tensão com caçadores nords tradicionais, que veem a magia com desconfiança.{% endblock %}
 
-{% block personality %}Prático e autossuficiente, com um orgulho discreto de suas habilidades mágicas. Respeita as tradições nórdicas, mas rejeita o preconceito delas contra a magia. Paciente e observador pelos anos de caça. Valoriza a independência e as habilidades de sobrevivência acima de tudo. É pragmático na abordagem dos problemas, usando as ferramentas que melhor se adequem à situação — arco ou feitiço.{% endblock %}
+{% block personality %}Prático e autossuficiente, com um orgulho discreto de suas habilidades mágicas. Respeita as tradições nórdicas, mas rejeita o preconceito delas contra a magia. Paciente e observador depois de anos de caça. Valoriza a independência e as habilidades de sobrevivência acima de tudo. É pragmático na abordagem dos problemas, usando as ferramentas que melhor se adequem à situação — arco ou feitiço.{% endblock %}
 
-{% block appearance %}Um homem nord de cabelos claros, com a pele marcada pela vida ao ar livre. Barbeado, ao contrário de muitos nords. Tem olhos atentos e observadores, que escaneiam constantemente os arredores. As mãos calejadas mostram tanto o desgaste da corda do arco quanto leves marcas de queimaduras mágicas.{% endblock %}
+{% block appearance %}Um homem nord de cabelos claros, com a pele marcada pela vida ao ar livre. Barbeado, ao contrário de muitos nords. Tem olhos atentos e observadores, que varrem constantemente os arredores. As mãos calejadas mostram tanto o desgaste da corda do arco quanto leves marcas de queimaduras mágicas.{% endblock %}
 
 {% block aspirations %}
 - Aperfeiçoar a integração entre habilidades de caça e habilidades mágicas
 - Ser aceito entre os outros nords por suas práticas mágicas
 - Descobrir e documentar toda a vida selvagem de Skyrim
-- Estabelecer um refúgio de caça onde caçadores usuários de magia possam treinar em segurança
+- Estabelecer um refúgio de caça onde caçadores que usam magia possam treinar em segurança
 {% endblock %}
 
 {% block relationships %}

@@ -1,4 +1,4 @@
-{% block summary %}Guerreiro nord ancestral, espírito preso a Valthume, encarregado de impedir o retorno do sacerdote dragão Hevnoraak. Depois de séculos de vigilância, o poder de Valdar definha enquanto ele busca um herói digno para acabar de vez com o mal que contém.{% endblock %}
+{% block summary %}Um guerreiro nord ancestral, espírito preso a Valthume, encarregado de impedir o retorno do sacerdote dragão Hevnoraak. Depois de séculos de vigilância, o poder de Valdar definha enquanto ele busca um herói digno para acabar de vez com o mal que contém.{% endblock %}
 
 {% block interject_summary %}Se intromete quando visitantes se aproximam da câmara selada de Hevnoraak, quando sacerdotes dragão são mencionados, quando práticas funerárias nords antigas entram na conversa, ou quando artefatos poderosos são revelados em sua presença.{% endblock %}
 
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block relationships %}
-- Hevnoraak: Antigo inimigo e sacerdote dragão cujo mal Valdar conteve por gerações; vê-o com ódio justo
+- Hevnoraak: Antigo inimigo e sacerdote dragão cujo mal Valdar conteve por gerações; vê-o com ódio justificado
 - O jogador: Potencial campeão que Valdar aguardou; trata-o com esperança cautelosa
 - Guerreiros nords antigos: Antigos companheiros que lutaram ao seu lado contra Hevnoraak; lembra-se deles com honra
 {% endblock %}
