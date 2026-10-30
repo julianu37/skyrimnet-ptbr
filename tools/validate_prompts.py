@@ -102,13 +102,20 @@ def english_ratio(text: str) -> tuple[int, float]:
 
 
 def compare(
-    source: Path, translated: Path, allow_subset: bool = False
+    source: Path,
+    translated: Path,
+    allow_subset: bool = False,
+    only: list[str] | None = None,
 ) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
 
     src_files = {p.relative_to(source) for p in source.rglob("*.prompt")}
     dst_files = {p.relative_to(translated) for p in translated.rglob("*.prompt")}
+    if only:
+        wanted = {Path(item) for item in only}
+        src_files &= wanted
+        dst_files &= wanted
 
     missing_files = sorted(src_files - dst_files)
     if allow_subset:
@@ -181,6 +188,11 @@ def main() -> int:
         action="store_true",
         help="treat source files missing from the layer as expected (partial layer)",
     )
+    parser.add_argument(
+        "--only",
+        nargs="+",
+        help="check only these paths (relative to the source root)",
+    )
     args = parser.parse_args()
 
     source = Path(args.source)
@@ -189,7 +201,7 @@ def main() -> int:
         print("source/translated must be directories", file=sys.stderr)
         return 2
 
-    errors, warnings = compare(source, translated, args.allow_subset)
+    errors, warnings = compare(source, translated, args.allow_subset, args.only)
     lines = [f"source: {source}", f"translated: {translated}", ""]
     lines += [f"ERROR {e}" for e in errors]
     lines += [f"WARN  {w}" for w in warnings]

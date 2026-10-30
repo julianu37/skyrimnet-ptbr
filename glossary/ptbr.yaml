@@ -39,11 +39,9 @@ keep_english:
   - Aldmeri Dominion
   - Thalmor
   - Stormcloaks
-  - Imperial Legion
   - Companions
   - Thieves Guild
   - Dark Brotherhood
-  - College of Winterhold
   - Dawnguard
   - Dragonborn
   - Dovahkiin
@@ -90,6 +88,23 @@ translate:
   - { en: Pickpocket, pt: Bater carteira, status: verify }
   - { en: Stealth, pt: Furtividade, status: approved }
   - { en: Speech, pt: Eloquência, status: approved }
+  - { en: Steward, pt: intendente, status: approved }
+  - { en: Imperial Legion, pt: Legião Imperial, status: approved }
+  - { en: College of Winterhold, pt: Colégio de Winterhold, status: approved }
+  - { en: White-Gold Concordat, pt: Concordata White-Gold, status: approved }
+  - { en: High King, pt: Alto Rei, status: approved }
+  - { en: High Queen, pt: Alta Rainha, status: approved }
+  - { en: Shield-Brother / Shield-Sister, pt: Irmão de Escudo / Irmã de Escudo, status: approved }
+  - { en: Blue Palace, pt: Palácio Azul, status: approved }
+  - { en: Palace of Kings, pt: Palácio dos Reis, status: approved }
+  - { en: Castle Dour, pt: Castelo Dour, status: approved }
+  - { en: Temple of the Divines, pt: Templo dos Divinos, status: approved }
+  - { en: Gray Quarter, pt: Distrito Cinzento, status: approved }
+  - { en: East Empire Company, pt: Companhia do Império Oriental, status: approved }
+  - { en: Legate, pt: Legado / Legata, status: verify }
+  - { en: Harbinger, pt: Harbinger, status: verify }
+  - { en: The Circle, pt: Circle, status: verify }
+  - { en: Silver Hand, pt: Silver Hand, status: verify }
 
 forbidden_translations:
   - "Whiterun -> Correrrio"
