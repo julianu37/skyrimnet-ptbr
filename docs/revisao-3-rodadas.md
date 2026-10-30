@@ -35,6 +35,7 @@ YAML traduzido: filtros (6), efeitos de voz (8), listas de Dialogue Actions
 | Verificação | Resultado |
 |---|---|
 | Validador de prompts (Jinja, tags, expressões, markers, UTF-8) | **0 erros**; 10 warnings de termos de jogo/comentários |
+| `content-validate.exe` oficial (beta28) | **0 erros, 0 warnings**, 527 shadows esperados, exit 0 |
 | Chaves JSON dentro dos prompts | **0 divergências** |
 | Placeholders da UI | **0 divergências** em 6.753 chaves |
 | `node --check` no bundle patchado | OK |
