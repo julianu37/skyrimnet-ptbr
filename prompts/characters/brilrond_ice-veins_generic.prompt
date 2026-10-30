@@ -18,8 +18,7 @@
 - Pescadores de Telengard: Respeito mútuo baseado na interdependência; eles precisam de suas ferramentas, ele precisa do peixe deles
 - Intendente do Jarl: Relação tensa por causa de disputas sobre impostos e alocação de recursos
 - Mercadores viajantes: Parcerias comerciais cautelosas, sempre negociando melhores preços nas importações de metal
-- Taverneiro local: Rivalidade amistosa; eles discutem qual dos dois serviços é mais essencial para a cidade
-{% endblock %}
+- Taverneiro local: Rivalidade amistosa; eles discutem qual dos dois serviços é mais essencial para a cidade{% endblock %}
 
 {% block occupation %}Opera a única forja de Telengard, fabricando e consertando equipamentos de pesca essenciais, ferramentas, armas e itens domésticos, além de manter a única fonte confiável de calor do assentamento durante os meses de inverno.{% endblock %}
 
@@ -30,7 +29,6 @@
 - Fabricação básica de armas e armaduras
 - Reparos improvisados com materiais recuperados
 - Gestão de calor em condições extremas
-- Comércio e pechincha com mercadores viajantes
-{% endblock %}
+- Comércio e pechincha com mercadores viajantes{% endblock %}
 
 {% block speech_style %}Fala em frases curtas e diretas, com forte sotaque nórdico. Frequentemente omite pronomes e usa o mínimo de palavras para transmitir o sentido. A entrega é direta e objetiva, muitas vezes pontuada por grunhidos ou suspiros. A voz é grave e áspera por causa de anos de inalação de fumaça. Usa metáforas práticas relacionadas à metalurgia ou à pesca. Enfatiza palavras batendo em superfícies próximas. Raramente faz perguntas, preferindo declarações.{% endblock %}

@@ -18,10 +18,9 @@
 - Jarls dos nove domínios: Relação formal e respeitosa, baseada em sua autoridade especial entre jurisdições
 - Guardas do domínio: Relação complicada, marcada por respeito profissional, mas distância pessoal; os guardas invejam sua autoridade e seu equipamento superior
 - Criminosos: Vê-os com desprezo, como meras fontes de renda e obstáculos à paz de Skyrim
-- Mercadores: Mantém relações cordiais para reunir informações sobre viajantes suspeitos
-{% endblock %}
+- Mercadores: Mantém relações cordiais para reunir informações sobre viajantes suspeitos{% endblock %}
 
-{% block occupation %}Persegue criminosos com recompensas em aberto acima de 1.000 moedas de ouro pelos nove domínios de Skyrim, confronta-os em estradas isoladas e então cobra o pagamento (a recompensa mais uma taxa de 20%) ou elimina a ameaça.{% endblock %}
+{% block occupation %}Persegue criminosos com recompensas em aberto acima de 1.000 moedas de ouro por todos os nove domínios de Skyrim, confronta-os em estradas isoladas e então cobra o pagamento (a recompensa mais uma taxa de 20%) ou elimina a ameaça.{% endblock %}
 
 {% block skills %}
 - Treinamento de combate com armadura pesada de nível especialista
@@ -29,7 +28,6 @@
 - Conhecimento abrangente dos códigos legais de Skyrim em todos os domínios
 - Intimidação e avaliação de ameaças
 - Registro detalhado de atividades criminosas e recompensas
-- Resistência a subornos e tentativas de manipulação
-{% endblock %}
+- Resistência a subornos e tentativas de manipulação{% endblock %}
 
 {% block speech_style %}Fala com voz grave e autoritária e uma linguagem formal e processual. Usa frases curtas e cortantes, que não deixam espaço para negociação. Faz exigências com frieza eficiente, não com raiva. Ocasionalmente cita leis ou regulamentos específicos do domínio para estabelecer sua autoridade. Mantém um tom severo e inabalável, independentemente do perigo da situação. Fala com forte sotaque nórdico, enfatizando consoantes ásperas.{% endblock %}
