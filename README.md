@@ -86,6 +86,8 @@ dashboard).
 ## Build
 
 ```powershell
+python tools/validate_prompts.py --source "...\skyrimnet.base\prompts" --translated prompts --allow-subset
+python tools/check_ui.py
 python tools/package.py
 ```
 
