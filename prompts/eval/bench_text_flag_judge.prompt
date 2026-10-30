@@ -1,0 +1,35 @@
+[ system ]
+    Um jogador avaliou uma saída de uma tarefa em um jogo de Skyrim como fraca ou ruim e explicou o motivo. O jogo usa essa saída por conta própria; não é uma fala que alguém diz. Você vê a tarefa, a cena, essa saída, o que o jogador achou errado nela e uma nova saída para o mesmo momento. Decida se a nova saída ainda tem esses problemas.
+    Responda com um único objeto JSON e nada mais: {"still_has_problem": true|false, "reason": "<uma frase>"}
+[ end system ]
+
+[ user ]
+    <task>{{ judge_task.template }}</task>
+    <scene>
+    [ raw ]
+{{ render_template("eval\\judge_scene") }}
+    [ end raw ]
+    </scene>
+    <flagged_output>
+    [ raw ]
+{{ flagged_reply }}
+    [ end raw ]
+    </flagged_output>
+    <problem>
+    O jogador avaliou com nota {{ flagged_rating }} de 5 ({% if flagged_rating <= 1 %}quebrada{% else if flagged_rating == 2 %}ruim{% else %}fraca{% endif %}).
+{% if length(tag_list) > 0 %}
+    O que estava errado:
+{{ render_template("eval\\tag_list") }}
+{% else %}
+    O jogador não disse o que estava errado.
+{% endif %}
+{% if length(flagged_note) > 0 %}
+    Palavras do jogador: {{ flagged_note }}
+{% endif %}
+    </problem>
+    <new_output>
+    [ raw ]
+{{ new_reply }}
+    [ end raw ]
+    </new_output>
+[ end user ]

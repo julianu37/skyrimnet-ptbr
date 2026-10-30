@@ -1,0 +1,66 @@
+{# SUBMÓDULO DE TESTE - Decoradores de item #}
+{# Testa: get_item_count, has_item #}
+{# CATEGORIA: Equipamento #}
+
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+
+## 📦 TESTES DE DECORADORES DE ITEM
+
+### Teste 1: get_item_count() - Contagem de itens específicos
+
+{% set goldCount = get_item_count(actorUUID, "Gold001") %}
+{% set lockpickCount = get_item_count(actorUUID, "Lockpick") %}
+
+**Contagens no inventário de {{ actorName }}:**
+- **Moedas de ouro:** {{ goldCount }}
+- **Gazuas:** {{ lockpickCount }}
+
+---
+
+### Teste 2: get_item_count() - Item não encontrado
+
+{% set unicornCount = get_item_count(actorUUID, 999999999) %}
+
+**Contagem de item inexistente:**
+- **Unicórnio (999999999):** {{ unicornCount }} (deve ser 0)
+
+---
+
+### Teste 3: has_item() - Verificação de presença de item
+
+{% set hasGold = has_item(actorUUID, "Gold001") %}
+{% set hasLockpick = has_item(actorUUID, "Lockpick") %}
+
+**Presença de itens de {{ actorName }}:**
+- **Tem moedas de ouro:** {% if hasGold %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **Tem gazuas:** {% if hasLockpick %}✓ SIM{% else %}✗ NÃO{% endif %}
+
+---
+
+### Teste 4: has_item() - Comparação com o jogador
+
+{% set playerHasGold = has_item(player.UUID, "Gold001") %}
+{% set playerHasLockpick = has_item(player.UUID, "Lockpick") %}
+
+**Presença de itens do jogador:**
+- **Tem ouro:** {% if playerHasGold %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **Tem gazua:** {% if playerHasLockpick %}✓ SIM{% else %}✗ NÃO{% endif %}
+
+---
+
+### Teste 5: Uso condicional
+
+{% if has_item(actorUUID, "Gold001") %}
+**{{ actorName }}** tem pelo menos uma moeda de ouro.
+  {% set coinPurse = get_item_count(actorUUID, "Gold001") %}
+  {% if coinPurse > 100 %}
+  Tem uma bolsa considerável, com {{ coinPurse }} de ouro!
+  {% elif coinPurse > 10 %}
+  Tem algum dinheiro — {{ coinPurse }} moedas de ouro.
+  {% else %}
+  Está quase sem dinheiro, com apenas {{ coinPurse }} de ouro.
+  {% endif %}
+{% else %}
+**{{ actorName }}** não tem ouro nenhum.
+{% endif %}

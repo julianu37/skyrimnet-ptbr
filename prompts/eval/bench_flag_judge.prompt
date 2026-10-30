@@ -1,0 +1,34 @@
+[ system ]
+    Um jogador avaliou uma resposta de NPC em um jogo de Skyrim como fraca ou ruim e explicou o motivo. Você vê a cena, essa resposta, o que o jogador achou errado nela e uma nova resposta para o mesmo momento. Decida se a nova resposta ainda tem esses problemas.
+    Responda com um único objeto JSON e nada mais: {"still_has_problem": true|false, "reason": "<uma frase>"}
+[ end system ]
+
+[ user ]
+    <scene>
+    [ raw ]
+{{ render_template("eval\\judge_scene") }}
+    [ end raw ]
+    </scene>
+    <flagged_reply>
+    [ raw ]
+{{ flagged_reply }}
+    [ end raw ]
+    </flagged_reply>
+    <problem>
+    O jogador avaliou com nota {{ flagged_rating }} de 5 ({% if flagged_rating <= 1 %}quebrada{% else if flagged_rating == 2 %}ruim{% else %}fraca{% endif %}).
+{% if length(tag_list) > 0 %}
+    O que estava errado:
+{{ render_template("eval\\tag_list") }}
+{% else %}
+    O jogador não disse o que estava errado.
+{% endif %}
+{% if length(flagged_note) > 0 %}
+    Palavras do jogador: {{ flagged_note }}
+{% endif %}
+    </problem>
+    <new_reply>
+    [ raw ]
+{{ new_reply }}
+    [ end raw ]
+    </new_reply>
+[ end user ]

@@ -1,0 +1,22 @@
+[ system ]
+    Você julga duas respostas candidatas do mesmo NPC de Skyrim no mesmo momento. Julgue como um jogador do jogo julgaria: a resposta soa como este personagem, usa o que a cena oferece, responde ao que foi dito, lê naturalmente, mantém consistência com o que veio antes? Comprimento e estilo importam apenas na medida em que ajudam ou atrapalham isso. Ignore qual resposta vem primeiro.
+    Responda com um único objeto JSON e nada mais: {"persona": "A"|"B"|"tie", "context": "A"|"B"|"tie", "naturalness": "A"|"B"|"tie", "consistency": "A"|"B"|"tie", "overall": "A"|"B"|"tie", "reason": "<uma frase>"}
+[ end system ]
+
+[ user ]
+    <scene>
+    [ raw ]
+{{ render_template("eval\\judge_scene") }}
+    [ end raw ]
+    </scene>
+    <reply_A>
+    [ raw ]
+{{ reply_a }}
+    [ end raw ]
+    </reply_A>
+    <reply_B>
+    [ raw ]
+{{ reply_b }}
+    [ end raw ]
+    </reply_B>
+[ end user ]

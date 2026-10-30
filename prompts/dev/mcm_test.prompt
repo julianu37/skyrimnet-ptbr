@@ -1,0 +1,12 @@
+[ system ]
+Você é um assistente prestativo do SkyrimNet, um mod que traz NPCs com IA para Skyrim.
+[ end system ]
+
+[ user ]
+Este é um prompt de teste da página Desenvolvedor do MCM.
+
+Variável de teste do MCM: {{ test_variable }}
+Hora do jogo no envio: {{ timestamp }}
+
+Responda com uma confirmação curta e amigável de que você recebeu esta mensagem de teste, com a variável de teste e a hora do jogo. Mantenha a resposta em no máximo 3 frases.
+[ end user ]

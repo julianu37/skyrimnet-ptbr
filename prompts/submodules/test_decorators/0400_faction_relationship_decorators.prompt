@@ -1,0 +1,168 @@
+{# SUBMÓDULO DE TESTE - Decoradores de facção e relacionamento #}
+{# Testa: is_in_faction, get_faction_rank, get_relationship_rank, get_crime_gold #}
+{# CATEGORIA: Facção, Relacionamento #}
+
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+
+## 🏛️ TESTES DE DECORADORES DE FACÇÃO E RELACIONAMENTO
+
+### Teste 1: is_in_faction() - Verificações de participação em facções
+
+**Grandes guildas/facções:**
+- CompanionsFaction: {% if is_in_faction(actorUUID, "CompanionsFaction") %}✓ MEMBRO{% else %}✗ Não é membro{% endif %}
+- CollegeOfWinterholdFaction: {% if is_in_faction(actorUUID, "CollegeOfWinterholdFaction") %}✓ MEMBRO{% else %}✗ Não é membro{% endif %}
+- ThievesGuildFaction: {% if is_in_faction(actorUUID, "ThievesGuildFaction") %}✓ MEMBRO{% else %}✗ Não é membro{% endif %}
+- DBFaction: {% if is_in_faction(actorUUID, "DBFaction") %}✓ MEMBRO (Dark Brotherhood){% else %}✗ Não é membro{% endif %}
+- DawnguardFaction: {% if is_in_faction(actorUUID, "DawnguardFaction") %}✓ MEMBRO{% else %}✗ Não é membro{% endif %}
+- VolkiharVampireFaction: {% if is_in_faction(actorUUID, "VolkiharVampireFaction") %}✓ MEMBRO{% else %}✗ Não é membro{% endif %}
+
+**Facções da Guerra Civil:**
+- CWImperialFaction: {% if is_in_faction(actorUUID, "CWImperialFaction") %}✓ IMPERIAL{% else %}✗ Não é imperial{% endif %}
+- CWSonsFaction: {% if is_in_faction(actorUUID, "CWSonsFaction") %}✓ STORMCLOAK{% else %}✗ Não é Stormcloak{% endif %}
+
+**Facções de guarda de Domínio:**
+- GuardFaction: {% if is_in_faction(actorUUID, "GuardFaction") %}✓ GUARDA{% else %}✗ Não é guarda{% endif %}
+- CrimeFactionWhiterun: {% if is_in_faction(actorUUID, "CrimeFactionWhiterun") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- CrimeFactionRift: {% if is_in_faction(actorUUID, "CrimeFactionRift") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- CrimeFactionImperial: {% if is_in_faction(actorUUID, "CrimeFactionImperial") %}✓ SIM{% else %}✗ NÃO{% endif %}
+
+**Facções diversas:**
+- BardSingerFaction: {% if is_in_faction(actorUUID, "BardSingerFaction") %}✓ BARDO{% else %}✗ Não é bardo{% endif %}
+- ServicesInnFaction: {% if is_in_faction(actorUUID, "ServicesInnFaction") %}✓ TAVERNEIRO{% else %}✗ Não é taverneiro{% endif %}
+- JobMerchantFaction: {% if is_in_faction(actorUUID, "JobMerchantFaction") %}✓ COMERCIANTE{% else %}✗ Não é comerciante{% endif %}
+- JobBlacksmithFaction: {% if is_in_faction(actorUUID, "JobBlacksmithFaction") %}✓ FERREIRO{% else %}✗ Não é ferreiro{% endif %}
+
+---
+
+### Teste 2: get_faction_rank() - Classificações em facções
+
+**Classificações de guilda de {{ actorName }}:**
+{% set companionsRank = get_faction_rank(actorUUID, "CompanionsFaction") %}
+- Classificação em CompanionsFaction: {{ companionsRank }}{% if companionsRank >= 0 %} (Na facção){% else %} (Fora da facção){% endif %}
+
+{% set collegeRank = get_faction_rank(actorUUID, "CollegeOfWinterholdFaction") %}
+- Classificação no Colégio de Winterhold: {{ collegeRank }}{% if collegeRank >= 0 %} (Na facção){% else %} (Fora da facção){% endif %}
+
+{% set thievesRank = get_faction_rank(actorUUID, "ThievesGuildFaction") %}
+- Classificação na Thieves Guild: {{ thievesRank }}{% if thievesRank >= 0 %} (Na facção){% else %} (Fora da facção){% endif %}
+
+**Classificações de guilda do jogador:**
+{% set playerCompanionsRank = get_faction_rank(player.UUID, "CompanionsFaction") %}
+{% set playerCollegeRank = get_faction_rank(player.UUID, "CollegeOfWinterholdFaction") %}
+{% set playerThievesRank = get_faction_rank(player.UUID, "ThievesGuildFaction") %}
+{% set playerDBRank = get_faction_rank(player.UUID, "DBFaction") %}
+- Classificação do jogador nos Companions: {{ playerCompanionsRank }}
+- Classificação do jogador no Colégio: {{ playerCollegeRank }}
+- Classificação do jogador na Thieves Guild: {{ playerThievesRank }}
+- Classificação do jogador na Dark Brotherhood: {{ playerDBRank }}
+
+**Exemplo de interpretação da classificação:**
+{% if companionsRank >= 4 %}
+{{ actorName }} é membro veterano dos Companions (Classificação {{ companionsRank }})
+{% elif companionsRank >= 2 %}
+{{ actorName }} é membro pleno dos Companions (Classificação {{ companionsRank }})
+{% elif companionsRank >= 0 %}
+{{ actorName }} é membro novo dos Companions (Classificação {{ companionsRank }})
+{% else %}
+{{ actorName }} não é membro dos Companions
+{% endif %}
+
+---
+
+### Teste 3: get_relationship_rank() - Níveis de relacionamento
+
+**Relacionamento entre {{ actorName }} e o jogador:**
+{% set relToPlayer = get_relationship_rank(actorUUID, player.UUID) %}
+- Valor bruto de relacionamento: {{ relToPlayer }}
+- Interpretação:
+{% if relToPlayer == 4 %}
+  💕 AMANTE (4)
+{% elif relToPlayer == 3 %}
+  🤝 Aliado (3)
+{% elif relToPlayer == 2 %}
+  💬 Confidente (2)
+{% elif relToPlayer == 1 %}
+  😊 Amigo (1)
+{% elif relToPlayer == 0 %}
+  🤷 Conhecido (0)
+{% elif relToPlayer == -1 %}
+  😤 Rival (-1)
+{% elif relToPlayer == -2 %}
+  😠 Adversário (-2)
+{% elif relToPlayer == -3 %}
+  👿 Inimigo (-3)
+{% elif relToPlayer == -4 %}
+  ☠️ ARQUINIMIGO (-4)
+{% else %}
+  Nível de relacionamento desconhecido ({{ relToPlayer }})
+{% endif %}
+
+**Relacionamento inverso (do jogador com {{ actorName }}):**
+{% set playerToActor = get_relationship_rank(player.UUID, actorUUID) %}
+- Relacionamento do jogador com {{ actorName }}: {{ playerToActor }}
+
+---
+
+### Teste 4: get_crime_gold() - Ouro de recompensa/crime
+
+{# Observação: get_crime_gold só funciona para o jogador #}
+**Recompensas do jogador em vários Domínios:**
+
+{% set whiterunCrime = get_crime_gold(player.UUID, "CrimeFactionWhiterun") %}
+- Domínio de Whiterun:
+  - Recompensa total: {{ whiterunCrime.total }} de ouro
+  - Crimes violentos: {{ whiterunCrime.violent }} de ouro
+  - Crimes não violentos: {{ whiterunCrime.nonViolent }} de ouro
+
+{% set riftCrime = get_crime_gold(player.UUID, "CrimeFactionRift") %}
+- The Rift:
+  - Recompensa total: {{ riftCrime.total }} de ouro
+  - Crimes violentos: {{ riftCrime.violent }} de ouro
+  - Crimes não violentos: {{ riftCrime.nonViolent }} de ouro
+
+{% set imperialCrime = get_crime_gold(player.UUID, "CrimeFactionImperial") %}
+- Imperial (Solitude):
+  - Recompensa total: {{ imperialCrime.total }} de ouro
+  - Crimes violentos: {{ imperialCrime.violent }} de ouro
+  - Crimes não violentos: {{ imperialCrime.nonViolent }} de ouro
+
+{% set eastmarchCrime = get_crime_gold(player.UUID, "CrimeFactionEastmarch") %}
+- Eastmarch (Windhelm):
+  - Recompensa total: {{ eastmarchCrime.total }} de ouro
+
+{% set falkreathCrime = get_crime_gold(player.UUID, "CrimeFactionFalkreath") %}
+- Falkreath:
+  - Recompensa total: {{ falkreathCrime.total }} de ouro
+
+**Resumo do status de recompensas:**
+{% if whiterunCrime.total > 0 or riftCrime.total > 0 or imperialCrime.total > 0 %}
+⚠️ O jogador tem recompensas ativas!
+{% else %}
+✓ O jogador não tem recompensas
+{% endif %}
+
+---
+
+### Teste 5: Lealdade na Guerra Civil
+
+**get_civil_war_side():**
+- Lado do jogador: {{ get_civil_war_side() }}
+
+{% if get_civil_war_side() == "Imperial" %}
+O jogador luta pelo Império! Viva o Imperador!
+{% elif get_civil_war_side() == "Stormcloak" %}
+O jogador luta pela independência de Skyrim! A rebelião de Ulfric!
+{% else %}
+O jogador não escolheu um lado na Guerra Civil (Neutro)
+{% endif %}
+
+---
+
+### Teste 6: is_follower() - Verificação de companheiro de equipe
+
+**Status de seguidor:**
+- {{ actorName }} é seguidor: {% if is_follower(actorUUID) %}✓ SIM (seguindo o jogador){% else %}✗ NÃO{% endif %}
+- O jogador é seguidor: {% if is_follower(player.UUID) %}✓ SIM{% else %}✗ NÃO (o jogador não pode ser seguidor de si mesmo){% endif %}
+
+---

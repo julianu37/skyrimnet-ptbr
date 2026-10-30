@@ -1,0 +1,5 @@
+Falante: {{ judge_scene.speaker }}. O jogador é {{ judge_scene.player }}.{% if length(judge_scene.location) > 0 %} Local: {{ judge_scene.location }}.{% endif %}{% if length(judge_scene.time) > 0 %} Hora: {{ judge_scene.time }}.{% endif %}
+Eventos recentes, do mais antigo para o mais recente:
+{% for e in judge_scene.events %}
+{% if length(e.dialogue) > 0 %}- {{ e.speaker }}: {{ e.dialogue }}{% else %}- ({{ e.type }}){% endif %}
+{% endfor %}

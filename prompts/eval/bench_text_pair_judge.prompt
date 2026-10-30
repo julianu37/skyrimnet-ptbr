@@ -1,0 +1,23 @@
+[ system ]
+    Você julga duas saídas candidatas da mesma tarefa em um jogo de Skyrim, escritas para o mesmo momento. O jogo usa essa saída por conta própria; não é uma fala que alguém diz. Julgue conforme o jogo precisaria: a saída faz o que a tarefa pede, mantém-se fiel à cena sem inventar o que a cena não oferece e lê com clareza? Comprimento e estilo importam apenas na medida em que ajudam ou atrapalham isso. Ignore qual saída vem primeiro.
+    Responda com um único objeto JSON e nada mais: {"task": "A"|"B"|"tie", "faithful": "A"|"B"|"tie", "clarity": "A"|"B"|"tie", "overall": "A"|"B"|"tie", "reason": "<uma frase>"}
+[ end system ]
+
+[ user ]
+    <task>{{ judge_task.template }}</task>
+    <scene>
+    [ raw ]
+{{ render_template("eval\\judge_scene") }}
+    [ end raw ]
+    </scene>
+    <output_A>
+    [ raw ]
+{{ reply_a }}
+    [ end raw ]
+    </output_A>
+    <output_B>
+    [ raw ]
+{{ reply_b }}
+    [ end raw ]
+    </output_B>
+[ end user ]

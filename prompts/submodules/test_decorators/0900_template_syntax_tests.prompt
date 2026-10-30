@@ -1,0 +1,327 @@
+{# SUBMÓDULO DE TESTE - Sintaxe de template e funções integradas #}
+{# Testa: sintaxe de template Inja, estruturas de controle, funções integradas, #}
+{#        laços, condicionais, filtros etc. #}
+{# CATEGORIA: Sintaxe de template #}
+
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+
+## 🔧 TESTES DE SINTAXE DE TEMPLATE E INJA
+
+### Teste 1: Atribuição e acesso a variáveis
+
+**Atribuição básica:**
+{% set testString = "Hello Template" %}
+{% set testNumber = 42 %}
+{% set testFloat = 3.14159 %}
+{% set testBool = true %}
+{% set testArray = ["apple", "banana", "cherry"] %}
+
+- testString: {{ testString }}
+- testNumber: {{ testNumber }}
+- testFloat: {{ testFloat }}
+- testBool: {{ testBool }}
+- testArray: {{ testArray }}
+- primeiro de testArray: {{ first(testArray) }}
+- último de testArray: {{ last(testArray) }}
+- comprimento de testArray: {{ length(testArray) }}
+
+**Acesso a propriedades de objeto:**
+- actor.name: {{ actor.name }}
+- actor.level: {{ actor.level }}
+- actor.race: {{ actor.race }}
+- player.name: {{ player.name }}
+
+---
+
+### Teste 2: Instruções condicionais
+
+**if/else básico:**
+{% if testNumber > 40 %}
+✓ testNumber ({{ testNumber }}) é maior que 40
+{% else %}
+✗ testNumber não é maior que 40
+{% endif %}
+
+**Cadeia if/elif/else:**
+{% if actor.level >= 50 %}
+⭐ {{ actorName }} é de nível LENDÁRIO (50+)
+{% elif actor.level >= 30 %}
+🔶 {{ actorName }} é de nível ALTO (30-49)
+{% elif actor.level >= 15 %}
+🔷 {{ actorName }} é de nível MÉDIO (15-29)
+{% else %}
+⚪ {{ actorName }} é de nível BAIXO (1-14)
+{% endif %}
+
+**Operadores lógicos:**
+{% if testNumber > 30 and testBool %}
+✓ Condição AND: testNumber > 30 AND testBool é true
+{% endif %}
+
+{% if testNumber < 10 or testBool %}
+✓ Condição OR: testNumber < 10 OR testBool é true
+{% endif %}
+
+{% if not (testNumber < 10) %}
+✓ Condição NOT: NOT (testNumber < 10)
+{% endif %}
+
+**Operadores de comparação:**
+- == igual a: {% if testNumber == 42 %}✓{% else %}✗{% endif %}
+- != diferente de: {% if testNumber != 99 %}✓{% else %}✗{% endif %}
+- < menor que: {% if testNumber < 100 %}✓{% else %}✗{% endif %}
+- > maior que: {% if testNumber > 10 %}✓{% else %}✗{% endif %}
+- <= menor ou igual: {% if testNumber <= 42 %}✓{% else %}✗{% endif %}
+- >= maior ou igual: {% if testNumber >= 42 %}✓{% else %}✗{% endif %}
+
+---
+
+### Teste 3: Laços for
+
+**Laço for básico:**
+{% for fruit in testArray %}
+- Fruta {{ loop.index1 }}: {{ fruit }}
+{% endfor %}
+
+**Variáveis de laço:**
+{% for item in testArray %}
+- Índice (base 0): {{ loop.index }}, Índice (base 1): {{ loop.index1 }}
+  - is_first: {{ loop.is_first }}, is_last: {{ loop.is_last }}
+  - Valor: {{ item }}
+{% endfor %}
+
+**Laço com condicional:**
+{% for npc in get_nearby_npc_list(player.UUID) %}
+{% if loop.index < 5 %}
+- Próximo {{ loop.index1 }}: {{ npc.name }}
+{% endif %}
+{% endfor %}
+
+**Laços aninhados:**
+{% set matrix = [["a", "b"], ["c", "d"]] %}
+{% for row in matrix %}
+Linha {{ loop.index1 }}:
+{% for cell in row %}
+  - Célula: {{ cell }}
+{% endfor %}
+{% endfor %}
+
+---
+
+### Teste 4: Filtros integrados
+
+**Filtros de string:**
+{% set mixedCase = "HeLLo WoRLd" %}
+- Original: {{ mixedCase }}
+- lower: {{ lower(mixedCase) }}
+- upper: (não disponível no Inja, use lower para minúsculas)
+- capitalize (via filtro): {{ actor.subjectivePronoun | capitalize }}
+
+**Operações numéricas:**
+{% set floatNum = 3.14159 %}
+- Original: {{ floatNum }}
+- round(floatNum, 2): {{ round(floatNum, 2) }}
+- round(floatNum, 0): {{ round(floatNum, 0) }}
+
+**Funções de array:**
+{% set numbers = [5, 2, 8, 1, 9] %}
+- first(numbers): {{ first(numbers) }}
+- last(numbers): {{ last(numbers) }}
+- length(numbers): {{ length(numbers) }}
+- join(numbers, "-"): {{ join(numbers, "-") }}
+
+**Verificações de existência:**
+{% if exists("actor") %}
+✓ A variável 'actor' existe
+{% endif %}
+
+{% if exists("nonexistent_variable") %}
+✗ Isto não deveria aparecer
+{% else %}
+✓ 'nonexistent_variable' não existe
+{% endif %}
+
+**Função default():**
+{% set maybeUndefined = "" %}
+- default(maybeUndefined, "fallback"): {{ default(maybeUndefined, "fallback") }}
+- default(actor.name, "Unknown"): {{ default(actor.name, "Unknown") }}
+
+---
+
+### Teste 5: Comentários
+
+{# Este é um comentário de uma linha - ele não aparece na saída #}
+
+{# 
+   Este é um 
+   comentário de várias linhas
+   Ele também não aparece na saída
+#}
+
+✓ Se você está vendo isto, os comentários estão funcionando (conteúdo oculto acima)
+
+---
+
+### Teste 6: Controle de espaços em branco
+
+**Sem controle de espaços em branco (pode ter linhas extras):**
+{% if true %}
+Conteúdo com espaços em branco normais
+{% endif %}
+
+**Com controle de espaços em branco (aparado):**
+{%- if true -%}
+Conteúdo com espaços em branco aparados
+{%- endif -%}
+
+**Espaços em branco de expressão:**
+Normal: [{{ testString }}]
+Aparar antes: [{{- testString }}]
+Aparar depois: [{{ testString -}}]
+Aparar ambos: [{{- testString -}}]
+
+---
+
+### Teste 7: Operações matemáticas
+
+{% set a = 10 %}
+{% set b = 3 %}
+
+**Aritmética:**
+- a + b = {{ a + b }}
+- a - b = {{ a - b }}
+- a * b = {{ a * b }}
+- a / b = {{ a / b }}
+
+**Expressões complexas:**
+{% set health_percent = (actor.health / actor.maxHealth) * 100 %}
+- % de Vida: {{ round(health_percent, 1) }}%
+
+{% set avg = (actor.oneHanded + actor.twoHanded + actor.archery) / 3 %}
+- Perícia de combate média: {{ round(avg, 1) }}
+
+---
+
+### Teste 8: Concatenação e formatação de strings
+
+**Concatenação de strings:**
+{% set greeting = "Hello, " %}
+{% set fullGreeting = greeting + actorName + "!" %}
+- Saudação completa: {{ fullGreeting }}
+
+**Montando strings com +:**
+- Combinado: {{ "Ator: " + actor.name + " (" + actor.race + ")" }}
+
+**Usando to_string para números:**
+- "Nível " + nível: {{ "Nível " + to_string(actor.level) }}
+
+---
+
+### Teste 9: Condicionais aninhadas
+
+{% set combatState = is_in_combat(actorUUID) %}
+{% set healthPercent = actor.health / actor.maxHealth %}
+
+{% if combatState %}
+⚔️ {{ actorName }} está EM COMBATE:
+    {% if healthPercent < 0.25 %}
+    💀 CRÍTICO - Quase morto!
+    {% elif healthPercent < 0.5 %}
+    ⚠️ PERIGO - Gravemente ferido
+    {% elif healthPercent < 0.75 %}
+    🔶 CUIDADO - Sofrendo dano
+    {% else %}
+    💚 SAUDÁVEL - Lutando bem
+    {% endif %}
+{% else %}
+🕊️ {{ actorName }} está EM PAZ:
+    {% if healthPercent < 0.5 %}
+    🏥 Deveria procurar cura
+    {% else %}
+    ✓ Em boa condição
+    {% endif %}
+{% endif %}
+
+---
+
+### Teste 10: Navegação em estruturas de dados complexas
+
+**Navegando no objeto de equipamento:**
+{% set equip = get_worn_equipment(actorUUID) %}
+{% if equip.rightHand %}
+Mão direita: {{ equip.rightHand.name }}
+    {% if equip.rightHand.keywords %}
+    Palavras-chave:
+        {% for kw in equip.rightHand.keywords %}
+        - {{ kw.editorID }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+**Navegando nos objetivos de missão:**
+{% set quests = get_selected_quests() %}
+{% for quest in quests %}
+{% if loop.index <= 3 %}
+Missão: {{ quest.name }}
+    {% if quest.objectives %}
+    Objetivos:
+        {% for obj in quest.objectives %}
+        [{% if obj.isCompleted %}✓{% else %}○{% endif %}] {{ obj.objectiveText }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+{% endfor %}
+
+---
+
+### Teste 11: Padrões de tratamento de erros
+
+**Acesso seguro a propriedades com padrões:**
+{% set safeName = default(actor.name, "Unknown Actor") %}
+{% set safeHealth = default(actor.health, 0) %}
+- Nome seguro: {{ safeName }}
+- Vida segura: {{ safeHealth }}
+
+**Verificação condicional de existência:**
+{% if actor.firstName and length(actor.firstName) > 0 %}
+Tem primeiro nome: {{ actor.firstName }}
+{% else %}
+Nenhum primeiro nome disponível
+{% endif %}
+
+**Acesso seguro a array:**
+{% set items = testArray %}
+{% if length(items) > 0 %}
+Primeiro item: {{ first(items) }}
+{% else %}
+O array está vazio
+{% endif %}
+
+---
+
+### Teste 12: Padrão de tratamento do modo de renderização
+
+**Verificação padrão do modo de renderização:**
+{% set first_person = (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+{% set third_person = (render_mode == "target" or render_mode == "dialogue_target") %}
+{% set brief_mode = (render_mode == "short_inline" or render_mode == "interject_inline") %}
+
+- render_mode atual: {{ render_mode }}
+- first_person: {{ first_person }}
+- third_person: {{ third_person }}
+- brief_mode: {{ brief_mode }}
+
+{% if first_person %}
+📝 MODO PRIMEIRA PESSOA:
+{{ actorName }} pensa na situação {{ actor.possessivePronoun }}...
+{% elif third_person %}
+📋 MODO TERCEIRA PESSOA:
+{{ actorName }} parece estar considerando algo.
+{% elif brief_mode %}
+📌 MODO BREVE: {{ actorName }} ({{ actor.race }})
+{% else %}
+❓ MODO DESCONHECIDO: {{ render_mode }}
+{% endif %}
+
+---

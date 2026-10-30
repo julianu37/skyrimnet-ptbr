@@ -1,0 +1,440 @@
+{# SUBMÓDULO DE TESTE - Decoradores de cena e mundo #}
+{# Testa: location, get_location, currentWeather, gameTime, gameTimeJson, gameTimeNumeric, #}
+{#        currentTime, is_indoors, short_time, get_nearby_npc_list, #}
+{#        get_active_short_lived_events, get_nearby_references, #}
+{#        get_nearby_references_for_entity, get_container_contents etc. #}
+{# CATEGORIA: Cena, Mundo, Ambiente #}
+
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+
+## 🌍 TESTES DE DECORADORES DE CENA E MUNDO
+
+### Teste 1: Decoradores de local
+
+**location (local atual do jogador):**
+- Local atual: {{ location }}
+
+**get_location() - Local de qualquer ator:**
+- Local do jogador: {{ get_location(player.UUID) }}
+- Local de {{ actorName }}: {{ get_location(actorUUID) }}
+
+**Comparação de locais:**
+{% if get_location(actorUUID) == get_location(player.UUID) %}
+📍 {{ actorName }} está no mesmo local que o jogador.
+{% else %}
+📍 {{ actorName }} está em um local diferente do jogador.
+  - Jogador: {{ get_location(player.UUID) }}
+  - {{ actorName }}: {{ get_location(actorUUID) }}
+{% endif %}
+
+**is_indoors:**
+- Status do ambiente: {% if is_indoors %}🏠 EM AMBIENTE INTERNO{% else %}🌲 AO AR LIVRE{% endif %}
+
+---
+
+### Teste 2: Decoradores de clima
+
+**currentWeather:**
+- Nome do clima: {{ currentWeather.name }}
+- ID de editor: {{ currentWeather.editorID }}
+- FormID: {{ currentWeather.formID }}
+- Está chovendo: {% if currentWeather.isRaining %}🌧️ SIM{% else %}✗ NÃO{% endif %}
+- Está nevando: {% if currentWeather.isSnowing %}❄️ SIM{% else %}✗ NÃO{% endif %}
+- Velocidade do vento: {{ currentWeather.windSpeed }}
+
+**Lógica de descrição do clima:**
+{% if currentWeather.isSnowing %}
+❄️ A neve cai do céu.
+{% elif currentWeather.isRaining %}
+🌧️ A chuva cai forte.
+{% elif currentWeather.windSpeed > 0.7 %}
+💨 Ventos fortes estão soprando.
+{% elif currentWeather.windSpeed > 0.3 %}
+🍃 Há uma brisa leve.
+{% else %}
+☀️ O clima está calmo e limpo.
+{% endif %}
+
+---
+
+### Teste 3: Decoradores de tempo
+
+**gameTime (formatado):**
+- {{ gameTime }}
+
+**gameTimeJson (estruturado):**
+- Hora (24h): {{ gameTimeJson.hour }}
+- Minuto: {{ gameTimeJson.minute }}
+- Hora de exibição (12h): {{ gameTimeJson.displayHour }}
+- AM/PM: {{ gameTimeJson.ampm }}
+- Dia: {{ gameTimeJson.day }}
+- Dia ordinal: {{ gameTimeJson.dayOrdinal }}
+- Nome do mês: {{ gameTimeJson.monthName }}
+- Nome do dia da semana: {{ gameTimeJson.weekdayName }}
+- Ano: {{ gameTimeJson.year }}
+
+**Lógica de hora do dia:**
+{% set hour = gameTimeJson.hour %}
+{% if hour >= 5 and hour < 8 %}
+🌅 É o começo da manhã (amanhecer).
+{% elif hour >= 8 and hour < 12 %}
+☀️ É manhã.
+{% elif hour >= 12 and hour < 14 %}
+🌞 É meio-dia.
+{% elif hour >= 14 and hour < 18 %}
+🌤️ É tarde.
+{% elif hour >= 18 and hour < 21 %}
+🌆 É o anoitecer.
+{% elif hour >= 21 or hour < 5 %}
+🌙 É noite.
+{% endif %}
+
+**gameTimeNumeric:**
+- Segundos desde a época: {{ gameTimeNumeric }}
+
+**currentTime (hora do sistema):**
+- {{ currentTime }}
+
+**short_time():**
+- Hora do jogo formatada: {{ short_time(gameTime) }}
+
+---
+
+### Teste 4: get_nearby_npc_list() - NPCs próximos
+
+{% set nearbyNPCs = get_nearby_npc_list(player.UUID) %}
+
+**NPCs perto do jogador:** {{ length(nearbyNPCs) }} encontrados
+
+{% if nearbyNPCs and length(nearbyNPCs) > 0 %}
+{% for npc in nearbyNPCs %}
+{% if loop.index <= 20 %}
+- **{{ npc.name }}**
+  - UUID: {{ npc.UUID }}
+  - Distância: {{ npc.distance }} unidades ({{ units_to_meters(npc.distance) }}m)
+{% endif %}
+{% endfor %}
+{% if length(nearbyNPCs) > 20 %}
+... e mais {{ length(nearbyNPCs) - 20 }} NPCs próximos
+{% endif %}
+{% else %}
+Nenhum NPC encontrado por perto.
+{% endif %}
+
+**NPCs próximos da perspectiva de {{ actorName }}:**
+{% set nearbyFromActor = get_nearby_npc_list(actorUUID) %}
+{% if nearbyFromActor and length(nearbyFromActor) > 0 %}
+{{ length(nearbyFromActor) }} NPCs perto de {{ actorName }}:
+{% for npc in nearbyFromActor %}
+{% if loop.index <= 10 %}
+- {{ npc.name }} ({{ units_to_meters(npc.distance) }}m)
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum NPC perto de {{ actorName }}.
+{% endif %}
+
+---
+
+### Teste 5: Eventos de curta duração
+
+**get_active_short_lived_events():**
+{% set activeEvents = get_active_short_lived_events() %}
+Total de eventos ativos: {{ length(activeEvents) }}
+
+{% if activeEvents and length(activeEvents) > 0 %}
+{% for event in activeEvents %}
+{% if loop.index <= 15 %}
+- Tipo: {{ event.type }}
+  - Entidade: {{ event.entity }}
+  - Carimbo de data/hora: {{ event.timestamp }}
+{% if event.data %}
+  - Dados: {{ event.data }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum evento ativo de curta duração.
+{% endif %}
+
+**get_short_lived_events_count():**
+- Contagem de eventos: {{ get_short_lived_events_count() }}
+
+**get_short_lived_events_by_type() - Eventos de combate:**
+{% set combatEvents = get_short_lived_events_by_type("combat") %}
+Eventos de combate: {{ length(combatEvents) }}
+
+**get_short_lived_events_by_type() - Eventos de diálogo:**
+{% set dialogueEvents = get_short_lived_events_by_type("dialogue") %}
+Eventos de diálogo: {{ length(dialogueEvents) }}
+
+**get_short_lived_events_by_entity() - Eventos do ator:**
+{% set actorEvents = get_short_lived_events_by_entity(actorUUID) %}
+Eventos envolvendo {{ actorName }}: {{ length(actorEvents) }}
+
+**get_short_lived_events_by_entity() - Eventos do jogador:**
+{% set playerEvents = get_short_lived_events_by_entity(player.UUID) %}
+Eventos envolvendo o jogador: {{ length(playerEvents) }}
+
+---
+
+### Teste 6: Decoradores de câmera
+
+**is_first_person():**
+- Visão em primeira pessoa: {% if is_first_person() %}✓ SIM (1ª pessoa){% else %}✗ NÃO (3ª pessoa){% endif %}
+
+**is_vr():**
+- Modo VR: {% if is_vr() %}🥽 MODO VR{% else %}🖥️ Tela plana{% endif %}
+
+---
+
+### Teste 7: Decoradores de estado de movimento
+
+{% set actorMountName = is_mounted(actorUUID) %}
+{% set actorMountRace = get_mount_race(actorUUID) %}
+{% set actorFurniture = get_furniture(actorUUID) %}
+{% set playerMountName = is_mounted(player.UUID) %}
+{% set playerMountRace = get_mount_race(player.UUID) %}
+{% set playerFurniture = get_furniture(player.UUID) %}
+
+**Estados de movimento do ator:**
+- {{ actorName }} is_sneaking: {% if isString(actorMountName) and length(actorMountName) > 0 %}⏸ SUPRIMIDO ENQUANTO MONTADO{% elif is_sneaking(actorUUID) %}🤫 FURTIVO{% else %}✗ Não está furtivo{% endif %}
+- {{ actorName }} is_sprinting: {% if is_sprinting(actorUUID) %}🏃 CORRENDO{% else %}✗ Não está correndo{% endif %}
+- {{ actorName }} is_walking: {% if is_walking(actorUUID) %}🚶 ANDANDO{% else %}✗ Não está andando{% endif %}
+- {{ actorName }} is_swimming: {% if is_swimming(actorUUID) %}🏊 NADANDO{% else %}✗ Não está nadando{% endif %}
+- {{ actorName }} is_unconscious: {% if is_unconscious(actorUUID) %}💤 INCONSCIENTE{% else %}✗ Consciente{% endif %}
+- {{ actorName }} is_mounted: {% if isString(actorMountName) and length(actorMountName) > 0 %}✓ VERDADEIRO - Montado em {{ actorMountName }}{% else %}✗ FALSO - Não está montado{% endif %}
+- {{ actorName }} raça da montaria: {% if isString(actorMountName) and length(actorMountName) > 0 and isString(actorMountRace) and length(actorMountRace) > 0 %}{{ actorMountRace }}{% else %}N/A{% endif %}
+- {{ actorName }} movimento montado: {% if isString(actorMountName) and length(actorMountName) > 0 %}{% if is_sprinting(actorUUID) %}🐎 GALOPANDO{% elif is_walking(actorUUID) %}🐎 CAVALGANDO{% else %}🐎 PARADO{% endif %}{% else %}N/A{% endif %}
+- {{ actorName }} móvel: {% if isString(actorFurniture) and length(actorFurniture) > 0 %}{{ actorFurniture }}{% else %}Nenhum{% endif %}
+
+**Estados de movimento do jogador:**
+- Jogador is_sneaking: {% if isString(playerMountName) and length(playerMountName) > 0 %}⏸ SUPRIMIDO ENQUANTO MONTADO{% elif is_sneaking(player.UUID) %}🤫 FURTIVO{% else %}✗ Não está furtivo{% endif %}
+- Jogador is_sprinting: {% if is_sprinting(player.UUID) %}🏃 CORRENDO{% else %}✗ Não está correndo{% endif %}
+- Jogador is_walking: {% if is_walking(player.UUID) %}🚶 ANDANDO{% else %}✗ Não está andando{% endif %}
+- Jogador is_swimming: {% if is_swimming(player.UUID) %}🏊 NADANDO{% else %}✗ Não está nadando{% endif %}
+- Jogador is_mounted: {% if isString(playerMountName) and length(playerMountName) > 0 %}✓ VERDADEIRO - Montado em {{ playerMountName }}{% else %}✗ FALSO - Não está montado{% endif %}
+- Jogador raça da montaria: {% if isString(playerMountName) and length(playerMountName) > 0 and isString(playerMountRace) and length(playerMountRace) > 0 %}{{ playerMountRace }}{% else %}N/A{% endif %}
+- Jogador movimento montado: {% if isString(playerMountName) and length(playerMountName) > 0 %}{% if is_sprinting(player.UUID) %}🐎 GALOPANDO{% elif is_walking(player.UUID) %}🐎 CAVALGANDO{% else %}🐎 PARADO{% endif %}{% else %}N/A{% endif %}
+- Jogador móvel: {% if isString(playerFurniture) and length(playerFurniture) > 0 %}{{ playerFurniture }}{% else %}Nenhum{% endif %}
+
+---
+
+### Teste 8: Decoradores de diário
+
+**get_latest_diary_entry():**
+{% set latestDiary = get_latest_diary_entry(actorUUID) %}
+{% if latestDiary and latestDiary.content %}
+- Conteúdo: {{ latestDiary.content }}
+- Emoção: {{ latestDiary.emotion }}
+- Importância: {{ latestDiary.importance_score }}
+- Local: {{ latestDiary.location }}
+- Data: {{ latestDiary.entry_date_str }}
+- Idade (horas): {{ latestDiary.age_hours }}
+{% else %}
+Nenhuma entrada de diário encontrada para {{ actorName }}.
+{% endif %}
+
+**get_diary_entries() - Últimas 5 entradas:**
+{% set diaryEntries = get_diary_entries(actorUUID, 5) %}
+{% if diaryEntries and length(diaryEntries) > 0 %}
+{{ length(diaryEntries) }} entradas de diário encontradas:
+{% for entry in diaryEntries %}
+- Entrada {{ loop.index }}:
+  - Data: {{ entry.entry_date_str }}
+  - Emoção: {{ entry.emotion }}
+  - Prévia do conteúdo: {{ entry.content }}
+{% endfor %}
+{% else %}
+Nenhuma entrada de diário encontrada.
+{% endif %}
+
+---
+
+### Teste 9: Decoradores de humor
+
+**moodsList:**
+Humores disponíveis: {{ length(moodsList) }}
+{% for mood in moodsList %}
+- {{ mood }}
+{% endfor %}
+
+**Exemplos de mood_description():**
+- happy: {{ mood_description("happy") }}
+- sad: {{ mood_description("sad") }}
+- angry: {{ mood_description("angry") }}
+
+**Objeto moodDescriptions:**
+{% for mood, desc in moodDescriptions %}
+{% if loop.index <= 5 %}
+- {{ mood }}: {{ desc }}
+{% endif %}
+{% endfor %}
+
+---
+
+### Teste 10: get_nearby_references() - Objetos do mundo
+
+**Todos os objetos próximos (itens, móveis, contêineres):**
+{% set nearbyRefs = get_nearby_references(1500) %}
+{% if nearbyRefs and length(nearbyRefs) > 0 %}
+{{ length(nearbyRefs) }} objetos encontrados em até 1500 unidades:
+{% for ref in nearbyRefs %}
+{% if loop.index <= 15 %}
+- **{{ ref.name }}** ({{ ref.type }}/{{ ref.subtype }})
+  - FormID: {{ ref.formID }}
+  - Posição: {{ ref.position.meters }}m {{ ref.position.cardinalDirection }} ({{ ref.position.direction }})
+{% if ref.locked  %}  - Trancado: {% if ref.locked %}🔒 Sim{% else %}🔓 Não{% endif %}{% endif %}
+{% endif %}
+{% endfor %}
+{% if length(nearbyRefs) > 15 %}
+... e mais {{ length(nearbyRefs) - 15 }} objetos
+{% endif %}
+{% else %}
+Nenhum objeto encontrado por perto.
+{% endif %}
+
+**Filtrado: Poções próximas**
+{% set nearbyPotions = get_nearby_references(1000, "potion") %}
+{% if nearbyPotions and length(nearbyPotions) > 0 %}
+{{ length(nearbyPotions) }} poções encontradas:
+{% for potion in nearbyPotions %}
+{% if loop.index <= 5 %}
+- {{ potion.name }} ({{ potion.position.meters }}m {{ potion.position.cardinalDirection }})
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhuma poção encontrada por perto.
+{% endif %}
+
+**Filtrado: Móveis próximos**
+{% set nearbyFurniture = get_nearby_references(800, "furniture") %}
+{% if nearbyFurniture and length(nearbyFurniture) > 0 %}
+{{ length(nearbyFurniture) }} móveis encontrados:
+{% for furn in nearbyFurniture %}
+{% if loop.index <= 5 %}
+- {{ furn.name }} ({{ furn.subtype }}) - {{ furn.position.meters }}m {{ furn.position.cardinalDirection }}
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum móvel encontrado por perto.
+{% endif %}
+
+**Filtrado: Contêineres próximos**
+{% set nearbyContainers = get_nearby_references(1000, "container") %}
+{% if nearbyContainers and length(nearbyContainers) > 0 %}
+{{ length(nearbyContainers) }} contêineres encontrados:
+{% for container in nearbyContainers %}
+{% if loop.index <= 5 %}
+- {{ container.name }} ({{ container.position.meters }}m {{ container.position.cardinalDirection }}){% if container.locked %} 🔒 TRANCADO{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum contêiner encontrado por perto.
+{% endif %}
+
+**Filtrado: Equipamentos próximos (armas/armaduras)**
+{% set nearbyEquipment = get_nearby_references(800, "equipment") %}
+Equipamentos encontrados: {{ length(nearbyEquipment) }}
+{% for eq in nearbyEquipment %}
+{% if loop.index <= 5 %}
+- {{ eq.name }} ({{ eq.subtype }})
+{% endif %}
+{% endfor %}
+
+**Filtrado: Consumíveis próximos (poções/comida/ingredientes)**
+{% set nearbyConsumables = get_nearby_references(800, "consumable") %}
+Consumíveis encontrados: {{ length(nearbyConsumables) }}
+
+---
+
+### Teste 11: get_container_contents() - Inventário de contêiner
+
+{% if nearbyContainers and length(nearbyContainers) > 0 %}
+{% set firstContainer = first(nearbyContainers) %}
+**Inspecionando: {{ firstContainer.name }}** (FormID: {{ firstContainer.formID }})
+
+{% set contents = get_container_contents(firstContainer.formID) %}
+{% if not contents.error %}
+- Nome do contêiner: {{ contents.name }}
+- Trancado: {% if contents.locked %}🔒 Sim (Nível: {{ contents.lockLevel }}){% else %}🔓 Não{% endif %}
+- Total de itens: {{ contents.itemCount }}
+
+{% if contents.items and length(contents.items) > 0 %}
+**Conteúdo:**
+{% for item in contents.items %}
+{% if loop.index <= 10 %}
+- {{ item.name }} x{{ item.count }} ({{ item.type }})
+  - Valor: {{ item.value }} de ouro | Peso: {{ item.weight }}
+{% endif %}
+{% endfor %}
+{% if length(contents.items) > 10 %}
+... e mais {{ length(contents.items) - 10 }} itens
+{% endif %}
+{% else %}
+O contêiner está vazio.
+{% endif %}
+{% else %}
+Erro: {{ contents.error }}
+{% endif %}
+{% else %}
+Nenhum contêiner próximo para inspecionar.
+{% endif %}
+
+---
+
+### Teste 12: get_nearby_references_for_entity() - Objetos do mundo a partir da posição da entidade
+
+**Todos os objetos próximos a partir da posição de {{ actorName }}:**
+{% set actorNearbyRefs = get_nearby_references_for_entity(actorUUID, 1500) %}
+{% if actorNearbyRefs and length(actorNearbyRefs) > 0 %}
+{{ length(actorNearbyRefs) }} objetos encontrados em até 1500 unidades de {{ actorName }}:
+{% for ref in actorNearbyRefs %}
+{% if loop.index <= 10 %}
+- **{{ ref.name }}** ({{ ref.type }}/{{ ref.subtype }})
+  - FormID: {{ ref.formID }}
+  - Posição: {{ ref.position.meters }}m {{ ref.position.cardinalDirection }}
+{% endif %}
+{% endfor %}
+{% if length(actorNearbyRefs) > 10 %}
+... e mais {{ length(actorNearbyRefs) - 10 }} objetos
+{% endif %}
+{% else %}
+Nenhum objeto encontrado perto de {{ actorName }}.
+{% endif %}
+
+**Filtrado: Móveis perto de {{ actorName }}**
+{% set actorFurniture = get_nearby_references_for_entity(actorUUID, 800, "furniture") %}
+{% if actorFurniture and length(actorFurniture) > 0 %}
+{{ length(actorFurniture) }} móveis encontrados perto de {{ actorName }}:
+{% for furn in actorFurniture %}
+{% if loop.index <= 5 %}
+- {{ furn.name }} ({{ furn.subtype }}) - {{ furn.position.meters }}m {{ furn.position.cardinalDirection }}
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum móvel encontrado perto de {{ actorName }}.
+{% endif %}
+
+**Filtrado: Contêineres perto de {{ actorName }}**
+{% set actorContainers = get_nearby_references_for_entity(actorUUID, 1000, "container") %}
+{% if actorContainers and length(actorContainers) > 0 %}
+{{ length(actorContainers) }} contêineres encontrados perto de {{ actorName }}:
+{% for container in actorContainers %}
+{% if loop.index <= 5 %}
+- {{ container.name }} ({{ container.position.meters }}m){% if container.locked %} 🔒 TRANCADO{% endif %}
+{% endif %}
+{% endfor %}
+{% else %}
+Nenhum contêiner encontrado perto de {{ actorName }}.
+{% endif %}
+
+**Comparação: perspectiva do jogador vs {{ actorName }}**
+- Objetos perto do jogador: {{ length(nearbyRefs) }}
+- Objetos perto de {{ actorName }}: {{ length(actorNearbyRefs) }}
+{% if length(nearbyRefs) != length(actorNearbyRefs) %}
+📍 Contagens de objetos diferentes - os atores estão em locais diferentes ou têm arredores diferentes.
+{% else %}
+📍 Mesma contagem de objetos - os atores podem estar perto um do outro.
+{% endif %}---

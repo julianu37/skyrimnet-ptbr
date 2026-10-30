@@ -1,0 +1,172 @@
+{# SUBMÓDULO DE TESTE - Decoradores de combate #}
+{# Testa: get_actor_value, get_base_actor_value, is_in_combat, has_weapon_drawn, #}
+{#        is_hostile_to_actor, is_knocked_down, is_reanimated, is_summoned, #}
+{#        get_spell_list (avançado: escola, spellType, castingType, delivery etc.) #}
+{# CATEGORIA: Combate #}
+
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+
+## ⚔️ TESTES DE DECORADORES DE COMBATE
+
+### Teste 1: get_actor_value() - Valores atuais
+
+**Atributos:**
+- Vida: {{ get_actor_value(actorUUID, "Health") }}
+- Magia: {{ get_actor_value(actorUUID, "Magicka") }}
+- Vigor: {{ get_actor_value(actorUUID, "Stamina") }}
+- Capacidade de carga: {{ get_actor_value(actorUUID, "CarryWeight") }}
+- Mult. de velocidade: {{ get_actor_value(actorUUID, "SpeedMult") }}
+
+**Perícias via get_actor_value:**
+- Uma Mão: {{ get_actor_value(actorUUID, "OneHanded") }}
+- Duas Mãos: {{ get_actor_value(actorUUID, "TwoHanded") }}
+- Arquearia: {{ get_actor_value(actorUUID, "Archery") }}
+- Destruição: {{ get_actor_value(actorUUID, "Destruction") }}
+- Restauração: {{ get_actor_value(actorUUID, "Restoration") }}
+- Furtividade: {{ get_actor_value(actorUUID, "Sneak") }}
+- Eloquência: {{ get_actor_value(actorUUID, "Speech") }}
+
+**Resistências:**
+- Resistência a Fogo: {{ get_actor_value(actorUUID, "ResistFire") }}
+- Resistência a Gelo: {{ get_actor_value(actorUUID, "ResistFrost") }}
+- Resistência a Choque: {{ get_actor_value(actorUUID, "ResistShock") }}
+- Resistência a Veneno: {{ get_actor_value(actorUUID, "ResistPoison") }}
+- Resistência a Magia: {{ get_actor_value(actorUUID, "ResistMagic") }}
+- Resistência a Doença: {{ get_actor_value(actorUUID, "ResistDisease") }}
+
+---
+
+### Teste 2: get_base_actor_value() - Valores base/permanentes
+
+**Atributos base (sem modificadores):**
+- Vida base: {{ get_base_actor_value(actorUUID, "Health") }}
+- Magia base: {{ get_base_actor_value(actorUUID, "Magicka") }}
+- Vigor base: {{ get_base_actor_value(actorUUID, "Stamina") }}
+- Capacidade de carga base: {{ get_base_actor_value(actorUUID, "CarryWeight") }}
+
+**Perícias base:**
+- Uma Mão base: {{ get_base_actor_value(actorUUID, "OneHanded") }}
+- Destruição base: {{ get_base_actor_value(actorUUID, "Destruction") }}
+- Furtividade base: {{ get_base_actor_value(actorUUID, "Sneak") }}
+
+**Diferenças calculadas (atual - base):**
+{% set healthDiff = get_actor_value(actorUUID, "Health") - get_base_actor_value(actorUUID, "Health") %}
+{% set magickaDiff = get_actor_value(actorUUID, "Magicka") - get_base_actor_value(actorUUID, "Magicka") %}
+- Modificador de Vida: {{ healthDiff }}{% if healthDiff > 0 %} (reforçado){% elif healthDiff < 0 %} (enfraquecido/danificado){% else %} (inalterado){% endif %}
+- Modificador de Magia: {{ magickaDiff }}{% if magickaDiff > 0 %} (reforçado){% elif magickaDiff < 0 %} (enfraquecido/drenado){% else %} (inalterado){% endif %}
+
+---
+
+### Teste 3: Verificações de estado de combate
+
+**is_in_combat():**
+- {{ actorName }}: {% if is_in_combat(actorUUID) %}⚔️ EM COMBATE{% else %}🕊️ Fora de combate{% endif %}
+- Jogador: {% if is_in_combat(player.UUID) %}⚔️ EM COMBATE{% else %}🕊️ Fora de combate{% endif %}
+
+**has_weapon_drawn():**
+- {{ actorName }}: {% if has_weapon_drawn(actorUUID) %}🗡️ Arma DESEMBAINHADA{% else %}🔒 Arma guardada{% endif %}
+- Jogador: {% if has_weapon_drawn(player.UUID) %}🗡️ Arma DESEMBAINHADA{% else %}🔒 Arma guardada{% endif %}
+
+**is_hostile_to_actor():**
+- {{ actorName }} hostil ao jogador: {% if is_hostile_to_actor(actorUUID, player.UUID) %}⚠️ HOSTIL{% else %}✓ Não hostil{% endif %}
+- Jogador hostil a {{ actorName }}: {% if is_hostile_to_actor(player.UUID, actorUUID) %}⚠️ HOSTIL{% else %}✓ Não hostil{% endif %}
+
+---
+
+### Teste 4: Estados de combate especiais
+
+**is_knocked_down():**
+- {{ actorName }}: {% if is_knocked_down(actorUUID) %}💀 DERRIBADO (sangrando/essencial caído){% else %}✓ De pé{% endif %}
+- Jogador: {% if is_knocked_down(player.UUID) %}💀 DERRIBADO{% else %}✓ De pé{% endif %}
+
+**is_reanimated():**
+- {{ actorName }}: {% if is_reanimated(actorUUID) %}🧟 REANIMADO (servo morto-vivo){% else %}✓ Não reanimado{% endif %}
+
+**is_summoned():**
+- {{ actorName }}: {% if is_summoned(actorUUID) %}✨ CRIATURA INVOCADA{% else %}✓ Não invocado{% endif %}
+
+---
+
+### Teste 5: get_spell_list() - Feitiços conhecidos (avançado)
+
+{% set actorSpells = get_spell_list(actorUUID) %}
+{% if actorSpells and length(actorSpells) > 0 %}
+**Feitiços conhecidos de {{ actorName }}:** ({{ length(actorSpells) }} no total)
+{% for spell in actorSpells %}
+{% if loop.index <= 10 %}
+- **{{ spell.name }}** ({{ spell.spellType }})
+  - Escola: {% if spell.school %}{{ spell.school }}{% else %}N/D (Poder){% endif %}
+  - Conjuração: {{ spell.castingType }} | Entrega: {{ spell.delivery }}
+  - Custo de Magia: {{ spell.magickaCost }} | Tempo de carga: {{ spell.chargeTime }}s
+  - Duas Mãos: {% if spell.isTwoHanded %}Sim{% else %}Não{% endif %} | Hostil: {% if spell.isHostile %}⚠️ Sim{% else %}Não{% endif %}
+{% endif %}
+{% endfor %}
+{% if length(actorSpells) > 10 %}
+... e mais {{ length(actorSpells) - 10 }} feitiços
+{% endif %}
+{% else %}
+**{{ actorName }}** não conhece feitiços.
+{% endif %}
+
+**Exemplos de filtragem de feitiços:**
+
+{% set destructionSpells = [] %}
+{% set restorationSpells = [] %}
+{% set powers = [] %}
+{% for spell in actorSpells %}
+{% if spell.school == "Destruction" %}{% set _ = destructionSpells.append(spell) %}{% endif %}
+{% if spell.school == "Restoration" %}{% set _ = restorationSpells.append(spell) %}{% endif %}
+{% if spell.spellType == "Power" or spell.spellType == "LesserPower" %}{% set _ = powers.append(spell) %}{% endif %}
+{% endfor %}
+
+- Feitiços de Destruição: {{ length(destructionSpells) }}
+- Feitiços de Restauração: {{ length(restorationSpells) }}
+- Poderes: {{ length(powers) }}
+
+{% set playerSpells = get_spell_list(player.UUID) %}
+{% if playerSpells and length(playerSpells) > 0 %}
+**Feitiços conhecidos do jogador:** ({{ length(playerSpells) }} no total)
+{% for spell in playerSpells %}
+{% if loop.index <= 8 %}
+- {{ spell.name }} ({% if spell.school %}{{ spell.school }}{% else %}{{ spell.spellType }}{% endif %}) - {{ spell.castingType }}
+{% endif %}
+{% endfor %}
+{% if length(playerSpells) > 8 %}
+... e mais {{ length(playerSpells) - 8 }} feitiços
+{% endif %}
+{% else %}
+**O jogador** não conhece feitiços.
+{% endif %}
+
+---
+
+### Teste 6: Exemplos de lógica por limiar de perícia
+
+{% set actorDestruction = get_actor_value(actorUUID, "Destruction") %}
+{% set actorSpeech = get_actor_value(actorUUID, "Speech") %}
+
+**Descrições por nível de perícia:**
+{% if actorDestruction >= 100 %}
+- Destruição: LENDÁRIO ({{ actorDestruction }})
+{% elif actorDestruction >= 75 %}
+- Destruição: Especialista ({{ actorDestruction }})
+{% elif actorDestruction >= 50 %}
+- Destruição: Adepto ({{ actorDestruction }})
+{% elif actorDestruction >= 25 %}
+- Destruição: Aprendiz ({{ actorDestruction }})
+{% else %}
+- Destruição: Novato ({{ actorDestruction }})
+{% endif %}
+
+{% if actorSpeech >= 75 %}
+- Eloquência: Negociador mestre ({{ actorSpeech }})
+{% elif actorSpeech >= 50 %}
+- Eloquência: Orador hábil ({{ actorSpeech }})
+{% elif actorSpeech >= 25 %}
+- Eloquência: Conversador razoável ({{ actorSpeech }})
+{% else %}
+- Eloquência: Comunicador ruim ({{ actorSpeech }})
+{% endif %}
+
+---

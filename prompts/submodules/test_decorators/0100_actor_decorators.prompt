@@ -1,0 +1,171 @@
+{# SUBMÓDULO DE TESTE - Decoradores de ator #}
+{# Testa: decnpc, isValidActor, actor_has_keyword, has_line_of_sight, distance_between #}
+{# CATEGORIA: Ator #}
+
+{% set actor = decnpc(actorUUID) %}
+
+## 📋 TESTES DE DECORADORES DE ATOR
+
+### Teste 1: decnpc() - Dados centrais do ator
+
+{% if isValidActor(actorUUID) %}
+**✓ isValidActor(actorUUID) = true** - O ator é válido
+
+#### Identidade básica
+- **UUID:** {{ actor.UUID }}
+- **Nome:** {{ actor.name }}
+- **Primeiro nome:** {{ actor.firstName }}
+- **Sobrenome:** {{ actor.lastName }}
+- **Gênero:** {{ actor.gender }}
+- **Sexo:** {{ actor.sex }}
+- **Raça:** {{ actor.race }}
+- **Classe:** {{ actor.class }}
+- **Nível:** {{ actor.level }}
+- **É mulher:** {{ actor.isFemale }}
+- **É criança:** {{ actor.isChild }}
+
+#### Pronomes (de decnpc)
+- **Subjetivo:** {{ actor.subjectivePronoun }} ({{ subj | capitalize }} caminha)
+- **Objetivo:** {{ actor.objectivePronoun }} (Eu vejo {{ obj }})
+- **Adjetivo possessivo:** {{ actor.possessiveAdjective }} (espada {{ actor.possessiveAdjective | capitalize }})
+- **Pronome possessivo:** {{ actor.possessivePronoun }} (A espada é {{ actor.possessivePronoun }})
+- **Reflexivo:** {{ actor.reflexivePronoun }} ({{ subj | capitalize }} machucou {{ refl }})
+
+#### Atributos vitais
+- **Vida:** {{ actor.health }} / {{ actor.maxHealth }}
+- **Magia:** {{ actor.magicka }} / {{ actor.maxMagicka }}
+- **Vigor:** {{ actor.stamina }} / {{ actor.maxStamina }}
+- **Peso:** {{ actor.weight }}
+- **Quantidade de ouro:** {{ actor.goldCount }}
+
+#### Indicadores de estado
+- **Está morto:** {{ actor.isDead }}
+- **É essencial:** {{ actor.isEssential }}
+- **É guarda:** {{ actor.isGuard }}
+- **É hostil:** {{ actor.isHostile }}
+- **Está em combate:** {{ actor.isInCombat }}
+- **Está ocupado:** {{ actor.isBusy }}
+- **É capaz de falar:** {{ actor.isCapableOfSpeech }}
+- **Distância até o jogador:** {{ actor.distanceToPlayer }} unidades ({{ units_to_meters(actor.distanceToPlayer) }}m)
+
+#### Condições
+- **Paralisia:** {{ actor.paralysis }}
+- **Condição cerebral:** {{ actor.brainCondition }}
+
+#### Perícias (do objeto decnpc)
+**Perícias de combate:**
+- Uma Mão: {{ actor.oneHanded }}
+- Duas Mãos: {{ actor.twoHanded }}
+- Arquearia: {{ actor.archery }}
+- Bloqueio: {{ actor.block }}
+- Armadura Pesada: {{ actor.heavyArmor }}
+- Armadura Leve: {{ actor.lightArmor }}
+
+**Perícias de magia:**
+- Destruição: {{ actor.destruction }}
+- Restauração: {{ actor.restoration }}
+- Alteração: {{ actor.alteration }}
+- Conjuração: {{ actor.conjuration }}
+- Ilusão: {{ actor.illusion }}
+- Encantamento: {{ actor.enchanting }}
+
+**Perícias furtivas:**
+- Furtividade: {{ actor.sneak }}
+- Arrombamento: {{ actor.lockpicking }}
+- Bater carteira: {{ actor.pickpocket }}
+- Eloquência: {{ actor.speech }}
+- Alquimia: {{ actor.alchemy }}
+- Ferraria: {{ actor.smithing }}
+
+#### Facções (de decnpc)
+{% if actor.faction and length(actor.faction) > 0 %}
+Facções: {{ join(actor.faction, ", ") }}
+{% else %}
+Nenhuma facção encontrada nos dados de decnpc
+{% endif %}
+
+#### Palavras-chave (de decnpc)
+{% if actor.keywords and length(actor.keywords) > 0 %}
+Palavras-chave encontradas: {{ length(actor.keywords) }}
+{% for kw in actor.keywords %}
+- {{ kw.editorID }} (FormID: {{ kw.formID }})
+{% endfor %}
+{% else %}
+Nenhuma palavra-chave nos dados de decnpc
+{% endif %}
+
+{% else %}
+**✗ isValidActor(actorUUID) = false** - O ator NÃO é válido
+{% endif %}
+
+---
+
+### Teste 2: actor_has_keyword() - Verificações de palavras-chave
+
+Testando palavras-chave comuns de tipo de ator:
+- **ActorTypeNPC:** {% if actor_has_keyword(actorUUID, "ActorTypeNPC") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeUndead:** {% if actor_has_keyword(actorUUID, "ActorTypeUndead") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeAnimal:** {% if actor_has_keyword(actorUUID, "ActorTypeAnimal") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeCreature:** {% if actor_has_keyword(actorUUID, "ActorTypeCreature") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeDaedra:** {% if actor_has_keyword(actorUUID, "ActorTypeDaedra") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeDragon:** {% if actor_has_keyword(actorUUID, "ActorTypeDragon") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeGhost:** {% if actor_has_keyword(actorUUID, "ActorTypeGhost") %}✓ SIM{% else %}✗ NÃO{% endif %}
+- **ActorTypeDwarven:** {% if actor_has_keyword(actorUUID, "ActorTypeDwarven") %}✓ SIM{% else %}✗ NÃO{% endif %}
+
+---
+
+### Teste 3: Comparação com o jogador
+
+{% set playerData = decnpc(player.UUID) %}
+**Informações do jogador:**
+- Nome: {{ player.name }}
+- Nível: {{ player.level }}
+- Raça: {{ player.race }}
+- UUID: {{ player.UUID }}
+- Está em combate: {{ player.isInCombat }}
+- Verificação de jogador: {% if is_player(player.UUID) %}✓ SIM{% else %}✗ NÃO{% endif %}
+- O ator é o jogador: {% if is_player(actorUUID) %}✓ SIM (o ator É o jogador){% else %}✗ NÃO (o ator NÃO é o jogador){% endif %}
+
+---
+
+### Teste 4: Casos extremos de isValidActor()
+
+- **UUID do ator válido:** {{ isValidActor(actorUUID) }}
+- **UUID do jogador válido:** {{ isValidActor(player.UUID) }}
+- **UUID zero válido:** {{ isValidActor(0) }}
+
+---
+
+### Teste 5: has_line_of_sight() - Verificações de linha de visão
+
+{# Verifica se dois atores conseguem se ver usando direção do olhar, campo de visão e física de raycast #}
+
+{% set nearbyNPCs = get_nearby_npc_list(player.UUID) %}
+{% if nearbyNPCs and length(nearbyNPCs) > 0 %}
+**Linha de visão até NPCs próximos (da perspectiva do ator):**
+{% for npc in nearbyNPCs %}
+{% if loop.index <= 5 and npc.UUID != actorUUID %}
+- {{ npc.name }}: {% if has_line_of_sight(actorUUID, npc.UUID) %}✓ Pode ver{% else %}✗ Não pode ver{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+---
+
+### Teste 6: distance_between() - Cálculos de distância
+
+{# Retorna a distância 3D entre dois atores em unidades do jogo (128 unidades ≈ 1,828 metros) #}
+
+
+{% if nearbyNPCs and length(nearbyNPCs) > 0 %}
+**Distâncias entre o ator e NPCs próximos:**
+{% for npc in nearbyNPCs %}
+{% if loop.index <= 5 and npc.UUID != actorUUID %}
+{% set dist = distance_between(actorUUID, npc.UUID) %}
+- {{ npc.name }}: {{ dist }} unidades ({{ units_to_meters(dist) }}m)
+{% endif %}
+{% endfor %}
+{% endif %}
+
+---

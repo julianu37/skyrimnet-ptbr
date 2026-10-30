@@ -1,0 +1,29 @@
+{# SUBMÓDULO DE TESTE - Cabeçalho de testes de decoradores #}
+{# Este arquivo estabelece o contexto de teste e as variáveis comuns #}
+{# CATEGORIA: Infraestrutura de teste #}
+
+{# ═══════════════════════════════════════════════════════════════════════ #}
+{#                       SUBMÓDULO DE TESTE DE DECORADORES                 #}
+{#   Propósito: exercitar TODOS os decoradores para validar o template      #}
+{# ═══════════════════════════════════════════════════════════════════════ #}
+
+{# Define a perspectiva do modo de renderização (padrão) #}
+{% set first_person = (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+{% set third_person = (render_mode == "target" or render_mode == "dialogue_target") %}
+{% set brief_mode = (render_mode == "short_inline" or render_mode == "interject_inline") %}
+
+{# Armazena em cache os dados do ator para evitar chamadas repetidas #}
+{% set actor = decnpc(actorUUID) %}
+{% set actorName = actor.name %}
+{% set subj = actor.subjectivePronoun %}
+{% set obj = actor.objectivePronoun %}
+{% set poss = actor.possessivePronoun %}
+{% set refl = actor.reflexivePronoun %}
+
+## 🧪 MÓDULO DE TESTE DE DECORADORES - Ativo
+
+**Sujeito do teste:** {{ actorName }}
+**Modo de renderização:** {{ render_mode }}
+**Perspectiva:** {% if first_person %}Primeira pessoa{% elif third_person %}Terceira pessoa{% else %}Breve{% endif %}
+
+---
