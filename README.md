@@ -72,10 +72,14 @@ docs/esp.md
 
 ### Catálogo de plugins do SkyrimNet
 
-O conteúdo do pacote é o próprio plugin: `manifest.json` + `prompts/`. Para
-publicar, copie a pasta `dist/marketplace/plugins/julianu37/skyrimnet-ptbr/`
-para o repositório `MinLL/SkyrimNet-Plugins` (ou use a página Publish do
-dashboard).
+O conteúdo do pacote é o próprio plugin: `manifest.json` + `prompts/` +
+`filters/` + `voice_effects/` + `dialogue_actions/`. Para publicar, copie a
+pasta `dist/marketplace/plugins/julianu37/skyrimnet-ptbr/` para o repositório
+`MinLL/SkyrimNet-Plugins` (ou use a página Publish do dashboard).
+
+O catálogo instala apenas conteúdo da Content Library (prompts, bios, filtros,
+efeitos de voz e regras). O **patch de UI** e o **patch do ESP** só vêm no zip
+do MO2, porque não são arquivos de plugin.
 
 ## Requisitos
 

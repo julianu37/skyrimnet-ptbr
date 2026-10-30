@@ -1,7 +1,8 @@
 # Plano de tradução PT-BR do SkyrimNet
 
-Status: rascunho de arquitetura (beta27). Objetivo: jogar em português
-brasileiro sem forkar o mod e sem quebrar a cada update.
+Status: executado até o marco de 2026-10-30 — prompts de sistema e UI 100%,
+250+ bios, YAML de conteúdo e ESP cobertos. Restam bios. Objetivo: jogar em
+português brasileiro sem forkar o mod e sem quebrar a cada update.
 
 ## 1. Princípio: camadas, não fork
 
@@ -21,12 +22,12 @@ desativada. Updates do SkyrimNet não sobrescrevem a tradução.
 | Camada | Arquivos | Impacto | Risco |
 |---|---|---|---|
 | Diretiva de idioma (diálogo) | ~2–5 prompts | alto | baixo |
-| UI do dashboard | ~2.000 chaves i18n | alto | médio (bundle minificado) |
+| UI do dashboard | 6.753 chaves i18n | alto | médio (bundle minificado) |
 | Bios de personagens | 1.509 `.prompt` | médio | baixo (Jinja) |
 | Outros prompts | 123 `.prompt` | médio | baixo |
-| YAML de conteúdo | 35 | baixo | baixo |
-| MCM / Papyrus | 1 script grande | médio | alto (recompilar) |
-| ESP | poucas strings | baixo | médio (xTranslator) |
+| YAML de conteúdo | 16 de 35 (resto é config) | baixo | baixo |
+| MCM / Papyrus | não existe MCM SkyUI | — | — |
+| ESP | 9 strings visíveis | baixo | médio (patch byte-preserving) |
 
 ## 3. O que NÃO traduzir
 
@@ -94,10 +95,12 @@ Pipeline por lote:
 
 ### Fase 4 — MCM, ESP e release
 
-- MCM: traduzir `skynet_McmScript.psc` e recompilar com o Creation Kit/Papyrus.
-  Se o processo travar, lançar a primeira versão com MCM em inglês e UI PT-BR.
-- ESP: xTranslator apenas nas strings próprias do mod.
-- Empacotar `dist/SkyrimNet-PT-BR/`, testar em load order limpa, versionar.
+- MCM: o SkyrimNet Beta25+ não usa MCM do SkyUI; as opções ficam no dashboard
+  web. Não há script Papyrus de MCM para recompilar.
+- ESP: `tools/patch_esp.py` traduz as 9 strings visíveis (descrições de
+  feitiços e mensagens) preservando o tamanho dos registros. Backup automático.
+- Empacotar `dist/SkyrimNet-PT-BR-<versão>.zip`, testar em load order limpa,
+  versionar.
 
 ## 5. Sozinho ou com subagentes?
 
@@ -122,13 +125,13 @@ Regras para subagentes:
 
 | Item | Volume | Esforço |
 |---|---|---|
-| Bios | ~6 MB de texto | ~40 lotes de 40 arquivos |
-| Outros prompts | ~0,5 MB | ~5 lotes |
-| UI | ~2.000 chaves | 1 extração + 1 revisão |
-| MCM | 1 script | 2–3 dias + compilação |
+| Bios | ~6 MB de texto | ~26 lotes de 48 arquivos |
+| Outros prompts | ~0,5 MB | concluído |
+| UI | 6.753 chaves | concluído |
+| MCM | não existe | — |
 
-Com 4 subagentes em paralelo, as bios ficam prontas em ~10–15 rodadas de lote,
-mais revisão. O gargalo real é QA e teste in game, não a tradução.
+Com 4 subagentes em paralelo, as bios restantes ficam prontas em ~1–2 dias de
+rodadas, mais revisão. O gargalo real é QA e teste in game, não a tradução.
 
 ## 7. Riscos
 
