@@ -41,7 +41,7 @@ def build_marketplace() -> Path:
     target = DIST / "marketplace" / "plugins" / AUTHOR / SLUG
     if target.exists():
         shutil.rmtree(target)
-    copy_plugin(target, extras=True)
+    copy_plugin(target, extras=False)
     return target
 
 
