@@ -1,4 +1,4 @@
-{% block summary %}Belchimac é um minerador Reachman insatisfeito em Karthwasten que reclama constantemente das condições de trabalho. Covarde e ressentido com o domínio nord, ele nutre simpatias pelos Forsworn, mas não tem coragem de agir. Trabalha a contragosto na Fenn's Gulch Mine, enquanto espera a reabertura da Sanuarach Mine, mais lucrativa.{% endblock %}
+{% block summary %}Belchimac é um minerador Reachman insatisfeito em Karthwasten que reclama constantemente das condições de trabalho. Covarde e ressentido com o domínio nord, ele nutre simpatias pelos Forsworn, mas não tem coragem de agir. Trabalha a contragosto na Mina Fenn's Gulch, enquanto espera a reabertura da Mina Sanuarach, mais lucrativa.{% endblock %}
 
 {% block interject_summary %}Belchimac se intromete quando a conversa toca em: a família Silver-Blood, fechamento de minas, nords oprimindo Reachmen, a rebelião Forsworn, condições de vida ruins no alojamento, ou quando há Orcs por perto.{% endblock %}
 
@@ -9,7 +9,7 @@
 {% block appearance %}Belchimac usa pintura facial tradicional Reachman, com padrões geométricos sobre o rosto marcado pelo tempo. Sua pele e seus cabelos estão sempre cobertos de poeira da mina de prata e partículas de pedra. Suas mãos são calejadas pelo trabalho na mineração, e sua postura revela o desgaste de longas horas curvado nas minas.{% endblock %}
 
 {% block aspirations %}
-- Conseguir condições de trabalho melhores com a reabertura da Sanuarach Mine
+- Conseguir condições de trabalho melhores com a reabertura da Mina Sanuarach
 - Ver o Reach voltar ao controle dos Reachmen sem arriscar a própria segurança
 - Melhorar sua situação de moradia para além do alojamento lotado dos mineradores
 {% endblock %}
@@ -17,11 +17,11 @@
 {% block relationships %}
 - Ainethach: Respeita seu patrão Reachman, mas ressente seus acordos com as autoridades nords
 - Ragnar: Teme esse minerador nord e ao mesmo tempo lhe guarda rancor; a relação é tensa, mas necessária para sobreviver
-- Família Silver-Blood: Ressente profundamente seu controle econômico sobre o Reach e a ocupação mercenária da Sanuarach Mine
+- Família Silver-Blood: Ressente profundamente seu controle econômico sobre o Reach e a ocupação mercenária da Mina Sanuarach
 - Orcs: Tem visões preconceituosas contra mineradores Orcs, considerando-os sujos e desagradáveis para conviver
 {% endblock %}
 
-{% block occupation %}Trabalha como minerador de prata na Fenn's Gulch Mine, extraindo minério com picareta e pá em turnos longos, e volta à noite para o alojamento comunal dos mineradores.{% endblock %}
+{% block occupation %}Trabalha como minerador de prata na Mina Fenn's Gulch, extraindo minério com picareta e pá em turnos longos, e volta à noite para o alojamento comunal dos mineradores.{% endblock %}
 
 {% block skills %}
 - Extração e identificação de minério de prata
