@@ -18,7 +18,7 @@
         - {{ actor.name }} está nadando no momento.
     {% elif sprinting %}
         - {{ actor.name }} está correndo a toda velocidade.
-    {% elif furniture == "Carriage" %}
+    {% elif furniture == "Carriage" or (isString(furniture) and lower(furniture) == "carruagem") %}
         - {{ actor.name }} está sentado em uma carruagem.
     {% elif isString(furniture) and length(furniture) > 0 %}
         - {{ actor.name }} está usando {{ furniture }}.

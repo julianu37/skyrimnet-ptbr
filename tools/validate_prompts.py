@@ -123,9 +123,11 @@ def compare(
     translated: Path,
     allow_subset: bool = False,
     only: list[str] | None = None,
+    allow_structural: list[str] | None = None,
 ) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
+    structural_ok = {Path(item).as_posix() for item in (allow_structural or [])}
 
     src_files = {p.relative_to(source) for p in source.rglob("*.prompt")}
     dst_files = {p.relative_to(translated) for p in translated.rglob("*.prompt")}
@@ -164,14 +166,15 @@ def compare(
                 warnings.append(f"{rel}: Jinja parse differs from source")
         if src["blocks"] != dst["blocks"]:
             errors.append(f"{rel}: block names differ ({src['blocks']} != {dst['blocks']})")
-        if src["exprs"] != dst["exprs"]:
-            missing = src["exprs"] - dst["exprs"]
-            added = dst["exprs"] - src["exprs"]
-            errors.append(f"{rel}: {{{{ }}}} expressions differ (missing={dict(missing)}, extra={dict(added)})")
-        if src["tags"] != dst["tags"]:
-            missing = src["tags"] - dst["tags"]
-            added = dst["tags"] - src["tags"]
-            errors.append(f"{rel}: {{% %}} tags differ (missing={dict(missing)}, extra={dict(added)})")
+        if rel.as_posix() not in structural_ok:
+            if src["exprs"] != dst["exprs"]:
+                missing = src["exprs"] - dst["exprs"]
+                added = dst["exprs"] - src["exprs"]
+                errors.append(f"{rel}: {{{{ }}}} expressions differ (missing={dict(missing)}, extra={dict(added)})")
+            if src["tags"] != dst["tags"]:
+                missing = src["tags"] - dst["tags"]
+                added = dst["tags"] - src["tags"]
+                errors.append(f"{rel}: {{% %}} tags differ (missing={dict(missing)}, extra={dict(added)})")
         if src["markers"] != dst["markers"]:
             errors.append(f"{rel}: section markers differ")
 
@@ -210,6 +213,11 @@ def main() -> int:
         nargs="+",
         help="check only these paths (relative to the source root)",
     )
+    parser.add_argument(
+        "--allow-structural",
+        nargs="+",
+        help="paths allowed to add Jinja conditions intentionally",
+    )
     args = parser.parse_args()
 
     source = Path(args.source)
@@ -218,7 +226,9 @@ def main() -> int:
         print("source/translated must be directories", file=sys.stderr)
         return 2
 
-    errors, warnings = compare(source, translated, args.allow_subset, args.only)
+    errors, warnings = compare(
+        source, translated, args.allow_subset, args.only, args.allow_structural
+    )
     lines = [f"source: {source}", f"translated: {translated}", ""]
     lines += [f"ERROR {e}" for e in errors]
     lines += [f"WARN  {w}" for w in warnings]

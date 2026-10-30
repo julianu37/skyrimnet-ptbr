@@ -27,7 +27,7 @@ def copy_plugin(destination: Path, extras: bool) -> None:
     destination.mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "manifest.json", destination / "manifest.json")
     shutil.copytree(ROOT / "prompts", destination / "prompts", dirs_exist_ok=True)
-    for name in ("filters", "voice_effects", "dialogue_actions"):
+    for name in ("filters", "voice_effects", "dialogue_actions", "furniture"):
         source = ROOT / name
         if source.exists():
             shutil.copytree(source, destination / name, dirs_exist_ok=True)
