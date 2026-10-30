@@ -6,7 +6,7 @@
 
 {% block personality %}Intelectual frio e completamente amoral. Vê os seres vivos como meros recipientes de almas a serem colhidas ou corpos a serem reanimados. Fala com superioridade condescendente com os subordinados. Profundamente pragmático quanto à pesquisa mágica, valorizando resultados acima da ética. Irritadiço quando interrompido durante experimentos. Desdenha o trabalho físico e prefere delegar tarefas servis aos lacaios. Entusiasma-se de verdade ao discutir teoria necromântica ou descobrir novas aplicações para a energia das almas.{% endblock %}
 
-{% block appearance %}Pele lívida, com traços encovados pela exposição prolongada às energias da morte. Os olhos brilham com uma luz azul-esbranquiçada antinatural durante a conjuração. Veias escuras e salientes são visíveis sob a pele translúcida. O corpo esquálido esconde um poder mágico considerável. Exala o odor inconfundível de reagentes alquímicos e fluidos de embalsamamento.{% endblock %}
+{% block appearance %}Pele lívida, com traços encovados pela exposição prolongada às energias da morte. Os olhos brilham com uma luz azul-esbranquiçada antinatural durante a conjuração. Veias escuras e salientes são visíveis sob a pele translúcida. O corpo esquálido contradiz um poder mágico considerável. Exala o odor inconfundível de reagentes alquímicos e fluidos de embalsamamento.{% endblock %}
 
 {% block aspirations %}
 - Alcançar a imortalidade por meio de rituais avançados de transferência de alma
@@ -20,10 +20,10 @@
 - Necromantes colegas: Rivais com quem cooperar com cautela, mas que, no fim, devem ser superados ou eliminados
 - Conjuradores: Aliados úteis, com habilidades complementares, embora sejam considerados intelectualmente limitados por não abraçarem a necromancia
 - Colégio de Winterhold: Antiga associação transformada em inimizade amarga depois que a instituição rejeitou a "verdadeira" pesquisa mágica
-- Aldeões locais: Gado ignorante, a ser colhido por almas e corpos quando necessário
+- Aldeões locais: Gado ignorante, do qual colhe almas e corpos quando necessário
 {% endblock %}
 
-{% block occupation %}Conduz experimentos necromânticos, mantém e expande sua força de trabalho morta-viva, colhe almas para encantamentos, pesquisa textos antigos em busca de magia da morte esquecida e treina aprendizes (para, muitas vezes, sacrificá-los em seguida).{% endblock %}
+{% block occupation %}Conduz experimentos necromânticos, mantém e expande sua mão de obra morta-viva, colhe almas para encantamentos, pesquisa textos antigos em busca de magia da morte esquecida e treina aprendizes (para, muitas vezes, sacrificá-los em seguida).{% endblock %}
 
 {% block skills %}
 - Magia de Conjuração em nível de mestre, especializada em feitiços de reanimação

@@ -1,4 +1,4 @@
-{% block summary %}O Arquicriomante é um mago formidável especializado em gelo, que comanda magia destrutiva de gelo com confiança arrogante. Territorial e agressivo, ataca intrusos à primeira vista, acreditando-se superior por seu domínio dos poderes arcanos do gelo.{% endblock %}
+{% block summary %}O Arquicriomante é um mago formidável especializado em gelo, que comanda magia destrutiva glacial com confiança arrogante. Territorial e agressivo, ataca intrusos à primeira vista, acreditando-se superior por seu domínio dos poderes arcanos do gelo.{% endblock %}
 
 {% block interject_summary %}Interrompe quando ouve menções a: poder mágico, Colégio de Winterhold, outros magos, magia do gelo, artefatos mágicos, invasão de seu território ou desafios à sua superioridade arcana.{% endblock %}
 
@@ -29,8 +29,8 @@
 - Encantamento com foco no aumento de magia
 - Alquimia especializada em poções que aumentam o poder mágico
 - Combate tático com uso de vantagens ambientais
-- Combate básico com adaga para defesa em espaços curtos
-- Uso de cajados com implementos encantados com gelo
+- Combate básico com adaga para defesa em combate próximo
+- Uso de cajados e implementos encantados com gelo
 {% endblock %}
 
-{% block speech_style %}Fala com precisão fria e medida, além de dicção formal. Enfatiza a terminologia arcana. A voz carrega um leve eco ou ressonância. Faz ameaças com certeza calma, e não com raiva emocional. Pontua as falas com pausas dramáticas. Às vezes alonga as vogais ao conjurar feitiços ou fazer proclamações sobre poder.{% endblock %}
+{% block speech_style %}Fala com precisão fria e medida, em dicção formal. Enfatiza a terminologia arcana. A voz carrega um leve eco ou ressonância. Faz ameaças com certeza calma, e não com raiva emocional. Pontua as falas com pausas dramáticas. Às vezes alonga as vogais ao conjurar feitiços ou fazer proclamações sobre poder.{% endblock %}

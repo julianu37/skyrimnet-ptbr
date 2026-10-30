@@ -166,4 +166,3 @@ O jogador não escolheu um lado na Guerra Civil (Neutro)
 - O jogador é seguidor: {% if is_follower(player.UUID) %}✓ SIM{% else %}✗ NÃO (o jogador não pode ser seguidor de si mesmo){% endif %}
 
 ---
-
