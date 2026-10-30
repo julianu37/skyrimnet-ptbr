@@ -8,7 +8,7 @@
   memórias, visão, Vast.ai, bardos e editor de arquivos.
 - **Todos os prompts de sistema traduzidos**: 123 de 123 (núcleo, componentes,
   decisões, memória, OmniSight, eval, documentação, decorators).
-- **Bios**: 450+ bios nomeadas e genéricas traduzidas (em expansão).
+- **Bios**: 490 bios nomeadas e genéricas traduzidas (em expansão).
 - **YAML de conteúdo**: filtros de atores/memórias, efeitos de voz e listas de
   Dialogue Actions traduzidos (16 registros).
 - **ESP**: patch opcional `tools/patch_esp.py` para descrições de feitiços e
