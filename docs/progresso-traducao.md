@@ -9,10 +9,10 @@ Atualizado em 2026-10-30.
 | Prompts | 304 | 1632 | 18,6% |
 | Bios de personagens | 202 | 1509 | 13,4% |
 | Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
-| Interface web (chaves) | 3727 | 6753 | 55,2% |
-| YAML de conteúdo | 0 | 35 | 0% |
-| MCM/Papyrus | 0 | 1 | 0% |
-| ESP | 0 | 1 | 0% |
+| Interface web (chaves) | 4267 | 6753 | 63,2% |
+| YAML de conteúdo | 16 | 35 | 45,7% |
+| MCM/Papyrus | n/a | n/a | — |
+| ESP | n/a | n/a | — |
 
 ## Lotes concluídos
 
@@ -33,6 +33,8 @@ Atualizado em 2026-10-30.
 | UI `settings` restante | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
 | UI `plugins` + `characters` | 920 chaves | `bf4ff25`, `073ced9`, `20d78c9` |
 | UI `gamedata` + `prompts` | 795 chaves | `7234876`, `c2047ed`, `f1d9dd1` |
+| UI `actions` + `triggers` + `routing` | 540 chaves | `4ce1cb7` |
+| YAML: filtros, voice effects, dialogue actions | 16 registros | `d896cb8` |
 
 ## Ferramentas e regras
 
@@ -48,10 +50,13 @@ Atualizado em 2026-10-30.
 
 1. 1.307 bios restantes (lotes de ~48).
 2. `eval` (7), `documentation` (2), `dev` (1), `test_decorators` (10).
-3. 3.026 chaves de UI (tutorial, world_knowledge, actions, triggers,
-   routing, debug, vast_ai, bards, etc.).
-4. 35 YAML de conteúdo.
-5. MCM/Papyrus e ESP.
+3. 1.840 chaves de UI (tutorial e world_knowledge em andamento; depois
+   debug, vast_ai, bards, file_editor, etc.).
+4. 19 YAML restantes: `config/carry_tags_*` (11, fora da Content Library)
+   e `furniture` (4, mantidos em inglês por dependência da lógica dos prompts).
+5. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
+   dashboard web (já traduzido). ESP: só contém registros de teste
+   (`Alrik Test-Alpha`, `Bera Test-Beta`) e nenhum texto de jogador.
 
 ## Em andamento
 
