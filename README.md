@@ -12,9 +12,9 @@ do SkyrimNet.
 - **Núcleo dos prompts**: `system_head` (8), `user_final_instructions` (11),
   `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
   e no fim da mensagem do usuário.
-- **421 prompts**: 298 bios (Whiterun, Riverwood, Solitude, Windhelm, Riften,
-  Markarth e NPCs nomeados de outras regiões) + 123 prompts de sistema
-  (100% do sistema).
+- **568+ prompts**: 450+ bios (Whiterun, Riverwood, Solitude, Windhelm, Riften,
+  Markarth, genéricos de guardas/bandidos e NPCs nomeados de outras regiões) +
+  123 prompts de sistema (100% do sistema).
 - **Interface web**: **6.753 de 6.753 chaves (100%)** — nav, common, home,
   settings completos, TTS, LLM, logs, chat, plugins, personagens, gamedata,
   prompts, actions, triggers, routing, tutorial, world knowledge, debug e
