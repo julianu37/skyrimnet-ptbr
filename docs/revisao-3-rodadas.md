@@ -1,82 +1,71 @@
 # Revisão em 3 rodadas — marco atual
 
 Data: 2026-10-30
-Escopo: núcleo de diálogo PT-BR + interface web + 58 bios.
-Status: **núcleo funcional; tradução completa ainda pendente**.
+Escopo: núcleo + prompts de sistema + 58 bios + UI core.
+Status: **núcleo e sistema funcionais; tradução completa pendente**.
 
 ## Rodada 1 — Completude
 
-### Prompts
-
-| Camada | Traduzidos | Total | Falta |
+| Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| `characters` | 58 | 1509 | 1451 |
-| `submodules` | 19 | 55 | 36 |
-| raiz | 2 | 17 | 15 |
-| `components` | 0 | 15 | 15 |
-| `decisions` | 0 | 5 | 5 |
-| `helpers` | 0 | 3 | 3 |
-| `memory` | 0 | 5 | 5 |
-| `omnisight` | 0 | 7 | 7 |
-| `target_selectors` | 0 | 2 | 2 |
-| `transformers` | 0 | 2 | 2 |
-| `web` | 0 | 2 | 2 |
-| `eval` | 0 | 7 | 7 |
-| `documentation` | 0 | 2 | 2 |
-| `dev` | 0 | 1 | 1 |
-| **Total** | **79** | **1632** | **1553** |
+| Prompts (todos) | 160 | 1632 | 9,8% |
+| Bios de personagens | 58 | 1509 | 3,8% |
+| Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
+| Interface web (chaves) | 965 | 6753 | 14,3% |
+| YAML de conteúdo | 0 | 35 | 0% |
+| MCM/Papyrus | 0 | 1 | 0% |
+| ESP | 0 | 1 | 0% |
 
-### Interface web
+Detalhe dos prompts de sistema concluídos: raiz (17/17), `components` (15/15),
+`decisions` (5/5), `helpers` (3/3), `memory` (5/5), `omnisight` (7/7),
+`target_selectors` (2/2), `transformers` (2/2), `web` (2/2),
+`submodules/system_head` (8/8), `submodules/user_final_instructions` (11/11),
+`submodules/character_bio` (18/18), `guidelines` (1/1),
+`submodules/omnisight_*` (6/6).
 
-| Item | Cobertura |
-|---|---:|
-| Chaves no bundle | 6.753 |
-| Traduzidas | 965 (14,3%) |
-| Pendentes | 5.788 |
-| Placeholders/key mismatch | 0 |
-
-### Outras camadas
-
-- YAML de conteúdo: 0/35 traduzidos.
-- MCM/Papyrus: pendente.
-- ESP: pendente.
+Pendentes de sistema: `eval` (7), `documentation` (2), `dev` (1),
+`submodules/test_decorators` (10).
 
 ## Rodada 2 — Funcional
 
 | Verificação | Resultado |
 |---|---|
-| Validador de prompts (Jinja, tags, expressões, markers, UTF-8) | **0 erros**; 2 warnings esperados |
+| Validador de prompts (Jinja, tags, expressões, markers, UTF-8) | **0 erros**; 9 warnings de termos de jogo/comentários |
+| Chaves JSON dentro dos prompts | **0 divergências** |
 | Placeholders da UI | **0 divergências** |
 | `node --check` no bundle patchado | OK |
 | `node --check` no `pt-br.js` | OK |
-| Zip do MO2 | 87 entradas; **79 prompts** + **3 arquivos de UI** |
-| Mod ativo no MO2 | 79 prompts; UI (`index.html`, `main.027620d9.js`, `pt-br.js`) |
+| Zip do MO2 | 160 prompts + 3 arquivos de UI |
+| Mod ativo no MO2 | 160 prompts; UI aplicada na base `skyrimnet` |
 | Manifest | `julianu37.skyrimnet-ptbr` |
 | Adapter Kokoro | `ok` em `127.0.0.1:8020` |
-| Teste com Qwen2.5-3B (prompt núcleo traduzido) | resposta em **PT-BR** |
-| Camada de conteúdo no jogo | última inicialização: 2 layers, 0 rejected; falta reiniciar com o núcleo novo |
+| Teste com Qwen2.5-3B (prompt núcleo) | resposta em **PT-BR** |
+| Seletor de idioma da UI | opção **Português (Brasil)** no bundle; locale inicial `pt-br` |
+
+Observação: o patch de UI foi aplicado **na pasta do mod base `skyrimnet`**
+(backup `index.html.ptbr-original`), então não depende da ordem do MO2. O bundle
+patchado tem nome `main.027620d9.ptbr.js` para evitar cache.
 
 ## Rodada 3 — Consistência e QA
 
-- Terminologia: `intendente` (17), `Legião Imperial` (12), `Colégio de Winterhold` (5), `Concordata White-Gold` (6). Os 3 `administrador` restantes são “administradores da mina” (função, não Steward).
-- `Companheiros`/`Círculo` restantes são substantivos comuns em minúsculas, não os nomes de facção.
-- Aviso de inglês em `8000_recent_state_changes.prompt`: somente comentários Jinja (`{# Track... #}`) e nomes de variáveis; nada renderizado.
-- Licença/atribuição: `LICENSE`, `NOTICE.md` e `LICENSES/SkyrimNet-GamePlugin-LICENSE.txt` presentes.
-- Git: árvore limpa; commits `1918933` (UI + núcleo), `2b5b6d6` (modelo), `d5d4def` (diretiva).
-- Amostragem manual: Balgruuf, Maven, Hulda, prompts de sistema e UI de navegação — tom e terminologia consistentes.
+- Terminologia: `intendente` (17), `Legião Imperial` (12), `Colégio de
+  Winterhold` (5), `Concordata White-Gold` (6). `administrador` restante (3)
+  refere-se a administradores de mina.
+- `Companheiros`/`Círculo` restantes são substantivos comuns em minúsculas.
+- Warnings de inglês: nomes de itens/facções, comentários Jinja e variáveis;
+  nada de prosa instrucional em inglês no núcleo.
+- Licença/atribuição: `LICENSE`, `NOTICE.md`, `LICENSES/` presentes.
+- Git: árvore limpa; commits recentes `d6c36db`, `3f01234`, `e39cd1c`,
+  `1918933`, `687e419`.
+- Amostragem manual: Balgruuf, Maven, Hulda, `event_history`, `system_head`,
+  `user_final_instructions` e UI de navegação.
 
 ## Veredito
 
-O **núcleo que causava o inglês** está corrigido e testado com o próprio 3B: o prompt
-agora é português-dominante (system_head + user_final + template), e a resposta
-do teste saiu em PT-BR.
+O caminho que causava o inglês está corrigido e testado com o mesmo 3B:
+prompt português-dominante → resposta em PT-BR. A UI agora tem o seletor
+PT-BR e o bundle patchado.
 
-A tradução **não está completa**: faltam 1.553 prompts, 5.788 chaves de UI, 35
-YAML e MCM/ESP. O próximo ciclo deve atacar, nesta ordem:
-
-1. `components`, `decisions`, `helpers`, `memory`, `target_selectors`,
-   `transformers`, `omnisight` (39 arquivos).
-2. Restante de `submodules` (36).
-3. Bios em lotes (1.451).
-4. UI restante (5.788 chaves).
-5. YAML, MCM e ESP.
+A tradução **não está completa**: faltam 1.472 prompts, 5.788 chaves de UI,
+35 YAML e MCM/ESP. Quatro lotes de bios (48 arquivos) estão em andamento e
+serão validados/commitados na sequência.
