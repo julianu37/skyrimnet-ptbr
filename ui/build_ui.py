@@ -49,7 +49,8 @@ def build(source: Path) -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(main_file, OUT / main_file.name)
+    patched_name = main_file.stem + ".ptbr.js"
+    shutil.copy2(main_file, OUT / patched_name)
     shutil.copy2(source / "index.html", OUT / "index.html")
 
     (OUT / "pt-br.js").write_text(
@@ -59,7 +60,7 @@ def build(source: Path) -> None:
         encoding="utf-8",
     )
 
-    bundle = (OUT / main_file.name).read_text(encoding="utf-8")
+    bundle = (OUT / patched_name).read_text(encoding="utf-8")
     replacements = [
         (
             "const d={en:l};",
@@ -79,10 +80,11 @@ def build(source: Path) -> None:
         if count == 0:
             raise SystemExit(f"bundle pattern not found: {old[:60]}")
         bundle = bundle.replace(old, new)
-    (OUT / main_file.name).write_text(bundle, encoding="utf-8")
+    (OUT / patched_name).write_text(bundle, encoding="utf-8")
 
     index = (OUT / "index.html").read_text(encoding="utf-8")
     index = index.replace('<html lang="en"', '<html lang="pt-BR"', 1)
+    index = index.replace(main_file.name, patched_name, 1)
     marker = '<script defer="defer" src="/assets/web-new/main.'
     if index.count(marker) != 1:
         raise SystemExit("index.html main script marker not found exactly once")
@@ -94,7 +96,7 @@ def build(source: Path) -> None:
     (OUT / "index.html").write_text(index, encoding="utf-8")
 
     print(f"dictionary keys: {len(dictionary) - 1}")
-    print(f"bundle: {main_file.name}")
+    print(f"bundle: {patched_name}")
     print(f"overlay: {OUT}")
 
 

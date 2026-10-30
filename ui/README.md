@@ -15,6 +15,8 @@ O dashboard do SkyrimNet usa um dicionário i18n embutido no bundle
    - força o locale inicial `pt-br` (ignora `Dashboard.locale=en`);
    - adiciona `<script src="pt-br.js">` ao `index.html`.
 3. A saída fica em `ui/build/assets/web-new/` e é incluída no zip do MO2.
+   O bundle patchado é renomeado para `main.<hash>.ptbr.js` para evitar cache
+   do navegador; o `index.html` aponta para ele.
 
 ## Build
 
@@ -45,6 +47,14 @@ SKSE/Plugins/SkyrimNet/assets/web-new/
 └── pt-br.js
 ```
 
-Isso **sobrescreve** os assets da UI base. Se o SkyrimNet for atualizado,
-rode o build novamente com o novo bundle. Para desativar só a UI, remova a
-pasta `assets/web-new` do mod (ou desative o mod inteiro).
+Isso **sobrescreve** os assets da UI base. O mod de tradução precisa ficar
+**abaixo** de `skyrimnet` no painel esquerdo do MO2 (prioridade maior).
+
+Alternativa usada na instalação local: aplicar o overlay diretamente na pasta
+do mod base `skyrimnet` (com backup de `index.html` em
+`index.html.ptbr-original`). Assim a UI não depende da ordem do MO2. Um update
+do SkyrimNet sobrescreve o patch; rode o build novamente.
+
+Se o SkyrimNet for atualizado, rode o build novamente com o novo bundle. Para
+desativar só a UI, restaure o `index.html` original e remova
+`main.<hash>.ptbr.js`/`pt-br.js`.
