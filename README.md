@@ -12,11 +12,16 @@ do SkyrimNet.
 - **Núcleo dos prompts**: `system_head` (8), `user_final_instructions` (11),
   `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
   e no fim da mensagem do usuário.
-- **154 bios**: Whiterun, Riverwood, Solitude, Windhelm, Riften, Markarth e
-  NPCs nomeados de outras regiões.
-- **Interface web**: 2.932 chaves em PT-BR (nav, common, home, settings
-  completos, TTS, LLM, logs, chat, plugins e personagens), com fallback para
-  inglês nas demais.
+- **304 prompts**: 202 bios (Whiterun, Riverwood, Solitude, Windhelm, Riften,
+  Markarth e NPCs nomeados de outras regiões) + 102 prompts de sistema.
+- **Interface web**: 5.484 chaves em PT-BR (nav, common, home, settings
+  completos, TTS, LLM, logs, chat, plugins, personagens, gamedata, prompts,
+  actions, triggers, routing, world knowledge, debug e outros), com fallback
+  para inglês nas demais.
+- **YAML de conteúdo**: filtros, efeitos de voz e regras de Dialogue Actions
+  (16 registros).
+- **ESP**: descrições de feitiços e mensagens do plugin traduzidas via
+  `tools/patch_esp.py` (patch local, com backup).
 
 O restante está em tradução. O pacote é incremental: cada lote entra como um
 commit e um release. O benchmark local com Qwen2.5-3B está em
@@ -37,10 +42,11 @@ SkyrimNet.
 
 ## Modelo de LLM recomendado
 
-Este pacote traduz o conteúdo, mas **não controla o modelo**. Com modelos
-pequenos (3B), o prompt do SkyrimNet é dominado por inglês e o modelo pode
-ignorar a diretiva de PT-BR. Use **7B–14B** (Qwen2.5-7B/14B-Instruct, Gemma 2
-9B, Llama 3.1 8B) para diálogo em português com aderência consistente.
+O pacote traduz o conteúdo, mas **não controla o modelo**. Com o núcleo de
+prompts traduzido, o Qwen2.5-3B-Instruct já responde em PT-BR de forma
+consistente no teste local. Modelos **7B–14B** (Qwen2.5-7B/14B-Instruct,
+Gemma 2 9B, Llama 3.1 8B) tendem a dar mais qualidade, aderência e tolerância a
+contextos longos. O benchmark está em `benchmarks/REVIEW.md`.
 
 ## Instalação
 
@@ -48,14 +54,20 @@ ignorar a diretiva de PT-BR. Use **7B–14B** (Qwen2.5-7B/14B-Instruct, Gemma 2
 
 1. Instale o **SkyrimNet** normalmente como um mod.
 2. Baixe o zip em **Releases** e instale como um **mod separado** no MO2.
-3. Deixe **SkyrimNet PT-BR** abaixo do SkyrimNet no painel esquerdo
-   (prioridade maior).
+3. Deixe **SkyrimNet PT-BR** **abaixo** do SkyrimNet no painel esquerdo
+   (prioridade maior), para que o patch de UI do pacote vença.
 4. Ative e inicie o jogo.
+5. Opcional: feche o jogo e rode `tools\patch_esp.py` apontando para o
+   `SkyrimNet.esp` instalado, para traduzir as mensagens e descrições de
+   feitiços que ficam dentro do ESP. Veja `docs/esp.md`.
 
-O zip instala apenas:
+O zip instala:
 
 ```
 SKSE/Plugins/SkyrimNet/external/julianu37.skyrimnet-ptbr/
+SKSE/Plugins/SkyrimNet/assets/web-new/    (patch de UI)
+tools/patch_esp.py                        (opcional)
+docs/esp.md
 ```
 
 ### Catálogo de plugins do SkyrimNet
@@ -88,10 +100,15 @@ Gera:
 skyrimnet-ptbr/
 ├── manifest.json          # identidade do plugin (id = julianu37.skyrimnet-ptbr)
 ├── prompts/               # conteúdo traduzido (mesmos caminhos da base)
+├── filters/               # listas de atores/memórias traduzidas
+├── voice_effects/          # nomes dos efeitos de voz
+├── dialogue_actions/       # listas de Dialogue Actions
 ├── glossary/ptbr.yaml     # glossário e estilo
 ├── tools/validate_prompts.py
+├── tools/patch_esp.py
 ├── tools/package.py
 ├── docs/plano-traducao.md
+├── docs/esp.md
 ├── LICENSE                # MIT para a tradução/ferramentas
 ├── LICENSES/              # licença do SkyrimNet (conteúdo base)
 └── NOTICE.md              # atribuição e termos
