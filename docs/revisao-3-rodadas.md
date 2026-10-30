@@ -9,8 +9,8 @@ Status: **sistema e interface 100% traduzidos; restam bios e YAML de config.**
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts (todos) | 579 | 1632 | 35,5% |
-| Bios de personagens | 456 | 1509 | 30,2% |
+| Prompts (todos) | 597 | 1632 | 36,6% |
+| Bios de personagens | 474 | 1509 | 31,4% |
 | Prompts de sistema (não-bios) | 123 | 123 | **100%** |
 | Interface web (chaves) | 6753 | 6753 | **100%** |
 | YAML de conteúdo | 16 | 35 | 45,7% |
@@ -79,6 +79,6 @@ O caminho que causava o inglês está corrigido e testado com o mesmo 3B:
 prompt português-dominante → resposta em PT-BR. Sistema, UI, YAML de conteúdo
 e textos do ESP estão cobertos.
 
-A tradução **ainda não está completa**: faltam 1.053 bios (747 nomeadas + 306
-genéricas) e 19 YAML de configuração. As 456 bios atuais e os 579 prompts
+A tradução **ainda não está completa**: faltam 1.035 bios (744 nomeadas + 291
+genéricas) e 19 YAML de configuração. As 474 bios atuais e os 597 prompts
 estão validados e ativos.
