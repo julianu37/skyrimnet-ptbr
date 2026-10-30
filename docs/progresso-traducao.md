@@ -6,10 +6,10 @@ Atualizado em 2026-10-30.
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts | 256 | 1632 | 15,7% |
-| Bios de personagens | 154 | 1509 | 10,2% |
+| Prompts | 304 | 1632 | 18,6% |
+| Bios de personagens | 202 | 1509 | 13,4% |
 | Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
-| Interface web (chaves) | 2932 | 6753 | 43,4% |
+| Interface web (chaves) | 3727 | 6753 | 55,2% |
 | YAML de conteúdo | 0 | 35 | 0% |
 | MCM/Papyrus | 0 | 1 | 0% |
 | ESP | 0 | 1 | 0% |
@@ -29,8 +29,10 @@ Atualizado em 2026-10-30.
 | `submodules/character_bio` | 18 | `d6c36db` |
 | Bios 01–04 | 48 | `7735d35`, `fd242ca`, `3dbd27d`, `7c6ba97` |
 | Bios 05–08 | 48 | `b38818b`, `9fbb5f1`, `3d39a9c`, `ce765b2` |
+| Bios 09–12 | 48 | `2b60a99`, `594cd34`, `50f6ec0`, `8ea5446` |
 | UI `settings` restante | 1047 chaves | `9072d00`, `9d1d44b`, `dfc61f9` |
 | UI `plugins` + `characters` | 920 chaves | `bf4ff25`, `073ced9`, `20d78c9` |
+| UI `gamedata` + `prompts` | 795 chaves | `7234876`, `c2047ed`, `f1d9dd1` |
 
 ## Ferramentas e regras
 
@@ -44,19 +46,21 @@ Atualizado em 2026-10-30.
 
 ## Pendente
 
-1. 1.355 bios restantes (lotes de ~48).
+1. 1.307 bios restantes (lotes de ~48).
 2. `eval` (7), `documentation` (2), `dev` (1), `test_decorators` (10).
-3. 3.821 chaves de UI (gamedata, prompts, actions, triggers, routing, etc.).
+3. 3.026 chaves de UI (tutorial, world_knowledge, actions, triggers,
+   routing, debug, vast_ai, bards, etc.).
 4. 35 YAML de conteúdo.
 5. MCM/Papyrus e ESP.
 
 ## Em andamento
 
-- Bios lotes 09–12 (`batches/bios_09..12.txt`), 48 arquivos.
-- UI `gamedata_1`, `gamedata_2` e `prompts` (795 chaves).
+- Bios lotes 13–16 (`batches/bios_13..16.txt`), 48 arquivos.
+- UI `actions`, `triggers`, `routing` (540 chaves).
+- Prompts restantes de sistema (`batches/prompt_remaining.txt`, 21 arquivos).
 
 ## Próximo lote sugerido
 
-- UI `actions`, `triggers`, `routing` (~540 chaves).
+- UI `tutorial` + `world_knowledge` (~646 chaves).
 - Bios: novas rodadas de 4 × 12.
 - Prompts restantes de sistema (20).
