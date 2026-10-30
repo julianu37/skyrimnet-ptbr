@@ -95,6 +95,10 @@ do MO2, porque não são arquivos de plugin.
 python tools/validate_prompts.py --source "...\skyrimnet.base\prompts" --translated prompts --allow-subset
 python tools/check_ui.py
 python tools/package.py
+
+# validação oficial (dev kit beta28)
+content-validate.exe dist\marketplace\plugins\julianu37\skyrimnet-ptbr `
+  --base-tree "...\library\skyrimnet.base" --report dist\validate-report.json
 ```
 
 Gera:
