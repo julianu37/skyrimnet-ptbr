@@ -8,10 +8,10 @@ Status: **núcleo e sistema funcionais; tradução completa pendente**.
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts (todos) | 160 | 1632 | 9,8% |
-| Bios de personagens | 58 | 1509 | 3,8% |
+| Prompts (todos) | 208 | 1632 | 12,7% |
+| Bios de personagens | 106 | 1509 | 7,0% |
 | Prompts de sistema (não-bios) | 102 | 123 | 82,9% |
-| Interface web (chaves) | 965 | 6753 | 14,3% |
+| Interface web (chaves) | 2012 | 6753 | 29,8% |
 | YAML de conteúdo | 0 | 35 | 0% |
 | MCM/Papyrus | 0 | 1 | 0% |
 | ESP | 0 | 1 | 0% |
@@ -35,8 +35,8 @@ Pendentes de sistema: `eval` (7), `documentation` (2), `dev` (1),
 | Placeholders da UI | **0 divergências** |
 | `node --check` no bundle patchado | OK |
 | `node --check` no `pt-br.js` | OK |
-| Zip do MO2 | 160 prompts + 3 arquivos de UI |
-| Mod ativo no MO2 | 160 prompts; UI aplicada na base `skyrimnet` |
+| Zip do MO2 | 208 prompts + 3 arquivos de UI |
+| Mod ativo no MO2 | 208 prompts; UI aplicada na base `skyrimnet` |
 | Manifest | `julianu37.skyrimnet-ptbr` |
 | Adapter Kokoro | `ok` em `127.0.0.1:8020` |
 | Teste com Qwen2.5-3B (prompt núcleo) | resposta em **PT-BR** |
@@ -66,6 +66,6 @@ O caminho que causava o inglês está corrigido e testado com o mesmo 3B:
 prompt português-dominante → resposta em PT-BR. A UI agora tem o seletor
 PT-BR e o bundle patchado.
 
-A tradução **não está completa**: faltam 1.472 prompts, 5.788 chaves de UI,
-35 YAML e MCM/ESP. Quatro lotes de bios (48 arquivos) estão em andamento e
-serão validados/commitados na sequência.
+A tradução **não está completa**: faltam 1.424 prompts, 4.741 chaves de UI,
+35 YAML e MCM/ESP. Os quatro lotes de bios (48 arquivos) foram validados e commitados;
+106 bios estão ativas.
