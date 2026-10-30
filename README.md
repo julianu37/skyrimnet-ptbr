@@ -19,8 +19,9 @@ do SkyrimNet.
   settings completos, TTS, LLM, logs, chat, plugins, personagens, gamedata,
   prompts, actions, triggers, routing, tutorial, world knowledge, debug e
   demais telas.
-- **YAML de conteúdo**: filtros, efeitos de voz e regras de Dialogue Actions
-  (16 registros).
+- **YAML de conteúdo**: **35 de 35 (100%)** — filtros, efeitos de voz,
+  regras de Dialogue Actions, nomes de móveis e os `carry_tags` (estes via
+  `tools/patch_config.py`, patch local).
 - **ESP**: descrições de feitiços e mensagens do plugin traduzidas via
   `tools/patch_esp.py` (patch local, com backup).
 

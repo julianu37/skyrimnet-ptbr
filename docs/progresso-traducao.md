@@ -10,7 +10,7 @@ Atualizado em 2026-10-30.
 | Bios de personagens | 490 | 1509 | 32,5% |
 | Prompts de sistema (não-bios) | 123 | 123 | **100%** |
 | Interface web (chaves) | 6753 | 6753 | **100%** |
-| YAML de conteúdo | 16 | 35 | 45,7% |
+| YAML de conteúdo | **35** | 35 | **100%** |
 | ESP (textos visíveis) | 9 | 9 | **100%** |
 | MCM/Papyrus | n/a | n/a | — |
 
@@ -65,8 +65,8 @@ Atualizado em 2026-10-30.
 ## Pendente
 
 1. 1.019 bios restantes (lotes de ~48): 751 nomeadas + 268 genéricas.
-2. 19 YAML restantes: `config/carry_tags_*` (11, fora da Content Library) e
-   `furniture` (4, mantidos em inglês por dependência da lógica dos prompts).
+2. YAML: Content Library 100%; os 11 `config/carry_tags_*` são patch local
+   via `tools/patch_config.py`.
 3. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
    dashboard web (já 100% traduzido).
 

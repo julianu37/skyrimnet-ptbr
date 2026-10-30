@@ -9,8 +9,8 @@
 - **Todos os prompts de sistema traduzidos**: 123 de 123 (núcleo, componentes,
   decisões, memória, OmniSight, eval, documentação, decorators).
 - **Bios**: 490 bios nomeadas e genéricas traduzidas (em expansão).
-- **YAML de conteúdo**: filtros de atores/memórias, efeitos de voz e listas de
-  Dialogue Actions traduzidos (16 registros).
+- **YAML de conteúdo**: **35 de 35 (100%)** — filtros, efeitos de voz,
+  Dialogue Actions, móveis e carry tags (estes via patch local).
 - **ESP**: patch opcional `tools/patch_esp.py` para descrições de feitiços e
   mensagens do plugin (9 textos, byte-preserving).
 - **UI**: seletor “Português (Brasil)”, locale inicial `pt-br` e bundle
