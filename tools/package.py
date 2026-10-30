@@ -60,8 +60,10 @@ def build_mod_zip() -> Path:
     shutil.copytree(ROOT / "LICENSES", staging / "LICENSES", dirs_exist_ok=True)
     (staging / "tools").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "tools" / "patch_esp.py", staging / "tools" / "patch_esp.py")
+    shutil.copy2(ROOT / "tools" / "patch_config.py", staging / "tools" / "patch_config.py")
     (staging / "docs").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "docs" / "esp.md", staging / "docs" / "esp.md")
+    shutil.copy2(ROOT / "docs" / "config.md", staging / "docs" / "config.md")
 
     ui_assets = ROOT / "ui" / "build" / "assets" / "web-new"
     if ui_assets.exists():
