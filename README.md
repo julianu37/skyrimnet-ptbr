@@ -17,6 +17,13 @@ O restante está em tradução. O pacote é incremental: cada lote entra como um
 commit e um release. O benchmark local com Qwen2.5-3B está em
 `benchmarks/REVIEW.md`.
 
+## Modelo de LLM recomendado
+
+Este pacote traduz o conteúdo, mas **não controla o modelo**. Com modelos
+pequenos (3B), o prompt do SkyrimNet é dominado por inglês e o modelo pode
+ignorar a diretiva de PT-BR. Use **7B–14B** (Qwen2.5-7B/14B-Instruct, Gemma 2
+9B, Llama 3.1 8B) para diálogo em português com aderência consistente.
+
 ## Instalação
 
 ### Mod Organizer 2 (recomendado)
