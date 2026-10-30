@@ -211,10 +211,10 @@ Aparar ambos: [{{- testString -}}]
 - Saudação completa: {{ fullGreeting }}
 
 **Montando strings com +:**
-- Combinado: {{ "Ator: " + actor.name + " (" + actor.race + ")" }}
+- Combinado: {{ "Actor: " + actor.name + " (" + actor.race + ")" }}
 
 **Usando to_string para números:**
-- "Nível " + nível: {{ "Nível " + to_string(actor.level) }}
+- "Level " + nível: {{ "Level " + to_string(actor.level) }}
 
 ---
 
@@ -325,3 +325,4 @@ O array está vazio
 {% endif %}
 
 ---
+

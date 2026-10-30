@@ -27,7 +27,7 @@
 #### Pronomes (de decnpc)
 - **Subjetivo:** {{ actor.subjectivePronoun }} ({{ subj | capitalize }} caminha)
 - **Objetivo:** {{ actor.objectivePronoun }} (Eu vejo {{ obj }})
-- **Adjetivo possessivo:** {{ actor.possessiveAdjective }} (espada {{ actor.possessiveAdjective | capitalize }})
+- **Adjetivo possessivo:** {{ actor.possessiveAdjective }} ({{ actor.possessiveAdjective | capitalize }} espada)
 - **Pronome possessivo:** {{ actor.possessivePronoun }} (A espada é {{ actor.possessivePronoun }})
 - **Reflexivo:** {{ actor.reflexivePronoun }} ({{ subj | capitalize }} machucou {{ refl }})
 
@@ -169,3 +169,4 @@ Testando palavras-chave comuns de tipo de ator:
 {% endif %}
 
 ---
+
