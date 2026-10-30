@@ -1,0 +1,12 @@
+{% if has_current_scene_description() and is_scene_newer_than_location() %}
+## O que Você Vê ao Seu Redor Agora
+{{ get_current_scene_description() }}
+
+*(Isto descreve o ambiente imediato ao seu redor com detalhes úteis: escala espacial, pessoas presentes e o que estão fazendo, móveis e objetos, elementos interativos e atmosfera. Use essas informações naturalmente quando forem relevantes para suas decisões, reações ou observações.)*
+{% endif %}
+{% if has_current_location_description() %}
+## Onde Você Está
+{{ get_current_location_description()  }}
+
+*(Conhecimento geral sobre este lugar — seu caráter e suas características. Isso informa a sua compreensão do local, mas você normalmente não recitaria esses fatos, a menos que sejam diretamente relevantes para o momento.)*
+{% endif %}

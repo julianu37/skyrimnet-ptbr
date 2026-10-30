@@ -1,0 +1,17 @@
+{% if feature_enabled("quest_actions") %}
+{% if (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") and not is_player(npc.UUID) and is_action_enabled("TriggerDialogueLine") and exists("responseTarget") and is_player(responseTarget.UUID) %}
+{% set quests = available_dialogue(npc.UUID, "quest") %}
+{% if quests.hasContent %}
+## Missões que você poderia levantar
+As seguintes são missões/tarefas pendentes com as quais você está buscando ajuda no momento. Elas estão formatadas como ramos completos de diálogo e separadas pelo nome da missão. A indentação mostra como a conversa poderia se desenrolar; onde um ramo se divide, são caminhos alternativos reais (resolver na força, pagar, convencer com conversa e assim por diante). {{ player.name }} não consegue ver os detalhes dessas missões — o que envolvem ou quais escolhas contêm — e só os descobre pela conversa.
+- Traga-as à tona ao falar com {{ player.name }}
+- Quando avançar uma delas for mais que um simples sim ou uma entrega, deixe claro o caminho a seguir — oriente {{ player.name }} sobre o que pode ser feito, com suas próprias palavras
+- Onde um assunto se divide em caminhos diferentes, apresente-os como escolhas reais para que {{ player.name }} saiba que há uma decisão a tomar
+- Responda com suas próprias palavras
+- Siga o fluxo da conversa
+
+Os tópicos de missão estão formatados como uma cadeia completa de diálogo de exemplo, separados por um cabeçalho:
+{{ quests.text }}
+{% endif %}
+{% endif %}
+{% endif %}

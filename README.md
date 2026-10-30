@@ -9,13 +9,29 @@ do SkyrimNet.
 
 ## O que já está traduzido
 
-- **Fala dos NPCs em PT-BR**: diretiva de idioma em `dialogue_response.prompt` e
-  `player_dialogue.prompt`.
+- **Núcleo dos prompts**: `system_head` (8), `user_final_instructions` (11),
+  `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
+  e no fim da mensagem do usuário.
 - **58 bios**: Whiterun, Riverwood, Solitude, Windhelm, Riften e Markarth.
+- **Interface web**: 965 chaves em PT-BR (nav, common, home, settings de
+  voz/áudio/LLM, TTS, LLM, logs e chat), com fallback para inglês nas demais.
 
 O restante está em tradução. O pacote é incremental: cada lote entra como um
 commit e um release. O benchmark local com Qwen2.5-3B está em
 `benchmarks/REVIEW.md`.
+
+## Interface web
+
+O zip inclui o patch de UI em `SKSE/Plugins/SkyrimNet/assets/web-new/`
+(`main.<hash>.js`, `index.html`, `pt-br.js`). O build é feito a partir do
+bundle instalado do SkyrimNet:
+
+```powershell
+python ui/build_ui.py --source "C:\...\mods\skyrimnet\SKSE\Plugins\SkyrimNet\assets\web-new"
+```
+
+Veja `ui/README.md` para cobertura, fallback e atualização após updates do
+SkyrimNet.
 
 ## Modelo de LLM recomendado
 

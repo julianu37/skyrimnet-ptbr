@@ -1,0 +1,14 @@
+{% if render_mode == "full" or render_mode == "transform" %}
+{# Este é o ÚLTIMO bloco do prompt de sistema, então a voz que ele descrever será a
+   instrução mais recente do modelo. Normalmente é o próprio perfil de fala do NPC. Quando
+   uma entidade virtual vinculada tomou plenamente este corpo (entity_led), o perfil do
+   hospedeiro é suprimido dentro de render_character_profile — por isso, renderize aqui a
+   voz da ENTIDADE; caso contrário, o espaço final fica silencioso e o modo de falar do
+   hospedeiro volta a se infiltrar por padrão. #}
+{{ render_character_profile("speech_style", npc.UUID) }}
+{% for _sl in get_linked_identities(npc.UUID) %}{% if _sl.dominance == "entity_led" and _sl.is_virtual %}
+{{ render_character_profile("speech_style", _sl.uuid) }}
+## Você está falando pela boca de {{ decnpc(npc.UUID).name }}
+O perfil de voz imediatamente acima é SEU — de {{ _sl.name }} — e é nele que você deve falar. O modo de falar de {{ decnpc(npc.UUID).name }} não é seu para você voltar a ele; ele só vem à tona quando você imita esse jeito de propósito para passar despercebido.
+{% endif %}{% endfor %}
+{% endif %}

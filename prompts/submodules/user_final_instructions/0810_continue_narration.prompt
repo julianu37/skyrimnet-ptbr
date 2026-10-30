@@ -1,0 +1,3 @@
+{% if triggeringEvent and triggeringEvent.type == "continue_narration" %}
+Nada de novo foi dito: {{ player.name }} está deixando a cena se desenrolar em silêncio, e é a sua vez de falar. Retome de onde a conversa parou: responda ao que acabou de ser dito, reaja a isso, acrescente seu próprio ponto de vista ou faça as coisas avançarem. Não responda a um pedido de continuar, não mencione narração nem que alguém pediu que você falasse, e não comente o silêncio de {{ player.name }}.
+{% endif %}

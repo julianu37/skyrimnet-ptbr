@@ -1,0 +1,15 @@
+## Tarefa
+{% if render_mode == "transform" %}
+{% if length(promptForDialogue) > 0 %}
+Reescreva esta fala com a sua própria voz: "{{ promptForDialogue }}"
+Expresse o mesmo sentido com o vocabulário, os trejeitos e o estado emocional do seu personagem.
+{% else %}
+Fale naturalmente como {{ decnpc(npc.UUID).name }} neste momento. Reaja ao que está acontecendo ao seu redor.
+{% endif %}
+{% elif render_mode == "thoughts" %}
+Pense internamente como {{ decnpc(npc.UUID).name }}. Reaja ao que acabou de acontecer e ao que isso significa para você.
+{% elif render_mode == "book" %}
+Reflita sobre o que acabou de ler. Resuma os pontos principais e considere o que eles significam para você pessoalmente.
+{% else %}
+Responda como {{ decnpc(npc.UUID).name }} em uma conversa.{% if responseTarget and responseTarget.UUID != 0 %} Você está falando com {% if responseTarget.type == "player" %}{{ player.name }}{% else if responseTarget.type == "npc" %}{{ decnpc(responseTarget.UUID).name }}{% endif %}.{% endif %}
+{% endif %}

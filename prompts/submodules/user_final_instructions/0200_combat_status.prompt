@@ -1,0 +1,49 @@
+{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" %}
+{% if is_in_combat(npc.UUID) %}
+{# Combat-specific vital status reminder - guard against div-by-zero for actors with 0 max values #}
+{% if decnpc(npc.UUID).maxHealth > 0 %}{% set healthRatio = decnpc(npc.UUID).health / decnpc(npc.UUID).maxHealth %}{% else %}{% set healthRatio = 0 %}{% endif %}
+{% if decnpc(npc.UUID).maxMagicka > 0 %}{% set magickaRatio = decnpc(npc.UUID).magicka / decnpc(npc.UUID).maxMagicka %}{% else %}{% set magickaRatio = 0 %}{% endif %}
+{% if decnpc(npc.UUID).maxStamina > 0 %}{% set staminaRatio = decnpc(npc.UUID).stamina / decnpc(npc.UUID).maxStamina %}{% else %}{% set staminaRatio = 0 %}{% endif %}
+{% set targets = get_combat_targets(npc.UUID) %}
+**STATUS DE COMBATE:**
+{% if length(targets) > 0 %}- Lutando contra: {% for t in targets %}{{ decnpc(t).name }}{% if not loop.is_last %}, {% endif %}{% endfor %}
+{% else %}- Em combate ativo
+{% endif %}
+{% if healthRatio < 0.25 %}- CRÍTICO: À beira da morte, qualquer golpe pode ser fatal
+{% elif healthRatio < 0.5 %}- Ferimentos graves, sangrando e lutando para continuar
+{% elif healthRatio < 0.75 %}- Sofrendo dano, mas ainda lutando com força
+{% else %}- Fisicamente bem, resistindo bem
+{% endif %}
+{% if decnpc(npc.UUID).maxMagicka > 0 or is_player(npc.UUID) %}
+{% if magickaRatio < 0.15 %}- Magia esgotada, sem energia para feitiços
+{% elif magickaRatio < 0.35 %}- Reservas mágicas se esgotando
+{% elif magickaRatio < 0.6 %}- Reservas mágicas razoáveis
+{% elif magickaRatio < 0.85 %}- Bastante energia mágica disponível
+{% else %}- Poder mágico completo
+{% endif %}
+{% endif %}
+{% if is_unconscious(npc.UUID) %}- Inconsciente e incapaz de agir
+{% elif staminaRatio < 0.25 %}- Arfando, sem fôlego, mal consegue golpear
+{% elif staminaRatio < 0.5 %}- Sem fôlego e perdendo o ritmo
+{% elif staminaRatio < 0.75 %}- Respirando com esforço, mas ainda capaz
+{% else %}- Energia de sobra
+{% endif %}
+{% endif %}
+{# Relative power level awareness vs responseTarget - compare levels to gauge threat. Rendered regardless of combat state so the NPC always has situational awareness. Level is one signal among many (gear, skills, magic, terrain) — describe lean of advantage rather than guaranteed outcomes. Never expose literal level numbers in the prompt: weaker LLMs will parrot them in dialogue. #}
+{% if exists("responseTarget") and isValidActor(responseTarget.UUID) and responseTarget.UUID != npc.UUID %}
+{% set npcLevel = decnpc(npc.UUID).level %}
+{% set targetLevel = decnpc(responseTarget.UUID).level %}
+{% set targetName = decnpc(responseTarget.UUID).name %}
+{% set levelDiff = npcLevel - targetLevel %}
+{% if targetLevel > 0 %}{% set levelRatio = npcLevel / targetLevel %}{% else %}{% set levelRatio = 2 %}{% endif %}
+**AVALIAÇÃO DE FORÇA EM COMBATE:**
+{% if levelRatio >= 2.0 or levelDiff >= 20 %}- Seus instintos dizem que {{ targetName }} está muito abaixo de você em capacidade bruta — a vantagem pende fortemente para o seu lado, embora equipamento e perícia ainda possam surpreender
+{% elif levelRatio >= 1.5 or levelDiff >= 10 %}- Seus instintos dizem que {{ targetName }} é bem menos capaz que você — você provavelmente tem a vantagem, mas não convém subestimar essa pessoa
+{% elif levelRatio >= 1.15 or levelDiff >= 4 %}- Seus instintos dizem que {{ targetName }} está um pouco abaixo de você — uma leve vantagem, nada certo
+{% elif levelRatio >= 0.85 or levelDiff >= -3 %}- Seus instintos dizem que {{ targetName }} é mais ou menos seu igual — forças parelhas, o resultado dependeria de perícia e circunstância
+{% elif levelRatio >= 0.65 or levelDiff >= -9 %}- Seus instintos dizem que {{ targetName }} é um pouco mais capaz que você — essa pessoa provavelmente tem a vantagem, mas você ainda poderia vencer com a abordagem certa
+{% elif levelRatio >= 0.5 or levelDiff >= -19 %}- Seus instintos dizem que {{ targetName }} está bem acima de você em capacidade bruta — um desafio íngreme, embora possível com preparação, terreno ou táticas espertas
+{% else %}- Seus instintos dizem que {{ targetName }} está muito acima de você — superar essa pessoa seria excepcionalmente difícil, exigindo astúcia de verdade, equipamento forte ou ajuda externa
+{% endif %}
+{% endif %}
+{% endif %}

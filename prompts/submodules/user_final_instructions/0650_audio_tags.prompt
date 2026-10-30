@@ -1,0 +1,118 @@
+{% set actor_tags_enabled = is_audio_tags_enabled(npc.UUID) %}
+{% set narrator_tags_enabled = is_audio_tags_enabled(get_narrator_uuid()) and is_narration_enabled() %}
+{% set dialogue_mode = render_mode == "full" or render_mode == "transform" %}
+{% set thought_mode = render_mode == "thoughts" %}
+{% set has_audio_tags = actor_tags_enabled or narrator_tags_enabled %}
+
+{% if has_audio_tags and (dialogue_mode or thought_mode) %}
+  {% set tts_engine = get_actor_tts(npc.UUID) %}
+  {% set useHiggsV3Tags = (tts_engine == "higgs" or tts_engine == "higgs_v3") and actor_tags_enabled %}
+  {% set useChatterboxTags = tts_engine == "chatterbox" and actor_tags_enabled %}
+
+  {% set chatterboxEmotionTags = ["[angry]", "[fear]", "[surprised]", "[whispering]", "[advertisement]", "[dramatic]", "[narration]","[happy]", "[sarcastic]"] %}
+  {% set chatterboxSoundTags = ["[clear throat]","[sigh]","[shush]","[cough]","[groan]","[sniff]","[gasp]","[chuckle]","[laugh]","[crying]"] %}
+  {% set allowed_audio_tags = get_allowed_audio_tags(npc.UUID) %}
+  ## Tags de Performance Vocal
+  {% if useHiggsV3Tags %}
+    Use tags de controle `[category-tag]` para orientar emoção, prosódia, estilo e efeitos sonoros.
+  {% else %}
+    Use [tags entre colchetes] para direcionar a performance vocal. As tags controlam emoção, entrega e reações — a voz de IA as interpreta conforme o contexto.
+  {% endif %}
+  
+  {% if useHiggsV3Tags %}
+    {% set originalEmotionsTags = ["emotion-affection", "emotion-amusement", "emotion-anger", "emotion-arousal", "emotion-awe", "emotion-bitterness", "emotion-confusion", "emotion-contemplation", "emotion-contentment", "emotion-determination", "emotion-disgust", "emotion-elation", "emotion-enthusiasm", "emotion-fear", "emotion-helplessness", "emotion-longing", "emotion-pride", "emotion-relief", "emotion-sadness", "emotion-shame", "emotion-surprise"] %}
+    {% set originalStylesTags = ["style-singing", "style-shouting", "style-whispering"] %}
+    {% set originalProsodyTags = ["prosody-speed_very_slow", "prosody-speed_slow", "prosody-speed_fast", "prosody-speed_very_fast", "prosody-pitch_low", "prosody-pitch_high", "prosody-expressive_high", "prosody-expressive_low"] %}
+    {% set originalSfxTags = ["sfx-cough", "sfx-laughter", "sfx-crying", "sfx-screaming", "sfx-burping", "sfx-humming", "sfx-sigh", "sfx-sniff", "sfx-sneeze"] %}
+    {% set filteredEmotionsTags = "" %}
+    {% set filteredStylesTags = "" %}
+    {% set filteredProsodyTags = "" %}
+    {% set filteredSfxTags = "" %}
+
+    {% for tag in allowed_audio_tags %}
+      {% if tag in originalEmotionsTags %}
+        {% set filteredEmotionsTags = filteredEmotionsTags + "`["+tag+"]`," %}
+      {% endif %}
+      {% if tag in originalStylesTags %}
+        {% set filteredStylesTags = filteredStylesTags + "`["+tag+"]`," %}
+      {% endif %}
+      {% if tag in originalProsodyTags %}
+        {% set filteredProsodyTags = filteredProsodyTags + "`["+tag+"]`," %}
+      {% endif %}
+      {% if tag in originalSfxTags %}
+        {% set filteredSfxTags = filteredSfxTags + "`["+tag+"]`," %}
+      {% endif %}
+    {% endfor %}
+
+    {% set exampleTag1 = "[sfx-sigh]Haah," %}
+    {% set exampleTag2 = "[emotion-elation]" %}
+    {% set exampleTag3 = "[style-whispering]" %}
+    {% set exampleTag4 = "[prosody-pitch_low]" %}
+
+    **Formato:** `[category-tag]`, colada ao texto sem espaço. Use apenas tags do catálogo abaixo — qualquer outra degrada o áudio ou é lida literalmente em voz alta. Elas são só de áudio; nunca as misture com marcação que não seja de áudio, como `<internal_thought>`.
+
+    **Posicionamento**
+    - **No nível da frase** (emoção, estilo, prosódia `speed_*`/`pitch_*`/`expressive_*`): no **início** da frase — colore a frase inteira, então marque uma vez, não repetidamente.
+    - **sfx inline**: no ponto exato em que o som ocorre, colada a uma onomatopeia curta. ex.: `[sfx-cough]Hem, vamos começar.`
+    
+    **Empilhamento:** Combine no máximo **uma tag por categoria** no início da frase (ex.: emoção + estilo, ou emoção + uma tag de prosódia) — elas controlam coisas diferentes. Nunca empilhe duas da *mesma* categoria. `sfx` inline pode ser adicionada por cima em qualquer lugar.
+
+    **Onomatopeia solta não precisa de tag.** "Ohh", "Mmh", "Ugh", "Aah" podem ficar direto na fala como textura leve. Use a tag `sfx` só quando quiser uma batida distinta e enfatizada.
+
+    
+    **Catálogo de tags (41 no total):**
+    - **Emoções:** {{filteredEmotionsTags}}
+    - **Estilos:** {{filteredStylesTags}}
+    - **Prosódia:** {{filteredProsodyTags}}
+    - **SFX (inline, coladas à onomatopeia):** {{filteredSfxTags}}
+
+    **Exemplos**
+    - `[emotion-arousal][prosody-pitch_low]Chegue mais perto... tenho um segredo.`
+    - `[emotion-elation][sfx-laughter]Haha, bem-vindo, bem-vindo!`
+    - `Quer a verdade? [emotion-bitterness]Está bem. Ele nunca ia voltar.`
+    - `[emotion-anger][emotion-disgust]...` ❌ duas emoções — escolha uma.
+  {% elif useChatterboxTags %}
+    {% set exampleTag1 = "[sigh]" %}
+    {% set exampleTag2 = "[happy]" %}
+    {% set exampleTag3 = "[whispering]" %}
+    {% set exampleTag4 = "[dramatic]" %}
+    **Tags de emoção permitidas (OPCIONAIS, no início da frase emocional):**
+    {{join(chatterboxEmotionTags, ", ")}}
+    **Tags de som permitidas (OPCIONAIS, podem aparecer EM QUALQUER LUGAR):**
+    {{ join(chatterboxSoundTags, ", ") }}
+    **Como escrever cada linha de diálogo/pensamento**
+    - Você PODE começar a linha com UMA tag de emoção, mas isso é opcional.
+    - Você PODE inserir várias tags de som em qualquer lugar da linha (início, meio, fim).
+    - Tags de som devem ser tokens isolados (cercados por espaços ou pontuação), não colados a palavras.
+    - NÃO invente outro texto entre colchetes. Use apenas as tags permitidas acima.
+    - Mantenha as tags significativas; não as use em excesso (normalmente 0–3 tags de som por linha, a menos que a cena exija).
+    
+    **Exemplos**
+    - [whispering] Fale baixo - [shush] - eles vão nos ouvir. [sigh]
+    - Eu te disse para não tocar nisso - [groan] - nunca mais. [cough]
+    - [happy] [clear throat] Então… combinado? [chuckle] Ótimo.
+  {% else %}
+    {% set exampleTag1 = "[sighs]" %}
+    {% set exampleTag2 = "[excited]" %}
+    {% set exampleTag3 = "[softly]" %}
+    {% set exampleTag4 = "[dramatic tone]" %}
+    **Tipos de tag:** emoções ([sad], [excited]), entrega ([whispers], [shouts], [slowly]), reações ([sighs], [laughs], [clears throat]), ritmo ([pause], [dramatic tone])
+  {% endif %}
+  {% if actor_tags_enabled %}
+    **Diálogo{% if thought_mode %}/pensamentos{% endif %}:** {{exampleTag1}} Acho que você tem razão. / Você viu aquilo? {{exampleTag2}} Incrível!
+  {% endif %}
+  {% if narrator_tags_enabled %}
+    **Narração:** *{{exampleTag3}} {{ decnpc(npc.UUID).name }} se vira.* / *{{exampleTag4}} A sala fica em silêncio.*
+  {% endif %}
+  {% if not actor_tags_enabled and narrator_tags_enabled %}
+    As tags só funcionam na *narração*, não no diálogo.
+  {% endif %}
+  {% if actor_tags_enabled and not narrator_tags_enabled and is_narration_enabled() %}
+    As tags só funcionam no diálogo, não na *narração*.
+  {% endif %}
+
+  {% if not useChatterboxTags and not useHiggsV3Tags %}
+    Use com moderação — no máximo 1-2 por resposta.
+  {% endif %}
+{% endif %}
+

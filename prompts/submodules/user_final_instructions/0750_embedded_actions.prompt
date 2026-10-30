@@ -1,0 +1,23 @@
+{% if embed_actions_in_dialogue and eligible_actions and length(eligible_actions) > 0 %}
+## Ações Disponíveis
+Depois do seu diálogo, você pode, opcionalmente, realizar UMA ação se for apropriado. Produza o diálogo PRIMEIRO, e então a ação em uma linha separada.
+
+**Formato da Ação:**
+- `ACTION: ActionName` — ação sem parâmetros
+- `ACTION: ActionName PARAMS: {"param": "value"}` — ação com parâmetros
+- `ACTION: CategoryName PARAMS: {"intent": "o que você pretende fazer"}` — OBRIGATÓRIO para categorias
+- Omita a linha ACTION por completo se nenhuma ação servir
+
+**Ações Disponíveis:**
+{% for action in eligible_actions %}
+- `{{ action.name }}`{% if action.parameterSchema and length(action.parameterSchema) > 0 %} PARAMS: {{ action.parameterSchema }}{% endif %} — {{ action.description }}
+{% endfor %}
+
+**Diretrizes:**
+- Só use uma ação se ela corresponder ao que você disse, aceitou ou está fazendo
+- O consentimento pode ser implícito — respostas positivas ou passos para cumprir um pedido contam
+- Você pode iniciar ações sem ser provocado, se isso couber ao seu personagem
+- Algumas entradas são **categorias de ação** que agrupam ações relacionadas (ex.: "Inventory", "Economy"). Selecionar uma categoria dispara um acompanhamento para escolher a ação específica dentro dela
+- **OBRIGATÓRIO**: ao selecionar uma categoria, você DEVE incluir `PARAMS: {"intent": "..."}` descrevendo o que pretende fazer. Exemplo: `ACTION: Economy PARAMS: {"intent": "vender uma poção de vida ao jogador por 450 de ouro"}`. Seleções de categoria sem intent falharão.
+- Produza as linhas de diálogo ANTES da linha ACTION (isso permite que a fala comece enquanto a ação é interpretada)
+{% endif %}

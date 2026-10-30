@@ -54,6 +54,17 @@ def build_mod_zip() -> Path:
     shutil.copy2(ROOT / "LICENSE", staging / "LICENSE")
     shutil.copytree(ROOT / "LICENSES", staging / "LICENSES", dirs_exist_ok=True)
 
+    ui_assets = ROOT / "ui" / "build" / "assets" / "web-new"
+    if ui_assets.exists():
+        shutil.copytree(
+            ui_assets,
+            staging / "SKSE" / "Plugins" / "SkyrimNet" / "assets" / "web-new",
+            dirs_exist_ok=True,
+        )
+        print("ui     : included")
+    else:
+        print("ui     : not built (run ui/build_ui.py)")
+
     zip_path = DIST / f"SkyrimNet-PT-BR-{VERSION}.zip"
     if zip_path.exists():
         zip_path.unlink()

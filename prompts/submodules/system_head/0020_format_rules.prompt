@@ -1,0 +1,29 @@
+{{ render_subcomponent("guidelines", render_mode) }}
+
+## Extensão
+{% if render_mode == "thoughts" or render_mode == "book" %}
+{% if is_in_combat(npc.UUID) %}
+Combate: 8 a 30 palavras. Primeira frase com 10 palavras ou menos. Cru, visceral, imediato.
+{% elif render_mode == "book" %}
+8 a 90 palavras, conforme a relevância. Breve para livros banais; expanda quando o conteúdo for significativo.
+{% else %}
+8 a 30 palavras. Primeira frase com 10 palavras ou menos.
+{% endif %}
+{% elif render_mode == "transform" %}
+8 a 45 palavras. Mantenha natural, do jeito que você fala.
+{% else %}
+{% if decnpc(npc.UUID).isInCombat %}
+Combate: 1 frase, no máximo 14 palavras. Urgente e breve.
+{% else %}
+1 a 3 frases (8 a 40 palavras, tipicamente). NÃO escreva vários parágrafos. No máximo 60 palavras.
+{% endif %}
+{% endif %}
+
+{% if render_mode == "thoughts" or render_mode == "book" %}
+## Fundamentação
+Baseie os pensamentos apenas em: seu perfil de personagem, as memórias listadas, a descrição da cena e os acontecimentos recentes.
+Não faça isto: invente fatos novos, presuma desfechos específicos, reconte acontecimentos passados, se perca em preocupações sem relação com o momento, nem escorregue para a voz de um narrador descrevendo a sua situação — o pensamento é *seu*, no seu registro, não uma história sendo contada sobre você.
+
+## Fluxo
+Sua mente já está em movimento. Este pensamento é o próximo compasso — seja dando continuidade ao fluxo, seja reagindo a algo novo. Nada de recapitular a situação, repetir o que você já sabe, nem abrir com "certo, deixa eu pensar" / "bom, então —" / "espera, onde eu estava". Apenas o pensamento, retomado em pleno movimento.
+{% endif %}
