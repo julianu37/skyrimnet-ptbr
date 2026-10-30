@@ -106,6 +106,25 @@ translate:
   - { en: The Circle, pt: Circle, status: verify }
   - { en: Silver Hand, pt: Silver Hand, status: verify }
 
+review_decisions:
+  - { en: Dark Elf / Dunmer, pt: dunmer, status: approved, note: "invariável no plural; não usar 'elfo negro' nos prompts" }
+  - { en: Dragon Priest, pt: Sacerdote Dragão, status: approved }
+  - { en: Arch-Mage, pt: Arquimago, status: approved }
+  - { en: Master Wizard, pt: Mestre Mago, status: approved }
+  - { en: Night Mother, pt: Mãe da Noite, status: approved }
+  - { en: The Listener, pt: O Ouvinte, status: approved }
+  - { en: Five Tenets, pt: Cinco Preceitos, status: approved }
+  - { en: Way of the Voice, pt: Caminho da Voz, status: approved }
+  - { en: Skyforge, pt: Forja Celeste, status: approved }
+  - { en: Fort <name>, pt: Forte <name>, status: approved, note: "ex.: Forte Dawnguard" }
+  - { en: <name> Mine, pt: Mina <name>, status: approved, note: "ex.: Mina Kolskeggr, Mina da Mão Esquerda" }
+  - { en: <name> Cave, pt: Caverna <name>, status: approved }
+  - { en: <name> Farm, pt: Fazenda (de) <name>, status: approved }
+  - { en: Five Hundred Companions, pt: Quinhentos Companheiros, status: approved, note: "hoste histórica; a guilda continua 'Companions'" }
+  - { en: Snow Elves, pt: Elfos da Neve, status: approved }
+  - { en: Werewolf / Werebear, pt: lobisomem / urso-lobisomem, status: approved }
+  - { en: furniture resolved_name, pt: manter em inglês, status: approved, note: "os prompts comparam 'Carriage', 'bed', 'table' etc.; traduzir quebraria a lógica" }
+
 forbidden_translations:
   - "Whiterun -> Correrrio"
   - "Riverwood -> Vila do Rio"
