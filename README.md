@@ -12,20 +12,22 @@ do SkyrimNet.
 - **Núcleo dos prompts**: `system_head` (8), `user_final_instructions` (11),
   `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
   e no fim da mensagem do usuário.
-- **304 prompts**: 202 bios (Whiterun, Riverwood, Solitude, Windhelm, Riften,
-  Markarth e NPCs nomeados de outras regiões) + 102 prompts de sistema.
-- **Interface web**: 5.484 chaves em PT-BR (nav, common, home, settings
-  completos, TTS, LLM, logs, chat, plugins, personagens, gamedata, prompts,
-  actions, triggers, routing, world knowledge, debug e outros), com fallback
-  para inglês nas demais.
+- **421 prompts**: 298 bios (Whiterun, Riverwood, Solitude, Windhelm, Riften,
+  Markarth e NPCs nomeados de outras regiões) + 123 prompts de sistema
+  (100% do sistema).
+- **Interface web**: **6.753 de 6.753 chaves (100%)** — nav, common, home,
+  settings completos, TTS, LLM, logs, chat, plugins, personagens, gamedata,
+  prompts, actions, triggers, routing, tutorial, world knowledge, debug e
+  demais telas.
 - **YAML de conteúdo**: filtros, efeitos de voz e regras de Dialogue Actions
   (16 registros).
 - **ESP**: descrições de feitiços e mensagens do plugin traduzidas via
   `tools/patch_esp.py` (patch local, com backup).
 
-O restante está em tradução. O pacote é incremental: cada lote entra como um
-commit e um release. O benchmark local com Qwen2.5-3B está em
-`benchmarks/REVIEW.md`.
+A UI, os prompts de sistema, os YAML de conteúdo e os textos do ESP estão
+completos. O restante em tradução são as bios de personagens. O pacote é
+incremental: cada lote entra como um commit e um release. O benchmark local com
+Qwen2.5-3B está em `benchmarks/REVIEW.md`.
 
 ## Interface web
 
