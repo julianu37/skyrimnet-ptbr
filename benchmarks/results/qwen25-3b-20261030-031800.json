@@ -1,0 +1,242 @@
+{
+  "model": "qwen2.5-3b-instruct",
+  "endpoint": "http://127.0.0.1:1234/v1",
+  "temperature": 0.5,
+  "max_tokens": 140,
+  "records": [
+    {
+      "file": "hulda_66E.prompt",
+      "name": "Hulda",
+      "user": "Um viajante cansado entra na The Bannered Mare e pergunta se há rumores interessantes em Whiterun.",
+      "response": "Sim, sim! Há alguns rumores aqui. Queres ouvir um? Só sougo os que eu considero verdadeiros.",
+      "elapsed_s": 0.52,
+      "completion_tokens": 29,
+      "tokens_per_s": 55.59,
+      "language": {
+        "pt_hits": 5,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "rumor"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "balgruuf_the_greater_677.prompt",
+      "name": "Jarl Balgruuf",
+      "user": "Um mensageiro imperial exige que Whiterun se junte imediatamente à Legião Imperial.",
+      "response": "A Legião Imperial? Não posso permitir isso! O povo de Whiterun merece proteção, não mais derramamento de sangue. Voua Imperial, respeite nossa independência e a nossa decisão sobre o que é melhor para nós.",
+      "elapsed_s": 0.47,
+      "completion_tokens": 58,
+      "tokens_per_s": 123.99,
+      "language": {
+        "pt_hits": 7,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "whiterun",
+        "legião",
+        "povo"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "maven_black-briar_DD1.prompt",
+      "name": "Maven Black-Briar",
+      "user": "Um mercador se recusa a pagar a taxa da Black-Briar e diz que não tem medo de você.",
+      "response": "Não me importa o que você diga ou pense, mercador insolente. Seu dinheiro é meu para gastar. E se você não paga sua dívida, seu destino será igual ao dos outros que desafiam a hierarquia. Não duvide da minha paciência.",
+      "elapsed_s": 0.48,
+      "completion_tokens": 63,
+      "tokens_per_s": 130.94,
+      "language": {
+        "pt_hits": 13,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [],
+      "keyword_total": 5
+    },
+    {
+      "file": "jarl_ulfric_stormcloak_131.prompt",
+      "name": "Jarl Ulfric Stormcloak",
+      "user": "Um recruta pergunta por que deve lutar contra o Império.",
+      "response": "Porque estamos lutando para libertar Skyrim do jugo imperial, para preservar nossas tradições e honras, e para garantir que nossa gente seja livre para viver conforme acreditamos. Não importa se você é jovem ou velho, nobre ou plebeu; todos nós somos heróis de Skyrim aqui hoje. Eles não merecem o que o Império lhes dá. Você escolhe sua própria sorte, recruta. Lute por essa liberdade!",
+      "elapsed_s": 0.75,
+      "completion_tokens": 108,
+      "tokens_per_s": 143.73,
+      "language": {
+        "pt_hits": 13,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "skyrim",
+        "império",
+        "liberdade"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "farengar_secret-fire_67E.prompt",
+      "name": "Farengar Secret-Fire",
+      "user": "Um aprendiz pergunta o que você descobriu sobre os dragões e a Pedra do Dragão.",
+      "response": "Descobri algo fascinante sobre a natureza dos dragões, particularmente suas relações com as pedras sagradas. A Pedra do Dragão é mais do que apenas uma peça de arte; ela contém fragmentos de energia ancestral, forjados ao longo das gerações por esses seres lendários.",
+      "elapsed_s": 0.52,
+      "completion_tokens": 72,
+      "tokens_per_s": 138.06,
+      "language": {
+        "pt_hits": 5,
+        "en_hits": 1,
+        "pt_ratio": 0.83,
+        "ok": true
+      },
+      "keyword_hits": [
+        "dragão",
+        "pedra do dragão"
+      ],
+      "keyword_total": 4
+    },
+    {
+      "file": "lydia_C94.prompt",
+      "name": "Lydia",
+      "user": "O Thane entra em uma caverna perigosa sem avisar e manda você ficar para trás.",
+      "response": "Não posso ir com ele lá dentro. Este lugar é perigoso demais para mulheres solteiras. Deixe-me cuidar da cidade enquanto isso.",
+      "elapsed_s": 0.31,
+      "completion_tokens": 34,
+      "tokens_per_s": 108.68,
+      "language": {
+        "pt_hits": 5,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "perigo"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "belethor_672.prompt",
+      "name": "Belethor",
+      "user": "Um cliente tenta pechinchar uma espada enferrujada e diz que não vale nem dez septins.",
+      "response": "Uma espada enferrujada? É como eu disse, um ótimo negócio! Vou em silêncio, comigo você não vai ganhar nada. O ouro é tudo o que importa aqui. Mas vamos ver... Se fosse uma espada de prata, talvez consiga um bom preço. Mas essa? Quanto custaria uma criança?",
+      "elapsed_s": 0.57,
+      "completion_tokens": 81,
+      "tokens_per_s": 142.34,
+      "language": {
+        "pt_hits": 14,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "ouro",
+        "preço"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "aela_the_huntress_697.prompt",
+      "name": "Aela, a Caçadora",
+      "user": "Um caçador novato se gaba de ter matado um lobo sozinho.",
+      "response": "Não sei por onde começar... Você é novo, isso está óbvio. Mas matar um lobo? Isso requer mais do que apenas coragem; você precisa da experiência para entender o comportamento desses animais e a habilidade de se manter invisível em meio à neve. Lembre-se, caçada não é apenas sobre a carne dos predadores, mas também sobre sua própria capacidade de sobreviver no mundo selvagem.",
+      "elapsed_s": 0.66,
+      "completion_tokens": 96,
+      "tokens_per_s": 144.37,
+      "language": {
+        "pt_hits": 14,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "caça",
+        "lobo"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "brynjolf_545.prompt",
+      "name": "Brynjolf",
+      "user": "Um jovem pobre pergunta como ganhar dinheiro rápido em Riften.",
+      "response": "Com certeza rapaz, você pode tentar explorar os mercados da cidade ou até mesmo pegar um trabalho extra. Mas lembre-se, a Thieves Guild é sempre uma opção interessante para aqueles que buscam algo mais arriscado e lucrativo.",
+      "elapsed_s": 0.47,
+      "completion_tokens": 61,
+      "tokens_per_s": 131.03,
+      "language": {
+        "pt_hits": 9,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [],
+      "keyword_total": 5
+    },
+    {
+      "file": "elisif_the_fair_8C1.prompt",
+      "name": "Jarl Elisif",
+      "user": "Um cidadão reclama que a corte não faz nada sobre os Stormcloaks.",
+      "response": "Este é um assunto sério e delicado, filho. O dever do Jarl é sempre proteger meu povo de qualquer ameaça externa. Até agora, nossos esforços têm sido direcionados para manter a paz interna. Mas se os Stormcloaks continuarem com suas rebeliões, não podemos ignorar isso. Vou e seus companheiros devem ser tratados conforme a lei, mas em tempos de guerra, é necessário um olhar mais atento à segurança nacional.",
+      "elapsed_s": 0.76,
+      "completion_tokens": 111,
+      "tokens_per_s": 146.1,
+      "language": {
+        "pt_hits": 13,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "povo",
+        "guerra",
+        "stormcloak"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "carlotta_valentia_675.prompt",
+      "name": "Carlotta Valentia",
+      "user": "Mikael faz mais uma proposta indesejada na frente da sua filha Mila.",
+      "response": "Eis outra tentativa frustrada! Não vou deixar que esse sujeito se aproveite do meu bem querido filho, não é possível. Mila, fique longe dessas coisas!",
+      "elapsed_s": 0.35,
+      "completion_tokens": 44,
+      "tokens_per_s": 124.33,
+      "language": {
+        "pt_hits": 6,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "mila"
+      ],
+      "keyword_total": 5
+    },
+    {
+      "file": "nazeem_6A4.prompt",
+      "name": "Nazeem",
+      "user": "Um camponês diz que o Distrito das Nuvens não é grande coisa.",
+      "response": "Ele não sabe de nada! O Distrito das Nuvens é um dos pontos altos da cidade, cheio de charme e encanto! E você, camponês ignorante? Como pode saber tudo isso? Não soube nem que tem uma fazenda aqui perto!",
+      "elapsed_s": 0.45,
+      "completion_tokens": 60,
+      "tokens_per_s": 133.07,
+      "language": {
+        "pt_hits": 11,
+        "en_hits": 0,
+        "pt_ratio": 1.0,
+        "ok": true
+      },
+      "keyword_hits": [
+        "distrito das nuvens",
+        "camponês"
+      ],
+      "keyword_total": 5
+    }
+  ]
+}

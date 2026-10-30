@@ -11,11 +11,11 @@ do SkyrimNet.
 
 - **Fala dos NPCs em PT-BR**: diretiva de idioma em `dialogue_response.prompt` e
   `player_dialogue.prompt`.
-- **10 bios** de Whiterun/Riverwood: Abelone, Adrianne Avenicci, Belethor,
-  Carlotta Valentia, Farengar Secret-Fire, Hulda, Lydia, Nazeem, Sigrid e Sven.
+- **58 bios**: Whiterun, Riverwood, Solitude, Windhelm, Riften e Markarth.
 
 O restante está em tradução. O pacote é incremental: cada lote entra como um
-commit e um release.
+commit e um release. O benchmark local com Qwen2.5-3B está em
+`benchmarks/REVIEW.md`.
 
 ## Instalação
 
