@@ -9,8 +9,8 @@ Status: **sistema e interface 100% traduzidos; restam bios e YAML de config.**
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts (todos) | 613 | 1632 | 37,6% |
-| Bios de personagens | 490 | 1509 | 32,5% |
+| Prompts (todos) | 895 | 1632 | 54,8% |
+| Bios de personagens | 772 | 1509 | 51,2% |
 | Prompts de sistema (não-bios) | 123 | 123 | **100%** |
 | Interface web (chaves) | 6753 | 6753 | **100%** |
 | YAML de conteúdo | **35** | 35 | **100%** |

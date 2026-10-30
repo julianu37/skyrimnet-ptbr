@@ -6,8 +6,8 @@ Atualizado em 2026-10-30.
 
 | Camada | Traduzido | Total | % |
 |---|---:|---:|---:|
-| Prompts | 613 | 1632 | 37,6% |
-| Bios de personagens | 490 | 1509 | 32,5% |
+| Prompts | 895 | 1632 | 54,8% |
+| Bios de personagens | 772 | 1509 | 51,2% |
 | Prompts de sistema (não-bios) | 123 | 123 | **100%** |
 | Interface web (chaves) | 6753 | 6753 | **100%** |
 | YAML de conteúdo | **35** | 35 | **100%** |
@@ -64,7 +64,7 @@ Atualizado em 2026-10-30.
 
 ## Pendente
 
-1. 1.019 bios restantes (lotes de ~48): 751 nomeadas + 268 genéricas.
+1. 737 bios restantes (lotes de 12-24).
 2. YAML: Content Library 100%; os 11 `config/carry_tags_*` são patch local
    via `tools/patch_config.py`.
 3. MCM/Papyrus: o SkyrimNet não usa MCM do SkyUI; as opções ficam no
