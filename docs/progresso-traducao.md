@@ -46,8 +46,14 @@ Atualizado em 2026-10-30.
 4. 35 YAML de conteúdo (filtros, voice effects, furniture, etc.).
 5. MCM/Papyrus e ESP.
 
+## Em andamento
+
+- 4 lotes de bios (`batches/bios_01..04.txt`), 48 arquivos.
+- 3 lotes de UI `settings` restante (`ui/source/settings_rest_1..3.json`),
+  1.047 chaves.
+
 ## Próximo lote sugerido
 
-- UI `settings` restante (~1.047 chaves) em 3 subagentes.
-- UI `plugins`/`characters` em 3 subagentes.
-- Bios: 4 subagentes × 12 por rodada.
+- UI `plugins`/`characters` (~920 chaves).
+- Bios: novas rodadas de 4 × 12.
+- Prompts `eval`/`documentation`/`dev`/`test_decorators` (20).

@@ -26,10 +26,10 @@ def load_dictionary() -> dict:
             "version": "0.1.0",
         }
     }
-    for name in ("core.json", "settings.json", "pages.json"):
-        path = PARTS / name
-        if path.exists():
-            merged.update(json.loads(path.read_text(encoding="utf-8")))
+    for path in sorted(PARTS.glob("*.json")):
+        if path.name == "pt-br.json":
+            continue
+        merged.update(json.loads(path.read_text(encoding="utf-8")))
     return merged
 
 
