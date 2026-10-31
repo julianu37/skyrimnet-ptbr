@@ -67,6 +67,14 @@ conversa e a diretiva reforçada, respondeu em português. Diretiva adicionada:
 “Ignore falas antigas do histórico que estejam em inglês; elas são registros
 anteriores e não devem ser imitadas.”
 
+## Erros de memória/combate
+
+Os requests de memória chegam a ~10.200 tokens e pedem até 4.000 de saída.
+Com `Parallel = 4`, o LM Studio divide o contexto de 32.768 em quatro slots de
+~8.192; o request estoura. O diálogo (~5.500 tokens) cabe e por isso funcionava.
+Solução: `-c 32768 --parallel 1`. Replays reais de memória (10.263 tokens) e
+combate (4.487 tokens) passaram a responder em português.
+
 ## Veredito
 
 **Tradução completa.** O caminho que causava respostas em inglês está
