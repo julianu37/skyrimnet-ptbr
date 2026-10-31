@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 — 2026-10-30
+
+- **Correção do dashboard in-game**: o patch de UI agora é aplicado em
+  `PrismaUI/views/SkyrimNet/dashboard` (o bundle que o jogo realmente carrega),
+  além de `assets/web-new`.
+- **UI completa também no PrismaUI**: 7.785 chaves (6.753 do bundle web + 1.032
+  específicas do dashboard in-game).
+- **Correção do contexto do LLM**: Qwen2.5-3B recarregado com 16.384 tokens
+  (antes 8.192); as requisições de memória de ~10.800 tokens voltaram a
+  funcionar.
+- **Diagnóstico**: logs mostravam HTTP 400 `exceed_context_size_error` em todas
+  as chamadas; prompts já estavam em PT-BR.
+- **Pacote** inclui o overlay PrismaUI e o `pt-br.js` do dashboard.
+
 ## 1.0.0 — 2026-10-30
 
 - **Tradução completa**: 1.632 de 1.632 prompts (1.509 bios + 123 de sistema).

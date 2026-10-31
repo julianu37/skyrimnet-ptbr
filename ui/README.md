@@ -1,65 +1,71 @@
-# Interface web em PT-BR
+# Interface PT-BR
 
-O dashboard do SkyrimNet usa um dicionário i18n embutido no bundle
-`main.*.js`. Não existe carregamento externo de locale, então o pacote
-**injeta** um dicionário `pt-br` e adiciona a opção no seletor de idioma.
+O SkyrimNet tem dois dashboards:
 
-## Como funciona
+| Onde | Bundle | Patch |
+|---|---|---|
+| **In-game (PrismaUI)** | `PrismaUI/views/SkyrimNet/dashboard/dashboard.<hash>.js` | `ui/build_prisma.py` |
+| **Web** | `SKSE/Plugins/SkyrimNet/assets/web-new/main.<hash>.js` | `ui/build_ui.py` |
 
-1. `ui/pt-br/*.json` contém as traduções por área (`core`, `settings`, `pages`).
-2. `ui/build_ui.py`:
-   - lê o bundle **instalado** do SkyrimNet (`assets/web-new`);
-   - gera `pt-br.json` e `pt-br.js`;
-   - injeta `"pt-br"` no mapa de locales;
-   - adiciona `Português (Brasil)` ao seletor;
-   - força o locale inicial `pt-br` (ignora `Dashboard.locale=en`);
-   - adiciona `<script src="pt-br.js">` ao `index.html`.
-3. A saída fica em `ui/build/assets/web-new/` e é incluída no zip do MO2.
-   O bundle patchado é renomeado para `main.<hash>.ptbr.js` para evitar cache
-   do navegador; o `index.html` aponta para ele.
+Os dois usam um dicionário i18n embutido, sem carregamento externo de locale.
+O pacote injeta um dicionário `pt-br` e registra a opção no seletor.
 
-## Build
+## Dashboard in-game (PrismaUI)
+
+`ui/build_prisma.py`:
+
+- lê `PrismaUI/views/SkyrimNet/dashboard`;
+- gera `pt-br.js` com 7.785 chaves;
+- adiciona `<script src="pt-br.js">` e `pt-br.js` à lista de assets;
+- patcheia `const n={en:i}` para incluir `pt` e `pt-br`;
+- copia o resultado para `ui/build/prisma/dashboard/`.
+
+```powershell
+python ui/build_prisma.py --source "C:\...\mods\skyrimnet\PrismaUI\views\SkyrimNet\dashboard"
+```
+
+O `Dashboard.yaml` já vem com `locale: pt-br`; o alias `pt-br` no provider faz
+o dashboard abrir em português.
+
+## Dashboard web
+
+`ui/build_ui.py`:
+
+- lê `assets/web-new`;
+- gera `pt-br.json`/`pt-br.js`;
+- injeta `pt-br` no mapa de locales e cache-busta o bundle para
+  `main.<hash>.ptbr.js`;
+- copia para `ui/build/assets/web-new/`.
 
 ```powershell
 python ui/build_ui.py --source "C:\...\mods\skyrimnet\SKSE\Plugins\SkyrimNet\assets\web-new"
 ```
 
-O `main.*.js` muda de nome/hash a cada release do SkyrimNet. O script detecta o
-arquivo atual e valida os padrões antes de aplicar; se o SkyrimNet mudar o
-código, o build falha em vez de gerar um bundle quebrado.
-
 ## Cobertura
 
-- **6.753 de 6.753 chaves (100%)** do bundle `main.027620d9.js` traduzidas,
-  incluindo nav, common, home, settings, TTS, LLM, logs, chat, plugins,
-  personagens, gamedata, prompts, actions, triggers, routing, tutorial,
-  world knowledge, debug, traces, memórias, visão, Vast.ai, bardos, editor de
-  arquivos e telas finais.
-- Chaves ausentes caem no inglês automaticamente (`d.en`).
-- Para traduzir uma nova área após um update do SkyrimNet, adicione fatias em
-  `ui/source/` e traduções em `ui/pt-br/`, depois rode o build.
-- O build valida que o número de chaves do dicionário final é 6.753 e que os
-  placeholders `{{...}}` batem com o inglês.
+- **7.785 de 7.785 chaves (100%)**: 6.753 do bundle web + 1.032 específicas do
+  PrismaUI.
+- Chaves ausentes caem no inglês.
+- `python tools/check_ui.py` valida chaves e placeholders.
 
 ## Instalação
 
-O zip do MO2 inclui:
+O zip inclui:
 
 ```
+PrismaUI/views/SkyrimNet/dashboard/
+├── index.html
+├── dashboard.<hash>.js
+└── pt-br.js
 SKSE/Plugins/SkyrimNet/assets/web-new/
 ├── index.html
-├── main.<hash>.js
+├── main.<hash>.ptbr.js
 └── pt-br.js
 ```
 
-Isso **sobrescreve** os assets da UI base. O mod de tradução precisa ficar
-**abaixo** de `skyrimnet` no painel esquerdo do MO2 (prioridade maior).
+O mod PT-BR deve ficar **abaixo** de `skyrimnet` no MO2 (prioridade maior).
+Na instalação local, os assets também foram aplicados diretamente na pasta do
+mod base, com backups `*.ptbr-original`, para não depender da ordem do MO2.
 
-Alternativa usada na instalação local: aplicar o overlay diretamente na pasta
-do mod base `skyrimnet` (com backup de `index.html` em
-`index.html.ptbr-original`). Assim a UI não depende da ordem do MO2. Um update
-do SkyrimNet sobrescreve o patch; rode o build novamente.
-
-Se o SkyrimNet for atualizado, rode o build novamente com o novo bundle. Para
-desativar só a UI, restaure o `index.html` original e remova
-`main.<hash>.ptbr.js`/`pt-br.js`.
+Se o SkyrimNet atualizar, rode os dois builds novamente. Para reverter,
+restaure os `*.ptbr-original` e remova `pt-br.js`/`main.<hash>.ptbr.js`.

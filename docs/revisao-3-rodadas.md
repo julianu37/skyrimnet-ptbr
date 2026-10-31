@@ -1,7 +1,7 @@
 # Revisão em 3 rodadas — versão 1.0
 
 Data: 2026-10-30
-Escopo: 1.632 prompts, 6.753 chaves de UI, 35 YAML, textos do ESP e carry tags.
+Escopo: 1.632 prompts, 7.785 chaves de UI, 35 YAML, textos do ESP e carry tags.
 Status: **tradução 100% concluída e validada**.
 
 ## Rodada 1 — Completude
@@ -11,7 +11,7 @@ Status: **tradução 100% concluída e validada**.
 | Prompts | **1632** | 1632 | **100%** |
 | Bios de personagens | **1509** | 1509 | **100%** |
 | Prompts de sistema | **123** | 123 | **100%** |
-| Interface web | **6753** | 6753 | **100%** |
+| Interface web | **7785** | 7785 | **100%** |
 | YAML de conteúdo | **35** | 35 | **100%** |
 | ESP (textos visíveis) | **9** | 9 | **100%** |
 | MCM/Papyrus | n/a | n/a | — |
@@ -26,10 +26,12 @@ Status: **tradução 100% concluída e validada**.
 |---|---|
 | `tools/validate_prompts.py` (1.632 prompts) | **0 erros**; 9 avisos de termos técnicos |
 | `content-validate.exe` oficial (beta28) | **0 erros, 0 warnings**, exit 0 |
-| Placeholders da UI (6.753 chaves) | **0 divergências** |
+| Placeholders da UI (7.785 chaves) | **0 divergências** |
 | Chaves JSON dentro dos prompts | **0 divergências** |
 | `node --check` no bundle patchado | OK |
 | `node --check` no `pt-br.js` | OK |
+| Dashboard in-game (PrismaUI) | patch em `dashboard.b3966cee.js` + `pt-br.js`, 7.785 chaves |
+| Contexto do LM Studio | 16.384 tokens; replay de 10.881 tokens OK |
 | Zip do MO2 | 1.632 prompts + UI + 35 YAML + ferramentas |
 | Mod ativo no MO2 | 1.632 prompts sincronizados |
 | ESP patch | 9/9, estrutura e tamanho preservados |
@@ -51,7 +53,7 @@ Status: **tradução 100% concluída e validada**.
 - Warnings restantes: nomes de itens/facções, comentários Jinja e variáveis;
   nenhuma prosa instrucional em inglês.
 - Licença/atribuição: `LICENSE`, `NOTICE.md`, `LICENSES/` presentes.
-- Git: árvore limpa; versão `1.0.0`.
+- Git: árvore limpa; versão `1.1.0`.
 - Amostragem manual: Balgruuf, Maven, Hulda, Lydia, `system_head`,
   `user_final_instructions`, `event_history`, `eval`, `documentation`,
   genéricos de guarda/bandido, UI de configurações e plugins.

@@ -13,7 +13,8 @@ do SkyrimNet.
   `dialogue_response` e `player_dialogue`, com a instrução de idioma no system
   e no fim da mensagem do usuário.
 - **1.632 prompts (100%)**: 1.509 bios + 123 prompts de sistema.
-- **Interface web (100%)**: 6.753 de 6.753 chaves.
+- **Interface web (100%)**: **7.785 de 7.785 chaves** — 6.753 do bundle web +
+  1.032 específicas do dashboard in-game (PrismaUI).
 - **YAML (100%)**: 35 registros — filtros, efeitos de voz, Dialogue Actions e
   móveis, além dos `carry_tags` via patch local.
 - **ESP (100%)**: 9 textos visíveis via `tools/patch_esp.py`.
@@ -26,24 +27,34 @@ partir dos scripts. O benchmark local com Qwen2.5-3B está em
 
 ## Interface web
 
-O zip inclui o patch de UI em `SKSE/Plugins/SkyrimNet/assets/web-new/`
-(`main.<hash>.js`, `index.html`, `pt-br.js`). O build é feito a partir do
-bundle instalado do SkyrimNet:
+O dashboard existe em dois bundles e o zip cobre os dois:
+
+- **Dashboard in-game (PrismaUI)**: `PrismaUI/views/SkyrimNet/dashboard/`
+  (`dashboard.<hash>.js`, `index.html`, `pt-br.js`).
+- **Dashboard web**: `SKSE/Plugins/SkyrimNet/assets/web-new/`
+  (`main.<hash>.ptbr.js`, `index.html`, `pt-br.js`).
+
+Builds:
 
 ```powershell
+python ui/build_prisma.py --source "C:\...\mods\skyrimnet\PrismaUI\views\SkyrimNet\dashboard"
 python ui/build_ui.py --source "C:\...\mods\skyrimnet\SKSE\Plugins\SkyrimNet\assets\web-new"
 ```
 
-Veja `ui/README.md` para cobertura, fallback e atualização após updates do
-SkyrimNet.
+O dashboard in-game lê `PrismaUI/views/...`; o patch antigo só em
+`assets/web-new` não era carregado dentro do jogo. Veja `ui/README.md`.
 
 ## Modelo de LLM recomendado
 
 O pacote traduz o conteúdo, mas **não controla o modelo**. Com o núcleo de
-prompts traduzido, o Qwen2.5-3B-Instruct já responde em PT-BR de forma
-consistente no teste local. Modelos **7B–14B** (Qwen2.5-7B/14B-Instruct,
-Gemma 2 9B, Llama 3.1 8B) tendem a dar mais qualidade, aderência e tolerância a
-contextos longos. O benchmark está em `benchmarks/REVIEW.md`.
+prompts traduzido, o Qwen2.5-3B-Instruct responde em PT-BR. **Configure o
+modelo com pelo menos 16.384 tokens de contexto**: o prompt completo em
+português chega a ~10.800 tokens e, com 8.192, o LM Studio devolve HTTP 400
+(`exceed_context_size_error`) e nenhuma fala é gerada.
+
+Modelos **7B–14B** (Qwen2.5-7B/14B-Instruct, Gemma 2 9B, Llama 3.1 8B) dão
+mais qualidade e tolerância a contextos longos. O benchmark está em
+`benchmarks/REVIEW.md`.
 
 ## Instalação
 

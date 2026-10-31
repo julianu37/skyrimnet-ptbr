@@ -76,6 +76,17 @@ def build_mod_zip() -> Path:
     else:
         print("ui     : not built (run ui/build_ui.py)")
 
+    prisma_assets = ROOT / "ui" / "build" / "prisma" / "dashboard"
+    if prisma_assets.exists():
+        shutil.copytree(
+            prisma_assets,
+            staging / "PrismaUI" / "views" / "SkyrimNet" / "dashboard",
+            dirs_exist_ok=True,
+        )
+        print("prisma : included")
+    else:
+        print("prisma : not built (run ui/build_prisma.py)")
+
     zip_path = DIST / f"SkyrimNet-PT-BR-{VERSION}.zip"
     if zip_path.exists():
         zip_path.unlink()
