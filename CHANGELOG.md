@@ -1,25 +1,33 @@
 # Changelog
 
+## 1.2.2 — 2026-10-30
+
+- **Correção do diagnóstico**: o **Qwen2.5-3B-Instruct não era o problema**.
+  Os logs mostram o 3B gerando falas em PT-BR. A linha em inglês do Frodnar é
+  uma fala **vanilla** do jogo capturada como evento de fundo, não saída do
+  LLM.
+- **Recomendação**: voltar ao **3B** (7B é opcional). O requisito real é
+  **32.768 tokens com `Parallel = 1`**.
+- **Erros de memória/combate**: causados pelo `Parallel = 4` dividindo o
+  contexto em slots de ~8k, não pelo modelo.
+
 ## 1.2.1 — 2026-10-30
 
 - **Diagnóstico dos erros de memória/combate**: `Parallel = 4` divide o
   contexto do LM Studio em quatro slots (~8k cada). Com prompts de memória de
   ~10.000 tokens, o request estoura mesmo com 32k de contexto.
-- **Correção**: carregar o 7B com `-c 32768 --parallel 1`. Replays reais de
-  memória (10.263 tokens) e combate (4.487 tokens) passaram a responder em
-  português.
+- **Correção**: carregar o modelo local (3B ou 7B) com
+  `-c 32768 --parallel 1`. Replays reais de memória (10.263 tokens) e combate
+  (4.487 tokens) passaram a responder em português.
 - Nenhuma alteração de prompt; apenas configuração do servidor local.
 
 ## 1.2.0 — 2026-10-30
 
-- **Correção das respostas em inglês**: o Qwen2.5-3B estava imitando o
-  histórico de falas antigas em inglês, mesmo com a diretiva em português.
-  O modelo local foi trocado para **Qwen2.5-7B-Instruct** em 16.384 tokens.
-- **Diretiva reforçada** em `dialogue_response` e `player_dialogue`: ignorar
-  falas antigas do histórico em inglês e responder obrigatoriamente em PT-BR.
-- **Validação real**: o payload exato da conversa foi reexecutado no 7B e
-  respondeu em português, inclusive com histórico inglês.
-- Contexto do LM Studio: 16.384 tokens (o 3B/7B precisa disso; 8.192 causa
+- **Diretiva de idioma reforçada** em `dialogue_response` e `player_dialogue`:
+  ignorar falas antigas do histórico que estejam em inglês.
+- **Validação real**: o 3B gera falas em PT-BR; o 7B foi testado como opção,
+  mas não é necessário.
+- **Contexto do LM Studio**: 32.768 tokens com `Parallel = 1` (8.192 causa
   HTTP 400).
 
 ## 1.1.0 — 2026-10-30

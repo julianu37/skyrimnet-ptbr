@@ -53,19 +53,21 @@ Status: **tradução 100% concluída e validada**.
 - Warnings restantes: nomes de itens/facções, comentários Jinja e variáveis;
   nenhuma prosa instrucional em inglês.
 - Licença/atribuição: `LICENSE`, `NOTICE.md`, `LICENSES/` presentes.
-- Git: árvore limpa; versão `1.1.0`.
+- Git: árvore limpa; versão `1.2.2`.
 - Amostragem manual: Balgruuf, Maven, Hulda, Lydia, `system_head`,
   `user_final_instructions`, `event_history`, `eval`, `documentation`,
   genéricos de guarda/bandido, UI de configurações e plugins.
 
 ## Diagnóstico do inglês residual
 
-O payload real da conversa (`/logs?api=requests`) mostrou que o sistema já
-estava em português, mas o histórico continha cinco respostas antigas do
-assistente em inglês. O 3B copiava o idioma do histórico. O 7B, com a mesma
-conversa e a diretiva reforçada, respondeu em português. Diretiva adicionada:
-“Ignore falas antigas do histórico que estejam em inglês; elas são registros
-anteriores e não devem ser imitadas.”
+O 3B **não era o problema**. Os requests recentes mostram o 3B gerando falas
+em PT-BR. A linha em inglês do Frodnar (“You're new around here…”) é uma fala
+**vanilla** do jogo, capturada como evento de fundo (`dialogue_background`),
+não uma resposta do LLM. Falas vanilla continuam em inglês; para traduzi-las
+seria necessário usar o Universal Translator.
+
+A diretiva “Ignore falas antigas do histórico que estejam em inglês” foi
+mantida como salvaguarda para históricos antigos gerados antes da tradução.
 
 ## Erros de memória/combate
 
@@ -78,5 +80,5 @@ combate (4.487 tokens) passaram a responder em português.
 ## Veredito
 
 **Tradução completa.** O caminho que causava respostas em inglês está
-corrigido e testado com o mesmo Qwen2.5-3B. O pacote 1.0.0 contém prompts,
+corrigido e testado com o mesmo Qwen2.5-3B. O pacote 1.2.2 contém prompts,
 bios, UI, YAML e textos do ESP em PT-BR, com validação oficial limpa.

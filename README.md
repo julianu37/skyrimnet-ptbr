@@ -46,20 +46,27 @@ O dashboard in-game lê `PrismaUI/views/...`; o patch antigo só em
 
 ## Modelo de LLM recomendado
 
-O pacote traduz o conteúdo, mas **não controla o modelo**. **Recomendação
-atual: Qwen2.5-7B-Instruct com 16.384 tokens de contexto.** O 3B responde em
-PT-BR em conversas novas, mas em saves antigos ele tende a imitar as falas
- anteriores do histórico que estão em inglês; o 7B segue a diretiva mesmo com
-esse histórico.
+O pacote traduz o conteúdo, mas **não controla o modelo**. O
+**Qwen2.5-3B-Instruct funciona bem em PT-BR** — foi o modelo usado nos testes
+finais. O 7B é opcional, para mais qualidade.
 
-No `OpenRouter.yaml`, use `model_name: qwen2.5-7b-instruct` e mantenha o
-servidor LM Studio com o modelo carregado em **32.768 tokens e
-`Parallel = 1`**. O paralelismo divide o contexto entre os slots: com
-`Parallel = 4`, cada requisição recebe só ~8.192 tokens e as chamadas de
-memória/combate (~10.000 tokens) falham com “Context size has been exceeded”.
-O diálogo é menor e por isso às vezes funciona mesmo com 4 slots.
+O importante é a configuração do servidor local:
 
-**Contexto 32k sozinho não resolve** se o paralelismo continuar em 4.
+- **32.768 tokens de contexto**;
+- **`Parallel = 1`**.
+
+O paralelismo divide o contexto entre os slots: com `Parallel = 4`, cada
+requisição recebe só ~8.192 tokens e as chamadas de memória/combate
+(~10.000 tokens) falham com “Context size has been exceeded”. O diálogo é
+menor e por isso às vezes funciona mesmo com 4 slots.
+
+No `OpenRouter.yaml`, use `model_name: qwen2.5-3b-instruct` (ou
+`qwen2.5-7b-instruct`, se preferir). **Contexto 32k sozinho não resolve** se o
+paralelismo continuar em 4.
+
+Falas **vanilla** do jogo (ex.: provocações de crianças, saudações de guardas)
+continuam em inglês: elas não são geradas pelo LLM e aparecem no histórico como
+eventos de fundo.
 
 ## Instalação
 

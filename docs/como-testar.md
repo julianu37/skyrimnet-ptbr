@@ -15,8 +15,8 @@
    Se estiver `4`, recarregue:
 
    ```powershell
-   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" unload qwen2.5-7b-instruct
-   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" load qwen2.5-7b-instruct -c 32768 --parallel 1 --gpu max -y
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" unload qwen2.5-3b-instruct
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" load qwen2.5-3b-instruct -c 32768 --parallel 1 --gpu max -y
    ```
 
    O paralelismo divide o contexto: com 32k e 4 slots, cada memória/combate
@@ -62,14 +62,14 @@
 
 Se o NPC responder em inglês:
 
-- use **Qwen2.5-7B-Instruct**; o 3B tende a imitar falas antigas do histórico
-  que estejam em inglês;
-- confirme `model_name: qwen2.5-7b-instruct` no `OpenRouter.yaml`;
-- confirme que o plugin PT-BR está ativo e acima da base na Content Library;
-- confira no log se os prompts `dialogue_response` e `player_dialogue` estão
-  vindo da camada `julianu37.skyrimnet-ptbr`;
-- em último caso, comece uma conversa nova (o histórico antigo em inglês deixa
-  de influenciar o modelo).
+- verifique se é uma fala **vanilla** do jogo (crianças, guardas, saudações
+  genéricas). Essas linhas não são geradas pelo LLM e continuam em inglês;
+- para falas geradas, confirme que o plugin PT-BR está ativo e acima da base
+  na Content Library;
+- confira no log se `dialogue_response` e `player_dialogue` estão vindo da
+  camada `julianu37.skyrimnet-ptbr`;
+- o **Qwen2.5-3B-Instruct funciona**; não é necessário trocar para 7B;
+- em último caso, comece uma conversa nova para descartar histórico antigo.
 
 ## 4. Conteúdo YAML
 
