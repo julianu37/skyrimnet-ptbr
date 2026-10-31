@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0 — 2026-10-30
+
+- **Correção das respostas em inglês**: o Qwen2.5-3B estava imitando o
+  histórico de falas antigas em inglês, mesmo com a diretiva em português.
+  O modelo local foi trocado para **Qwen2.5-7B-Instruct** em 16.384 tokens.
+- **Diretiva reforçada** em `dialogue_response` e `player_dialogue`: ignorar
+  falas antigas do histórico em inglês e responder obrigatoriamente em PT-BR.
+- **Validação real**: o payload exato da conversa foi reexecutado no 7B e
+  respondeu em português, inclusive com histórico inglês.
+- Contexto do LM Studio: 16.384 tokens (o 3B/7B precisa disso; 8.192 causa
+  HTTP 400).
+
 ## 1.1.0 — 2026-10-30
 
 - **Correção do dashboard in-game**: o patch de UI agora é aplicado em

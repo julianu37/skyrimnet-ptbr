@@ -61,10 +61,14 @@
 
 Se o NPC responder em inglês:
 
+- use **Qwen2.5-7B-Instruct**; o 3B tende a imitar falas antigas do histórico
+  que estejam em inglês;
+- confirme `model_name: qwen2.5-7b-instruct` no `OpenRouter.yaml`;
 - confirme que o plugin PT-BR está ativo e acima da base na Content Library;
-- confira no log se os prompts `system_head` e `user_final_instructions` estão
+- confira no log se os prompts `dialogue_response` e `player_dialogue` estão
   vindo da camada `julianu37.skyrimnet-ptbr`;
-- teste com o modelo 7B se estiver usando um modelo pequeno.
+- em último caso, comece uma conversa nova (o histórico antigo em inglês deixa
+  de influenciar o modelo).
 
 ## 4. Conteúdo YAML
 

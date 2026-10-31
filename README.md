@@ -46,15 +46,15 @@ O dashboard in-game lê `PrismaUI/views/...`; o patch antigo só em
 
 ## Modelo de LLM recomendado
 
-O pacote traduz o conteúdo, mas **não controla o modelo**. Com o núcleo de
-prompts traduzido, o Qwen2.5-3B-Instruct responde em PT-BR. **Configure o
-modelo com pelo menos 16.384 tokens de contexto**: o prompt completo em
-português chega a ~10.800 tokens e, com 8.192, o LM Studio devolve HTTP 400
-(`exceed_context_size_error`) e nenhuma fala é gerada.
+O pacote traduz o conteúdo, mas **não controla o modelo**. **Recomendação
+atual: Qwen2.5-7B-Instruct com 16.384 tokens de contexto.** O 3B responde em
+PT-BR em conversas novas, mas em saves antigos ele tende a imitar as falas
+ anteriores do histórico que estão em inglês; o 7B segue a diretiva mesmo com
+esse histórico.
 
-Modelos **7B–14B** (Qwen2.5-7B/14B-Instruct, Gemma 2 9B, Llama 3.1 8B) dão
-mais qualidade e tolerância a contextos longos. O benchmark está em
-`benchmarks/REVIEW.md`.
+No `OpenRouter.yaml`, use `model_name: qwen2.5-7b-instruct` e mantenha o
+servidor LM Studio com o modelo carregado em 16.384 tokens. **Com 8.192 o
+prompt completo (~10.800 tokens) falha com HTTP 400 e nenhuma fala é gerada.**
 
 ## Instalação
 

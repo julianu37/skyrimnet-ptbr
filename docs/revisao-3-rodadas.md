@@ -58,6 +58,15 @@ Status: **tradução 100% concluída e validada**.
   `user_final_instructions`, `event_history`, `eval`, `documentation`,
   genéricos de guarda/bandido, UI de configurações e plugins.
 
+## Diagnóstico do inglês residual
+
+O payload real da conversa (`/logs?api=requests`) mostrou que o sistema já
+estava em português, mas o histórico continha cinco respostas antigas do
+assistente em inglês. O 3B copiava o idioma do histórico. O 7B, com a mesma
+conversa e a diretiva reforçada, respondeu em português. Diretiva adicionada:
+“Ignore falas antigas do histórico que estejam em inglês; elas são registros
+anteriores e não devem ser imitadas.”
+
 ## Veredito
 
 **Tradução completa.** O caminho que causava respostas em inglês está
