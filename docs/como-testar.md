@@ -5,7 +5,23 @@
 1. Confirme que o **SkyrimNet** está instalado e ativo no MO2.
 2. Confirme que **SkyrimNet PT-BR** está ativo e **abaixo** do SkyrimNet no
    painel esquerdo (prioridade maior para os assets de UI).
-3. Confirme que o adapter Kokoro está no ar:
+3. Confirme que o modelo local tem **16.384 tokens de contexto**:
+
+   ```powershell
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" ps
+   ```
+
+   A coluna `CONTEXT` deve mostrar `16384`. Se estiver `8192`, recarregue:
+
+   ```powershell
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" unload qwen2.5-3b-instruct
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" load qwen2.5-3b-instruct -c 16384 --gpu max -y
+   ```
+
+   Com 8.192 o prompt completo (~10.800 tokens) falha com HTTP 400 e nenhuma
+   fala é gerada.
+
+4. Confirme que o adapter Kokoro está no ar:
 
    ```powershell
    curl http://127.0.0.1:8020/health
@@ -24,10 +40,12 @@
 ## 2. Dashboard
 
 1. Entre no jogo e abra o dashboard do SkyrimNet.
-2. Pressione **Ctrl+F5** para descartar o cache do navegador.
-3. Abra **Configurações → Dashboard → Idioma**.
-4. Selecione **Português (Brasil)**.
-5. Verifique:
+2. Para o dashboard **in-game**, não é preciso Ctrl+F5: ele carrega
+   `PrismaUI/views/SkyrimNet/dashboard`, já patcheado. Para o dashboard **web**,
+   pressione **Ctrl+F5**.
+3. O `Dashboard.yaml` já está com `locale: pt-br`; o dicionário tem os aliases
+   `pt` e `pt-br`.
+4. Verifique:
    - menu lateral em PT-BR;
    - página **Plugins** listando `SkyrimNet PT-BR`;
    - página **Personagens** com bios em português;
