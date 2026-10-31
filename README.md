@@ -53,8 +53,13 @@ PT-BR em conversas novas, mas em saves antigos ele tende a imitar as falas
 esse histórico.
 
 No `OpenRouter.yaml`, use `model_name: qwen2.5-7b-instruct` e mantenha o
-servidor LM Studio com o modelo carregado em 16.384 tokens. **Com 8.192 o
-prompt completo (~10.800 tokens) falha com HTTP 400 e nenhuma fala é gerada.**
+servidor LM Studio com o modelo carregado em **32.768 tokens e
+`Parallel = 1`**. O paralelismo divide o contexto entre os slots: com
+`Parallel = 4`, cada requisição recebe só ~8.192 tokens e as chamadas de
+memória/combate (~10.000 tokens) falham com “Context size has been exceeded”.
+O diálogo é menor e por isso às vezes funciona mesmo com 4 slots.
+
+**Contexto 32k sozinho não resolve** se o paralelismo continuar em 4.
 
 ## Instalação
 

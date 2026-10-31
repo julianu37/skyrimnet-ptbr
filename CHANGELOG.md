@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.1 — 2026-10-30
+
+- **Diagnóstico dos erros de memória/combate**: `Parallel = 4` divide o
+  contexto do LM Studio em quatro slots (~8k cada). Com prompts de memória de
+  ~10.000 tokens, o request estoura mesmo com 32k de contexto.
+- **Correção**: carregar o 7B com `-c 32768 --parallel 1`. Replays reais de
+  memória (10.263 tokens) e combate (4.487 tokens) passaram a responder em
+  português.
+- Nenhuma alteração de prompt; apenas configuração do servidor local.
+
 ## 1.2.0 — 2026-10-30
 
 - **Correção das respostas em inglês**: o Qwen2.5-3B estava imitando o

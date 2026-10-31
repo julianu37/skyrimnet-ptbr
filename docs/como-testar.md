@@ -5,21 +5,22 @@
 1. Confirme que o **SkyrimNet** está instalado e ativo no MO2.
 2. Confirme que **SkyrimNet PT-BR** está ativo e **abaixo** do SkyrimNet no
    painel esquerdo (prioridade maior para os assets de UI).
-3. Confirme que o modelo local tem **16.384 tokens de contexto**:
+3. Confirme que o modelo local tem **32.768 tokens e Parallel = 1**:
 
    ```powershell
    & "$env:USERPROFILE\.lmstudio\bin\lms.exe" ps
    ```
 
-   A coluna `CONTEXT` deve mostrar `16384`. Se estiver `8192`, recarregue:
+   A coluna `CONTEXT` deve mostrar `32768` e `PARALLEL` deve mostrar `1`.
+   Se estiver `4`, recarregue:
 
    ```powershell
-   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" unload qwen2.5-3b-instruct
-   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" load qwen2.5-3b-instruct -c 16384 --gpu max -y
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" unload qwen2.5-7b-instruct
+   & "$env:USERPROFILE\.lmstudio\bin\lms.exe" load qwen2.5-7b-instruct -c 32768 --parallel 1 --gpu max -y
    ```
 
-   Com 8.192 o prompt completo (~10.800 tokens) falha com HTTP 400 e nenhuma
-   fala é gerada.
+   O paralelismo divide o contexto: com 32k e 4 slots, cada memória/combate
+   recebe só 8k e falha com “Context size has been exceeded”.
 
 4. Confirme que o adapter Kokoro está no ar:
 

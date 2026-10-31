@@ -61,6 +61,7 @@ def build_mod_zip() -> Path:
     (staging / "tools").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "tools" / "patch_esp.py", staging / "tools" / "patch_esp.py")
     shutil.copy2(ROOT / "tools" / "patch_config.py", staging / "tools" / "patch_config.py")
+    shutil.copy2(ROOT / "tools" / "load-llm.ps1", staging / "tools" / "load-llm.ps1")
     (staging / "docs").mkdir(parents=True, exist_ok=True)
     shutil.copy2(ROOT / "docs" / "esp.md", staging / "docs" / "esp.md")
     shutil.copy2(ROOT / "docs" / "config.md", staging / "docs" / "config.md")
